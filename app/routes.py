@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
-from sqlalchemy import or_
+from sqlalchemy import or_, select
 from app import db
 from app.models import User, Role, Permission
 from app.forms import LoginForm, RegisterForm, UserForm
@@ -53,7 +53,15 @@ def register():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         
-        user_role = Role.query.filter_by(name='user').first()
+        #user_role = Role.query.filter_by(name='user').first()
+        stmt = select(Role).where(Role.name == 'user')
+        user_role = db.session.execute(stmt).scalars().first()
+        print('---------------------')
+        print(user_role)
+        print(user_role.name if user_role else 'No role found')
+        print(user_role.id if user_role else 'No role id')
+        print('---------------------')
+
         if user_role:
             user.roles.append(user_role)
         

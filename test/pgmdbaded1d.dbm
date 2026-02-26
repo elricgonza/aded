@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="173,0" last-zoom="0.85" max-obj-count="12"
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.85" max-obj-count="12"
 	 default-owner="postgres"
 	 layers="Default layer" active-layers="0">
 <role name="uaded"
@@ -116,7 +116,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alum" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="1580" y="560"/>
+	<position x="1560" y="540"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -188,24 +188,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asig" layer="0" collapse-mode="2" max-obj-count="4">
+<table name="seg" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<comment><![CDATA[alum c/ mat ASIGnadas]]></comment>
-	<position x="1080" y="580"/>
+	<comment><![CDATA[SEGuimiento académico]]></comment>
+	<position x="1100" y="580"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="id_alum">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="id_insc">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="id_mat">
-		<type name="integer" length="0"/>
-	</column>
-	<constraint name="asig_pk" type="pk-constr" table="public.asig">
+	<constraint name="seg_pk" type="pk-constr" table="public.seg">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -231,7 +225,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="trab" layer="0" collapse-mode="2" max-obj-count="4">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="1600" y="220"/>
+	<comment><![CDATA[prof trab (enseña) a un curso y descripción de materias asignadas]]></comment>
+	<position x="1700" y="240"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -240,11 +235,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
+		<object name="id_curso" index="3"/>
 		<object name="id_mat" index="2"/>
 		<object name="id_prof" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
+		<object name="curso_fk" index="3"/>
 		<object name="mat_fk" index="1"/>
 		<object name="prof_fk" index="0"/>
 	</customidxs>
@@ -276,6 +273,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="public.curso"
 	 dst-table="public.trab"
 	 src-required="false" dst-required="false"/>
+
+<relationship name="insc_has_many_seg" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#139081"
+	 src-table="public.insc"
+	 dst-table="public.seg"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
 
 <constraint name="nivel_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.plan" table="public.nivel">

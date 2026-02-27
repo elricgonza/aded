@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.75" max-obj-count="12"
+<dbmodel pgmodeler-ver="0.9.2" last-position="304,0" last-zoom="1" max-obj-count="12"
 	 default-owner="postgres"
 	 layers="Default layer" active-layers="0">
 <role name="uaded"
@@ -44,7 +44,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="nivel" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="400" y="60"/>
+	<position x="400" y="40"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -140,7 +140,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="insc" layer="0" collapse-mode="2" max-obj-count="4">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="440" y="240"/>
+	<position x="460" y="280"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -154,10 +154,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="fecha_insc">
 		<type name="date" length="0"/>
 	</column>
-	<constraint name="inscripcion_pk" type="pk-constr" table="public.insc">
+	<constraint name="insc_pk" type="pk-constr" table="public.insc">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-	<constraint name="inscripcion_uq" type="uq-constr" table="public.insc">
+	<constraint name="insc_uq" type="uq-constr" table="public.insc">
 		<columns names="id_alum" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -206,14 +206,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
-	<position x="740" y="420"/>
+	<position x="760" y="460"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="id_alum">
+	<column name="id_alum" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="id_mat">
+	<column name="id_mat" not-null="true">
 		<type name="smallint" length="0"/>
 		<comment><![CDATA[asignado a partir de INSC/CURSO/ASIG.id_mat]]></comment>
 	</column>
@@ -303,7 +303,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.asig"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="-1.48402" y="3.14318"/>
+		<position x="1.00077" y="11.3143"/>
 	</label>
 </relationship>
 
@@ -314,7 +314,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#f77242"
 	 src-table="public.curso"
 	 dst-table="public.asig"
-	 src-required="false" dst-required="false">
+	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
 		<position x="6.08678" y="-0.268239"/>
 	</label>
@@ -329,7 +329,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.seg"
 	 src-required="true" dst-required="false"
 	upd-action="CASCADE"
-	del-action="RESTRICT"/>
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="-11.2874" y="-5.04673"/>
+	</label>
+</relationship>
 
 <constraint name="nivel_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.plan" table="public.nivel">
@@ -368,6 +372,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <relationship name="rel_nivel_plan" type="relfk" layer="0"
+	 custom-color="#c878ec"
 	 src-table="public.nivel"
 	 dst-table="public.plan" reference-fk="nivel_id_plan_fkey"
 	 src-required="false" dst-required="false"/>

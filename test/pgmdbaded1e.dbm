@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="304,0" last-zoom="1" max-obj-count="12"
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.85" max-obj-count="12"
 	 default-owner="postgres"
 	 layers="Default layer" active-layers="0">
 <role name="uaded"
@@ -285,23 +285,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</customidxs>
 </table>
 
-<relationship name="prof_has_many_trab" type="rel1n" layer="0"
+<relationship name="prof_has_many_asig" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
 	 custom-color="#5184cc"
 	 src-table="public.prof"
 	 dst-table="public.asig"
-	 src-required="false" dst-required="false"/>
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
 
 <relationship name="mat_has_many_asig" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#34fc23"
+	 custom-color="#cc0000"
 	 src-table="public.mat"
 	 dst-table="public.asig"
-	 src-required="false" dst-required="false">
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
 	<label ref-type="name-label">
 		<position x="1.00077" y="11.3143"/>
 	</label>

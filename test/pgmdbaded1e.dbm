@@ -202,11 +202,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="seg" layer="0" collapse-mode="2" max-obj-count="9">
+<table name="seg" layer="0" collapse-mode="2" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
-	<position x="760" y="460"/>
+	<position x="760" y="440"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -228,6 +228,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="evfin">
 		<type name="smallint" length="0"/>
+	</column>
+	<column name="aprob">
+		<type name="boolean" length="0"/>
 	</column>
 	<constraint name="seg_pk" type="pk-constr" table="public.seg">
 		<columns names="id" ref-type="src-columns"/>
@@ -338,6 +341,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="-11.2874" y="-5.04673"/>
 	</label>
 </relationship>
+
+<index name="prof_mat_curso" table="public.asig"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="false">
+			<column name="id_prof"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="id_mat"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="id_curso"/>
+		</idxelement>
+</index>
 
 <constraint name="nivel_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.plan" table="public.nivel">

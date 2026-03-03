@@ -234,6 +234,7 @@ CREATE TABLE public.seg (
 	ev02 smallint,
 	ev03 smallint,
 	evfin smallint,
+	aprob boolean,
 	CONSTRAINT seg_pk PRIMARY KEY (id)
 
 );
@@ -262,8 +263,8 @@ ALTER TABLE public.prof OWNER TO uaded;
 -- DROP TABLE IF EXISTS public.asig CASCADE;
 CREATE TABLE public.asig (
 	id integer NOT NULL,
-	id_prof integer,
-	id_mat integer,
+	id_prof integer NOT NULL,
+	id_mat integer NOT NULL,
 	id_curso integer NOT NULL,
 	CONSTRAINT asig_pk PRIMARY KEY (id)
 
@@ -278,14 +279,14 @@ ALTER TABLE public.asig OWNER TO uaded;
 -- ALTER TABLE public.asig DROP CONSTRAINT IF EXISTS prof_fk CASCADE;
 ALTER TABLE public.asig ADD CONSTRAINT prof_fk FOREIGN KEY (id_prof)
 REFERENCES public.prof (id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: mat_fk | type: CONSTRAINT --
 -- ALTER TABLE public.asig DROP CONSTRAINT IF EXISTS mat_fk CASCADE;
 ALTER TABLE public.asig ADD CONSTRAINT mat_fk FOREIGN KEY (id_mat)
 REFERENCES public.mat (id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: curso_fk | type: CONSTRAINT --
@@ -300,6 +301,17 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE public.seg ADD CONSTRAINT insc_fk FOREIGN KEY (id_insc)
 REFERENCES public.insc (id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: prof_mat_curso | type: INDEX --
+-- DROP INDEX IF EXISTS public.prof_mat_curso CASCADE;
+CREATE UNIQUE INDEX prof_mat_curso ON public.asig
+	USING btree
+	(
+	  id_prof,
+	  id_mat,
+	  id_curso
+	);
 -- ddl-end --
 
 -- object: nivel_id_plan_fkey | type: CONSTRAINT --

@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.85" max-obj-count="12"
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.8" max-obj-count="12"
 	 default-owner="postgres"
 	 layers="Default layer" active-layers="0">
 <role name="uaded"
@@ -52,7 +52,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="nivel" not-null="true">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="id_plan" not-null="true">
+	<column name="plan_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="nivel_pkey" type="pk-constr" table="public.nivel">
@@ -76,7 +76,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="grado" not-null="true">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="id_nivel" not-null="true">
+	<column name="nivel_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="grado_pkey" type="pk-constr" table="public.grado">
@@ -100,7 +100,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="materia" not-null="true">
 		<type name="character varying" length="150"/>
 	</column>
-	<column name="id_grado" not-null="true">
+	<column name="grado_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="materia_pkey" type="pk-constr" table="public.mat">
@@ -140,7 +140,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="insc" layer="0" collapse-mode="2" max-obj-count="4">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="460" y="280"/>
+	<position x="440" y="300"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -170,16 +170,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="curso" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="860" y="220"/>
+	<position x="820" y="220"/>
 	<column name="id" not-null="true"
-	 identity-type="ALWAYS" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_grado" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="paralelo">
 		<type name="character varying" length="50"/>
-	</column>
-	<column name="id_grado" not-null="true">
-		<type name="integer" length="0"/>
 	</column>
 	<column name="gestion">
 		<type name="smallint" length="0"/>
@@ -207,7 +207,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
 	<position x="760" y="440"/>
-	<column name="id" not-null="true">
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="id_alum" not-null="true">
@@ -237,7 +238,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_insc" index="2"/>
+		<object name="id_insc" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -249,7 +250,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="1440" y="180"/>
-	<column name="id" not-null="true">
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="nom_prof">
@@ -263,12 +265,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="asig" layer="0" collapse-mode="2" max-obj-count="4">
+<table name="asig" layer="0" collapse-mode="2" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[prof ASIGnado (enseña) a un curso y descripción de materias asignadas]]></comment>
-	<position x="1200" y="320"/>
-	<column name="id" not-null="true">
+	<position x="1180" y="320"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="mat_id">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="asig_pk" type="pk-constr" table="public.asig">
@@ -276,14 +282,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_curso" index="3"/>
-		<object name="id_mat" index="2"/>
+		<object name="id_curso" index="2"/>
 		<object name="id_prof" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="curso_fk" index="3"/>
-		<object name="mat_fk" index="1"/>
+		<object name="curso_fk" index="2"/>
 		<object name="prof_fk" index="0"/>
 	</customidxs>
 </table>
@@ -298,21 +302,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="true" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
-
-<relationship name="mat_has_many_asig" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#cc0000"
-	 src-table="public.mat"
-	 dst-table="public.asig"
-	 src-required="true" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="1.00077" y="11.3143"/>
-	</label>
-</relationship>
 
 <relationship name="curso_has_many_asig" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
@@ -342,35 +331,46 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<index name="prof_mat_curso" table="public.asig"
-	 concurrent="false" unique="true" fast-update="false" buffering="false"
+<index name="idx_insc_alum_mat" table="public.seg"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
 	 index-type="btree" factor="0">
 		<idxelement use-sorting="false">
-			<column name="id_prof"/>
+			<column name="id_insc"/>
+		</idxelement>
+		<idxelement use-sorting="false">
+			<column name="id_alum"/>
 		</idxelement>
 		<idxelement use-sorting="false">
 			<column name="id_mat"/>
 		</idxelement>
-		<idxelement use-sorting="false">
-			<column name="id_curso"/>
-		</idxelement>
 </index>
+
+<relationship name="mat_has_many_asig" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#2cf77d"
+	 src-table="public.mat"
+	 dst-table="public.asig"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
 
 <constraint name="nivel_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.plan" table="public.nivel">
-	<columns names="id_plan" ref-type="src-columns"/>
+	<columns names="plan_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="grado_id_nivel_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.nivel" table="public.grado">
-	<columns names="id_nivel" ref-type="src-columns"/>
+	<columns names="nivel_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="materia_id_grado_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.grado" table="public.mat">
-	<columns names="id_grado" ref-type="src-columns"/>
+	<columns names="grado_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 

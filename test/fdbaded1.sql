@@ -51,7 +51,7 @@ insert into grado  (id, grado, id_nivel) values (16, '2do. Inic', 4);
 insert into grado  (id, grado, id_nivel) values (17, '1ro. Bas', 5);
 insert into grado  (id, grado, id_nivel) values (18, '2do. Bas', 5);
 insert into grado  (id, grado, id_nivel) values (19, '1ro. Interm', 6);
-insert into grado  (id, grado, id_nivel) values (20, '1ro. Interm', 6);
+insert into grado  (id, grado, id_nivel) values (20, '2do. Interm', 6);
 insert into grado  (id, grado, id_nivel) values (21, '3ro. Interm', 6);
 
 --delete from grado where id_nivel = 9
@@ -59,7 +59,7 @@ insert into grado  (id, grado, id_nivel) values (21, '3ro. Interm', 6);
 
 --------
 --insert into mat(id, materia, id_grado) values (1, 'mat chit', 50);	--x ok
---delete from materia
+delete from mat;
 
 --inic
 insert into mat(id, materia, id_grado) values (1, 'mat chit', 1);
@@ -145,3 +145,97 @@ ALTER TABLE ONLY public.materia
    ADD CONSTRAINT materia_id_grado_fkey FOREIGN KEY (id_grado) 
    REFERENCES public.grado(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 */
+
+--Tarea adm
+--conformación de curso // generador de cursos
+--proceso anual / otros (semestral, trimestral, etc)
+delete from curso;
+
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(1, 1, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(2, 1, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(3, 2, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(4, 2, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(5, 3, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(6, 3, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(7, 4, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(8, 4, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(9, 5, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(10, 5, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(11, 6, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(12, 6, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(13, 7, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(14, 7, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(15, 8, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(16, 8, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(17, 9, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(18, 9, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(19, 10, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(20, 10, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(21, 11, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(22, 11, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(23, 12, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(24, 12, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(25, 13, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(26, 13, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(27, 14, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(28, 14, 'B', 2025, '2025-01-01', '2025-12-31');
+
+
+--ifalfa
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(29, 15, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(30, 15, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(31, 16, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(32, 16, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(33, 17, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(34, 17, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(35, 18, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(36, 18, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(37, 19, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(38, 19, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(39, 20, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(40, 20, 'B', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(41, 21, 'A', 2025, '2025-01-01', '2025-12-31');
+insert into curso (id, id_grado, paralelo, gestion, fecha_ini, fecha_fin) values 
+	(42, 21, 'B', 2025, '2025-01-01', '2025-12-31');
+

@@ -3,16 +3,30 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.75" max-obj-count="12"
-	 default-owner="postgres"
-	 layers="Default layer" active-layers="0">
-<role name="uaded"
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="12"
+	 default-schema="public" default-owner="postgres">
+<role name="appgeo"
       inherit="true"
       login="true"
+      encrypted="true"
       password="********">
 </role>
 
-<database name="dbaded" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
+<role name="flask_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="uaded"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="dbaded1f" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
 	<role name="uaded"/>
 	<tablespace name="pg_default"/>
 </database>
@@ -44,7 +58,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="nivel" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="400" y="40"/>
+	<position x="380" y="60"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -68,7 +82,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="grado" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="780" y="20"/>
+	<position x="720" y="60"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -92,7 +106,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="mat" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="1180" y="20"/>
+	<position x="1060" y="60"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -108,7 +122,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<sequence name="materia_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+<sequence name="mat_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
 	<schema name="public"/>
 	<role name="uaded"/>
 </sequence>
@@ -116,7 +130,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alum" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="80" y="200"/>
+	<position x="60" y="180"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -124,7 +138,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="nombre" not-null="true">
 		<type name="character varying" length="100"/>
 	</column>
-	<column name="paterno" not-null="true">
+	<column name="apellido" not-null="true">
 		<type name="character varying" length="100"/>
 	</column>
 	<constraint name="alum_pk" type="pk-constr" table="public.alum">
@@ -140,7 +154,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="insc" layer="0" collapse-mode="2" max-obj-count="4">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="440" y="300"/>
+	<position x="460" y="220"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -162,7 +176,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<sequence name="inscripcion_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+<sequence name="insc_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
 	<schema name="public"/>
 	<role name="uaded"/>
 </sequence>
@@ -170,9 +184,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="curso" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="820" y="220"/>
+	<position x="800" y="260"/>
 	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT">
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="grado_id" not-null="true">
@@ -206,15 +220,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
-	<position x="760" y="440"/>
+	<position x="720" y="480"/>
 	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT">
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="id_alum" not-null="true">
+	<column name="insc_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="id_mat" not-null="true">
+	<column name="alum_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="mat_id" not-null="true">
 		<type name="smallint" length="0"/>
 		<comment><![CDATA[asignado a partir de INSC/CURSO/ASIG.id_mat]]></comment>
 	</column>
@@ -236,124 +253,67 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="seg_pk" type="pk-constr" table="public.seg">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_insc" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="insc_fk" index="1"/>
-	</customidxs>
 </table>
 
-<table name="prof" layer="0" collapse-mode="2" max-obj-count="3">
+<sequence name="seg_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="1440" y="180"/>
+</sequence>
+
+<table name="prof" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="1400" y="240"/>
 	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT">
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="nom_prof">
-		<type name="varchar" length="100"/>
+	<column name="nombre">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido">
+		<type name="character varying" length="100"/>
 	</column>
 	<column name="formacion">
-		<type name="varchar" length="100"/>
+		<type name="character varying" length="100"/>
 	</column>
 	<constraint name="prof_pk" type="pk-constr" table="public.prof">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
+<sequence name="prof_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
 <table name="asig" layer="0" collapse-mode="2" max-obj-count="4">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[prof ASIGnado (enseña) a un curso y descripción de materias asignadas]]></comment>
-	<position x="1180" y="320"/>
+	<position x="1140" y="340"/>
 	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT">
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="prof_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="curso_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="mat_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="asig_pk" type="pk-constr" table="public.asig">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_curso" index="2"/>
-		<object name="id_mat" index="3"/>
-		<object name="id_prof" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="curso_fk" index="2"/>
-		<object name="mat_fk" index="3"/>
-		<object name="prof_fk" index="0"/>
-	</customidxs>
 </table>
 
-<relationship name="prof_has_many_asig" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#5184cc"
-	 src-table="public.prof"
-	 dst-table="public.asig"
-	 src-required="true" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
-
-<relationship name="curso_has_many_asig" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#f77242"
-	 src-table="public.curso"
-	 dst-table="public.asig"
-	 src-required="true" dst-required="false">
-	<label ref-type="name-label">
-		<position x="6.08678" y="-0.268239"/>
-	</label>
-</relationship>
-
-<relationship name="insc_has_many_seg" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#139081"
-	 src-table="public.insc"
-	 dst-table="public.seg"
-	 src-required="true" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="-11.2874" y="-5.04673"/>
-	</label>
-</relationship>
-
-<index name="idx_insc_alum_mat" table="public.seg"
-	 concurrent="false" unique="false" fast-update="false" buffering="false"
-	 index-type="btree" factor="0">
-		<idxelement use-sorting="false">
-			<column name="id_insc"/>
-		</idxelement>
-		<idxelement use-sorting="false">
-			<column name="id_alum"/>
-		</idxelement>
-		<idxelement use-sorting="false">
-			<column name="id_mat"/>
-		</idxelement>
-</index>
-
-<relationship name="mat_has_many_asig" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#c6a1eb"
-	 src-table="public.mat"
-	 dst-table="public.asig"
-	 src-required="true" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
+<sequence name="asig_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
 
 <constraint name="nivel_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.plan" table="public.nivel">
@@ -391,35 +351,96 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
+<constraint name="insc_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.insc" table="public.seg">
+	<columns names="insc_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="prof_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.prof" table="public.asig">
+	<columns names="prof_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="curso_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.curso" table="public.asig">
+	<columns names="curso_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="mat_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.mat" table="public.asig">
+	<columns names="mat_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
 <relationship name="rel_nivel_plan" type="relfk" layer="0"
-	 custom-color="#c878ec"
+	 custom-color="#254619"
 	 src-table="public.nivel"
 	 dst-table="public.plan" reference-fk="nivel_id_plan_fkey"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_grado_nivel" type="relfk" layer="0"
+	 custom-color="#46531a"
 	 src-table="public.grado"
 	 dst-table="public.nivel" reference-fk="grado_id_nivel_fkey"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_mat_grado" type="relfk" layer="0"
+	 custom-color="#876449"
 	 src-table="public.mat"
 	 dst-table="public.grado" reference-fk="materia_id_grado_fkey"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_insc_alum" type="relfk" layer="0"
+	 custom-color="#5b02be"
 	 src-table="public.insc"
 	 dst-table="public.alum" reference-fk="alum_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_insc_curso" type="relfk" layer="0"
+	 custom-color="#adad9d"
 	 src-table="public.insc"
 	 dst-table="public.curso" reference-fk="curso_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_curso_grado" type="relfk" layer="0"
+	 custom-color="#235bfd"
 	 src-table="public.curso"
 	 dst-table="public.grado" reference-fk="grado_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_seg_insc" type="relfk" layer="0"
+	 custom-color="#718e68"
+	 src-table="public.seg"
+	 dst-table="public.insc" reference-fk="insc_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asig_prof" type="relfk" layer="0"
+	 custom-color="#8413e5"
+	 src-table="public.asig"
+	 dst-table="public.prof" reference-fk="prof_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0.635699" y="-7.73587"/>
+	</label>
+</relationship>
+
+<relationship name="rel_asig_curso" type="relfk" layer="0"
+	 custom-color="#fcaf3e"
+	 src-table="public.asig"
+	 dst-table="public.curso" reference-fk="curso_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-9.41322" y="-6.56229"/>
+	</label>
+</relationship>
+
+<relationship name="rel_asig_mat" type="relfk" layer="0"
+	 custom-color="#21af2b"
+	 src-table="public.asig"
+	 dst-table="public.mat" reference-fk="mat_fk"
 	 src-required="false" dst-required="false"/>
 
 </dbmodel>

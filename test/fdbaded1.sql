@@ -272,5 +272,5 @@ insert into prof(id, nombre, apellido, formacion) values (28, 'prof AB', 'apelli
 insert into prof(id, nombre, apellido, formacion) values (29, 'prof AC', 'apellido AC', 'formacion AC');
 
 --asig
-insert into asig(id, curso_id, mat_id, prof_id) values (1, 1, 1, 1);
-insert into asig(id, curso_id, mat_id, prof_id) values (1, 1, 1, 0);
+--#insert into asig(id, curso_id, mat_id, prof_id) values (1, 1, 1, 1);
+--#insert into asig(id, curso_id, mat_id, prof_id) values (1, 1, 1, 0);

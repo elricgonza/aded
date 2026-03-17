@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# -- dado curso(s) y grado(s) obtener materias de cada grado
-
+# dado curso(s) y grado(s) obtener materias de cada grado
+# fill - asig además con prof
 
 import psycopg2 as pg
 import psycopg2.extras as pge
@@ -25,15 +25,25 @@ def get_cx():
 # -- fill asig
 def fill_asig():
     cx1 = get_cx()
-    cur1 = cx1.cursor()
+    cr1 = cx1.cursor()
     cx2 = get_cx()
-    cur2 = cx2.cursor()
+    cr2 = cx2.cursor()
     cx3 = get_cx()
-    cur3 = cx3.cursor()
+    cr3 = cx3.cursor()
 
-    cur1.execute("SELECT * FROM curso where grado_id=1 ")
-    for r in cur1.fetchall():
-        print(r[1], r[2])
+    cr1.execute("SELECT * FROM cur where gra_id=1 ")
+    for r in cr1.fetchall():
+        print(r[0], r[1], r[2])
+        cr2.execute("SELECT * FROM mat where gra_id=%s", (r[1],))
+        for r2 in cr2.fetchall():
+            print(r2[0], r2[1], r2[2])
+            cr3.execute("SELECT * FROM prof where mat_id=%s", (r2[0],))
+            for r3 in cr3.fetchall():
+                print(r3[0], r3[1], r3[2])
+                cr4 = cx4.cursor()
+                cr4.execute("INSERT INTO asig (cur_id, mat_id, prof_id) VALUES (%s, %s, %s)", (r[0], r2[0], r3[0]))
+                cx4.commit()
+                cr4.close() 
 
     cx1.close()
 

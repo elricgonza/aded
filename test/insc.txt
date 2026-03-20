@@ -1,0 +1,1 @@
+alum_id		y		cur_id (deben ser únicos)

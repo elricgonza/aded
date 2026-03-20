@@ -1,0 +1,23 @@
+Con las tablas siguientes ya pobladas:
+
+-INSC: tabla de inscripción de alumnos en cursos 
+	campos: id, alum_id, cur_id, fecha_insc
+-ALUM: tabla de alumnos
+	campos: id, nombre, apellido
+-CUR: tabla de cursos
+	campos: id, gra_id, paralelo, gestion, fecha_ini, fecha_fin
+-MAT: tabla de materias
+	campos: id, materia, gra_id
+-ASIG: tabla de asignación de materias, profesores a cursos
+	campos: id, cur_id, mat_id, prof_id
+-PROF: tabla de profesores
+	campos: id, nombre, apellido
+
+Poblar a través de un programa en python y base de datos postgres la tabla SEG:
+
+-SEG: tabla de seguimiento de alumnos inscritos en cursos 
+	campos: id, insc_id, ev01, ev02, evfin, aprob
+
+Considerando que para cada alumno (ALUM) inscrito (en tabla INSC) 
+se debe crear un registro en SEG con las materias (MAT) que tiene asignado ese curso (CUR)
+

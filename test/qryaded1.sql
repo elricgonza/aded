@@ -33,22 +33,16 @@ select *
 -- alums 2o b (gra 10, cur b)
 select * from niv;
 
-select niv.nivel, gra.grado, cur.paralelo, cur.gestion,
-		alum.nombre, alum.apellido, insc.fecha_insc
-	from cur, gra, insc, alum, niv
-	where 
-		cur.gra_id = gra.id
-		and cur.id = insc.cur_id
-		and niv.id = gra.id
-		and insc.alum_id = alum.id 
-			and gra.grado like '%2do Sec%'
-			and cur.paralelo= 'B' 
 
---ok
-select niv.nivel, gra.grado, cur.paralelo, cur.gestion, insc.fecha_insc
-	from cur, gra, niv, insc
+--ok alum del 2do Sec
+select niv.nivel, gra.grado, cur.paralelo, cur.gestion, insc.fecha_insc, 
+		alum.nombre
+	from cur, gra, niv, insc, alum
 	where cur.gra_id = gra.id
 		and gra.niv_id = niv.id
 		and insc.cur_id = cur.id
-		and gra.grado = '2do Sec' and cur.paralelo= 'B'
-		and 
+		and gra.grado = '2do Sec' --and cur.paralelo= 'B'
+		and insc.alum_id = alum.id
+
+--
+

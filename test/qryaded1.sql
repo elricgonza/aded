@@ -44,5 +44,24 @@ select niv.nivel, gra.grado, cur.paralelo, cur.gestion, insc.fecha_insc,
 		and gra.grado = '2do Sec' --and cur.paralelo= 'B'
 		and insc.alum_id = alum.id
 
---
+--insc de alum
+select a.nombre, n.nivel, g.grado, c.paralelo, c.gestion, 
+		i.fecha_insc 
+	from insc i, alum a, cur c, gra g, niv n
+	where i.alum_id= a.id
+		and a.nombre= 'Fito'
+		and i.cur_id = c.id
+		and c.gra_id = g.id
+		and g.niv_id = n.id
 
+--seg de x alum
+select a.nombre, n.nivel, g.grado, c.paralelo, c.gestion, i.fecha_insc, 
+		s.mat_id, s.aprob
+	from insc i, alum a, cur c, gra g, niv n, seg s
+	where i.alum_id= a.id
+		and a.nombre= 'Fito'
+		and i.cur_id = c.id
+		and c.gra_id = g.id
+		and g.niv_id = n.id
+		and s.insc_id = i.id
+		

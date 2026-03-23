@@ -64,4 +64,42 @@ select a.nombre, n.nivel, g.grado, c.paralelo, c.gestion, i.fecha_insc,
 		and c.gra_id = g.id
 		and g.niv_id = n.id
 		and s.insc_id = i.id
+--
+
+
+
+--?
+
+
+--seg de x alum
+select  distinct a.nombre, n.nivel, g.id, g.grado, c.id, c.paralelo, c.gestion, i.fecha_insc, 
+		m.id, m.materia, s.aprob,
+		p.nombre as nomp
+	from insc i, alum a, cur c, gra g, niv n, seg s, mat m, asig aa, prof p
+	where i.alum_id= a.id
+		and a.nombre= 'Fito'
+		and i.cur_id = c.id
+		and c.gra_id = g.id
+		and g.niv_id = n.id
+		and s.insc_id = i.id
+		and aa.cur_id = c.id
+		and aa.mat_id = m.id
+		and aa.prof_id = p.id
+
+select * from gra;
+select * from alum where nombre='Fito'
+select * from mat where materia= 'mat chit'
+select * from cur
+select * from asig where cur_id= 1;
+
+--cont :)
+select *
+	from seg s, insc i, cur c, alum a--, asig
+	where s.insc_id = i.id
+		and i.cur_id = c.id and c.id= 1
+		and i.alum_id = a.id and a.nombre= 'Fito'
+		--and asig.cur_id = c.id
 		
+
+select * from cur
+	

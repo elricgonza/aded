@@ -94,12 +94,16 @@ select * from asig where cur_id= 1;
 
 --cont :)
 select *
-	from seg s, insc i, cur c, alum a--, asig
+
+select s.id, s.aprob, s.mat_id,
+		a.id, a.nombre, 
+		c.id, c.paralelo,
+		g.id, g.grado
+	from seg s, insc i, cur c, alum a, gra g
 	where s.insc_id = i.id
 		and i.cur_id = c.id and c.id= 1
+		and c.gra_id = g.id
 		and i.alum_id = a.id and a.nombre= 'Fito'
 		--and asig.cur_id = c.id
 		
-
-select * from cur
 	

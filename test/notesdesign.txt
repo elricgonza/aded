@@ -1,0 +1,25 @@
+-las tablas son inicializadas cada gestión?
+ (si es así, se deben eliminar los datos de las tablas al iniciar una nueva gestión)
+-¿Cómo se manejarán los datos históricos de las gestiones anteriores?
+ (se podrían archivar en una base de datos separada o en archivos de respaldo)
+-¿Qué tipo de datos se almacenarán en cada tabla?
+
+Propuesta: Almacenamiento [por "periodos"] check
+
+Proceso -cierre de gestión
+-archivado de datos históricos
+	-no existen supresiones en: prof, alum, insc, seg, pag
+		-no existen supresiones en: plan, niv, gra, mat (para garantizar la integridad referencial)	
+
+Proceso - inicio de gestión:
+1. Actualizaciones de las tablas, si requerido:
+		plan, niv, gra, mat, cos
+	como parte de las actualizaciones necesarias las tablas:
+		alum, prof 
+	creación de nuevos registros "obligatorios" para la nueva gestión:
+		cur, 
+		asig
+		insc
+		seg
+		pag
+

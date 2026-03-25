@@ -154,7 +154,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="insc" layer="0" collapse-mode="1" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="260" y="400"/>
+	<position x="280" y="420"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -174,6 +174,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="insc_uq" type="uq-constr" table="public.insc">
 		<columns names="alum_id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_cos" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="cos_fk" index="4"/>
+	</customidxs>
 </table>
 
 <sequence name="insc_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
@@ -192,10 +200,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="gra_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="paralelo">
+	<column name="paralelo" not-null="true">
 		<type name="character varying" length="50"/>
 	</column>
-	<column name="gestion">
+	<column name="gestion" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
 	<column name="fecha_ini">
@@ -261,10 +269,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="nombre">
+	<column name="nombre" not-null="true">
 		<type name="character varying" length="100"/>
 	</column>
-	<column name="apellido">
+	<column name="apellido" not-null="true">
 		<type name="character varying" length="100"/>
 	</column>
 	<column name="formacion">
@@ -308,32 +316,65 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="pag" layer="0" collapse-mode="1" max-obj-count="1">
+<table name="pag" layer="0" collapse-mode="1" max-obj-count="8">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="40" y="500"/>
-	<column name="id">
-		<type name="integer" length="0"/>
-	</column>
-</table>
-
-<table name="cos" layer="0" collapse-mode="1" max-obj-count="4">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="60" y="340"/>
+	<position x="60" y="480"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="cuota">
+	<column name="cuota" not-null="true">
 		<type name="float" length="0"/>
 	</column>
-	<column name="cant">
+	<column name="nro_cuota" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="desc" not-null="true">
+	<column name="pagado">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="fecha_pago">
+		<type name="date" length="0"/>
+	</column>
+	<column name="obs">
+		<type name="varchar" length="100"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_insc" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="insc_fk" index="0"/>
+	</customidxs>
+</table>
+
+<table name="cos" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="40" y="280"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="descrip" not-null="true">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="costo" not-null="true">
+		<type name="float" length="0"/>
+	</column>
+	<column name="descu" not-null="true">
 		<type name="smallint" length="0"/>
 		<comment><![CDATA[%]]></comment>
+	</column>
+	<column name="cuota" not-null="true">
+		<type name="float" length="0"/>
+	</column>
+	<column name="nro" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="importe" not-null="true">
+		<type name="float" length="0"/>
 	</column>
 	<constraint name="cos_pk" type="pk-constr" table="public.cos">
 		<columns names="id" ref-type="src-columns"/>
@@ -354,6 +395,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="-26.5269" y="16.8583"/>
 	</label>
 </relationship>
+
+<relationship name="insc_has_many_pag" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#b943f9"
+	 src-table="public.insc"
+	 dst-table="public.pag"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
 
 <constraint name="niv_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.plan" table="public.niv">

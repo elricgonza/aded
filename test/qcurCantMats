@@ -1,12 +1,5 @@
 --curs q tienen + mat en gest
-
-select c.id,  count(*) 
-	from asig ai, cur c  --, gra g
-	where ai.cur_id = c.id
-		and c.gestion= 2025
-	group by c.id
-	order by count(*) desc
---	
+--ok
 select c.id, g.grado, count(*) 
 	from asig ai, cur c, gra g
 	where ai.cur_id = c.id
@@ -15,6 +8,13 @@ select c.id, g.grado, count(*)
 	group by c.id, g.grado
 	order by count(*) desc
 
+--
+select c.id,  count(*) 
+	from asig ai, cur c  --, gra g
+	where ai.cur_id = c.id
+		and c.gestion= 2025
+	group by c.id
+	order by count(*) desc
 
 select * from asig 	where cur_id = 1	--
 select * from asig 	where cur_id = 12	--3

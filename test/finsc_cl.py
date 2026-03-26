@@ -42,12 +42,12 @@ def limpiar_tabla_insc(conn):
     """Limpia la tabla INSC antes de poblarla"""
     try:
         cursor = conn.cursor()
-        cursor.execute("TRUNCATE TABLE INSC RESTART IDENTITY CASCADE;")
+        cursor.execute("TRUNCATE TABLE INS RESTART IDENTITY CASCADE;")
         conn.commit()
         cursor.close()
-        print("✓ Tabla INSC limpiada")
+        print("✓ Tabla INS limpiada")
     except Exception as e:
-        print(f"✗ Error al limpiar tabla INSC: {e}")
+        print(f"✗ Error al limpiar tabla INS: {e}")
         conn.rollback()
         raise
 
@@ -55,7 +55,7 @@ def limpiar_tabla_insc(conn):
 def obtener_alumnos(conn):
     """Obtiene todos los alumnos ordenados por ID"""
     cursor = conn.cursor()
-    cursor.execute("SELECT id FROM ALUM ORDER BY id;")
+    cursor.execute("SELECT id FROM ALU ORDER BY id;")
     alumnos = [row[0] for row in cursor.fetchall()]
     cursor.close()
     print(f"✓ Total de alumnos encontrados: {len(alumnos)}")
@@ -82,8 +82,8 @@ def generar_fecha_inscripcion(fecha_inicio):
         return datetime.now().date()
     
     dias_antes = random.randint(1, 7)
-    fecha_insc = fecha_inicio - timedelta(days=dias_antes)
-    return fecha_insc
+    fecha_ins = fecha_inicio - timedelta(days=dias_antes)
+    return fecha_ins
 
 
 def poblar_inscripciones_metodo1(conn):
@@ -122,7 +122,7 @@ def poblar_inscripciones_metodo1(conn):
             WHERE c.curso_num = CEIL(a.alumno_num / %s::numeric)
                 AND CEIL(a.alumno_num / %s::numeric) <= tc.total_cursos
         )
-        INSERT INTO INSC (alum_id, cur_id, fecha_insc)
+        INSERT INTO INS (alum_id, cur_id, fecha_insc)
         SELECT 
             d.alum_id,
             d.cur_id,
@@ -177,13 +177,14 @@ def poblar_inscripciones_metodo2(conn):
             
             cur_id, fecha_inicio = cursos[curso_idx]
             fecha_insc = generar_fecha_inscripcion(fecha_inicio)
+            cos_id = random.randint(1, 9)  # Asignar un cos_id aleatorio entre 1 y 10
             
-            inscripciones.append((alum_id, cur_id, fecha_insc))
+            inscripciones.append((alum_id, cur_id, cos_id, fecha_insc))
         
         # Insertar en batch
         cursor = conn.cursor()
         insert_query = """
-            INSERT INTO INSC (alum_id, cur_id, fecha_insc)
+            INSERT INTO INS (alu_id, cur_id, fecha_ins)
             VALUES (%s, %s, %s);
         """
         
@@ -272,7 +273,7 @@ def verificar_distribucion(conn):
     cursor.execute("""
         SELECT COUNT(*)
         FROM ALUM a
-        LEFT JOIN INSC i ON a.id = i.alum_id
+        LEFT JOIN INSC i ON a.id = i.alu_id
         WHERE i.id IS NULL;
     """)
     
@@ -296,23 +297,24 @@ def main():
         conn = conectar_db()
         
         # Limpiar tabla existente
-        respuesta = input("\n¿Desea limpiar la tabla INSC antes de poblar? (s/n): ")
+        respuesta = input("\n¿Desea limpiar la tabla INS antes de poblar? (s/n): ")
         if respuesta.lower() == 's':
             limpiar_tabla_insc(conn)
         
         # Seleccionar método
-        print("\nSeleccione el método de población:")
-        print("1. SQL con CTEs (más rápido)")
-        print("2. Python con lógica en memoria (más flexible)")
-        metodo = input("Opción (1 o 2): ")
+        poblar_inscripciones_metodo2(conn)
+        #print("\nSeleccione el método de población:")
+        #print("1. SQL con CTEs (más rápido)")
+        #print("2. Python con lógica en memoria (más flexible)")
+        #metodo = input("Opción (1 o 2): ")
         
-        if metodo == '1':
-            poblar_inscripciones_metodo1(conn)
-        elif metodo == '2':
-            poblar_inscripciones_metodo2(conn)
-        else:
-            print("✗ Opción inválida")
-            return
+        #if metodo == '1':
+        #    poblar_inscripciones_metodo1(conn)
+        #elif metodo == '2':
+        #    poblar_inscripciones_metodo2(conn)
+        #else:
+        #    print("✗ Opción inválida")
+        #    return
         
         # Verificar resultados
         verificar_distribucion(conn)

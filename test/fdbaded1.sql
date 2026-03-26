@@ -1,9 +1,9 @@
 
 ------
-delete from plan;
-insert into plan (id, plan) values (1, 'Bach Hum');
-insert into plan (id, plan) values (2, 'Bach Téc');
-insert into plan (id, plan) values (3, 'Tecn Med');
+delete from pla;
+insert into pla (id, plan) values (1, 'Bach Hum');
+insert into pla (id, plan) values (2, 'Bach Téc');
+insert into pla (id, plan) values (3, 'Tecn Med');
 
 /*
 delete from plan where id=3;  --x  ok
@@ -17,13 +17,13 @@ select *
 ------
 --insert into niv (id, nivel, plan_id) values (1, 'Inic0', 0); --x ok
 delete from niv;
-insert into niv (id, nivel, plan_id) values (1, 'Inic', 1);
-insert into niv (id, nivel, plan_id) values (2, 'Prim', 1);
-insert into niv (id, nivel, plan_id) values (3, 'Sec', 1);
+insert into niv (id, nivel, pla_id) values (1, 'Inic', 1);
+insert into niv (id, nivel, pla_id) values (2, 'Prim', 1);
+insert into niv (id, nivel, pla_id) values (3, 'Sec', 1);
 
-insert into niv (id, nivel, plan_id) values (4, 'Inic', 3);
-insert into niv (id, nivel, plan_id) values (5, 'Basico', 3);
-insert into niv (id, nivel, plan_id) values (6, 'Interm', 3);
+insert into niv (id, nivel, pla_id) values (4, 'Inic', 3);
+insert into niv (id, nivel, pla_id) values (5, 'Basico', 3);
+insert into niv (id, nivel, pla_id) values (6, 'Interm', 3);
 
 ------
 --insert into gra  (id, grado, niv_id) values (1, 'pre k', 0);  --x ok
@@ -62,12 +62,12 @@ insert into gra  (id, grado, niv_id) values (21, '3ro. Interm', 6);
 delete from mat;
 
 --inic
-insert into mat(id, materia, gra_id) values (1, 'mat chit', 1);
-insert into mat(id, materia, gra_id) values (2, 'mat mov', 1);
+insert into mat(id, materia, gra_id) values (1, 'game', 1);
+insert into mat(id, materia, gra_id) values (2, 'bring', 1);
 
-insert into mat(id, materia, gra_id) values (3, 'mat movis', 2);
-insert into mat(id, materia, gra_id) values (4, 'mat capor', 2);
-insert into mat(id, materia, gra_id) values (5, 'mat count', 2);
+insert into mat(id, materia, gra_id) values (3, 'movis', 2);
+insert into mat(id, materia, gra_id) values (4, 'capor', 2);
+insert into mat(id, materia, gra_id) values (5, 'count', 2);
 
 --prim
 insert into mat(id, materia, gra_id) values (6, 'escrit', 3);
@@ -240,36 +240,36 @@ insert into cur (id, gra_id, paralelo, gestion, fecha_ini, fecha_fin) values
 	(42, 21, 'B', 2025, '2025-01-01', '2025-12-31');
 
 --prof
-insert into prof(id, nombre, apellido, formacion) values (1, 'prof A', 'apellido A', 'formacion A');
-insert into prof(id, nombre, apellido, formacion) values (2, 'prof B', 'apellido B', 'formacion B');
-insert into prof(id, nombre, apellido, formacion) values (3, 'prof C', 'apellido C', 'formacion C');
-insert into prof(id, nombre, apellido, formacion) values (4, 'prof D', 'apellido D', 'formacion D');
-insert into prof(id, nombre, apellido, formacion) values (5, 'prof E', 'apellido E', 'formacion E');
-insert into prof(id, nombre, apellido, formacion) values (6, 'prof F', 'apellido F', 'formacion F');
-insert into prof(id, nombre, apellido, formacion) values (7, 'prof G', 'apellido G', 'formacion G');
-insert into prof(id, nombre, apellido, formacion) values (8, 'prof H', 'apellido H', 'formacion H');
-insert into prof(id, nombre, apellido, formacion) values (9, 'prof I', 'apellido I', 'formacion I');
-insert into prof(id, nombre, apellido, formacion) values (10, 'prof J', 'apellido J', 'formacion J');
-insert into prof(id, nombre, apellido, formacion) values (11, 'prof K', 'apellido K', 'formacion K');
-insert into prof(id, nombre, apellido, formacion) values (12, 'prof L', 'apellido L', 'formacion L');
-insert into prof(id, nombre, apellido, formacion) values (13, 'prof M', 'apellido M', 'formacion M');
-insert into prof(id, nombre, apellido, formacion) values (14, 'prof N', 'apellido N', 'formacion N');
+insert into pro(id, nombre, apellido, formacion) values (1, 'prof A', 'apellido A', 'formacion A');
+insert into pro(id, nombre, apellido, formacion) values (2, 'prof B', 'apellido B', 'formacion B');
+insert into pro(id, nombre, apellido, formacion) values (3, 'prof C', 'apellido C', 'formacion C');
+insert into pro(id, nombre, apellido, formacion) values (4, 'prof D', 'apellido D', 'formacion D');
+insert into pro(id, nombre, apellido, formacion) values (5, 'prof E', 'apellido E', 'formacion E');
+insert into pro(id, nombre, apellido, formacion) values (6, 'prof F', 'apellido F', 'formacion F');
+insert into pro(id, nombre, apellido, formacion) values (7, 'prof G', 'apellido G', 'formacion G');
+insert into pro(id, nombre, apellido, formacion) values (8, 'prof H', 'apellido H', 'formacion H');
+insert into pro(id, nombre, apellido, formacion) values (9, 'prof I', 'apellido I', 'formacion I');
+insert into pro(id, nombre, apellido, formacion) values (10, 'prof J', 'apellido J', 'formacion J');
+insert into pro(id, nombre, apellido, formacion) values (11, 'prof K', 'apellido K', 'formacion K');
+insert into pro(id, nombre, apellido, formacion) values (12, 'prof L', 'apellido L', 'formacion L');
+insert into pro(id, nombre, apellido, formacion) values (13, 'prof M', 'apellido M', 'formacion M');
+insert into pro(id, nombre, apellido, formacion) values (14, 'prof N', 'apellido N', 'formacion N');
 
-insert into prof(id, nombre, apellido, formacion) values (15, 'prof O', 'apellido O', 'formacion O');
-insert into prof(id, nombre, apellido, formacion) values (16, 'prof P', 'apellido P', 'formacion P');
-insert into prof(id, nombre, apellido, formacion) values (17, 'prof Q', 'apellido Q', 'formacion Q');
-insert into prof(id, nombre, apellido, formacion) values (18, 'prof R', 'apellido R', 'formacion R');
-insert into prof(id, nombre, apellido, formacion) values (19, 'prof S', 'apellido S', 'formacion S');
-insert into prof(id, nombre, apellido, formacion) values (20, 'prof T', 'apellido T', 'formacion T');
-insert into prof(id, nombre, apellido, formacion) values (21, 'prof U', 'apellido U', 'formacion U');
-insert into prof(id, nombre, apellido, formacion) values (22, 'prof V', 'apellido V', 'formacion V');
-insert into prof(id, nombre, apellido, formacion) values (23, 'prof W', 'apellido W', 'formacion W');
-insert into prof(id, nombre, apellido, formacion) values (24, 'prof X', 'apellido X', 'formacion X');
-insert into prof(id, nombre, apellido, formacion) values (25, 'prof Y', 'apellido Y', 'formacion Y');
-insert into prof(id, nombre, apellido, formacion) values (26, 'prof Z', 'apellido Z', 'formacion Z');	
-insert into prof(id, nombre, apellido, formacion) values (27, 'prof AA', 'apellido AA', 'formacion AA');
-insert into prof(id, nombre, apellido, formacion) values (28, 'prof AB', 'apellido AB', 'formacion AB');
-insert into prof(id, nombre, apellido, formacion) values (29, 'prof AC', 'apellido AC', 'formacion AC');
+insert into pro(id, nombre, apellido, formacion) values (15, 'prof O', 'apellido O', 'formacion O');
+insert into pro(id, nombre, apellido, formacion) values (16, 'prof P', 'apellido P', 'formacion P');
+insert into pro(id, nombre, apellido, formacion) values (17, 'prof Q', 'apellido Q', 'formacion Q');
+insert into pro(id, nombre, apellido, formacion) values (18, 'prof R', 'apellido R', 'formacion R');
+insert into pro(id, nombre, apellido, formacion) values (19, 'prof S', 'apellido S', 'formacion S');
+insert into pro(id, nombre, apellido, formacion) values (20, 'prof T', 'apellido T', 'formacion T');
+insert into pro(id, nombre, apellido, formacion) values (21, 'prof U', 'apellido U', 'formacion U');
+insert into pro(id, nombre, apellido, formacion) values (22, 'prof V', 'apellido V', 'formacion V');
+insert into pro(id, nombre, apellido, formacion) values (23, 'prof W', 'apellido W', 'formacion W');
+insert into pro(id, nombre, apellido, formacion) values (24, 'prof X', 'apellido X', 'formacion X');
+insert into pro(id, nombre, apellido, formacion) values (25, 'prof Y', 'apellido Y', 'formacion Y');
+insert into pro(id, nombre, apellido, formacion) values (26, 'prof Z', 'apellido Z', 'formacion Z');	
+insert into pro(id, nombre, apellido, formacion) values (27, 'prof AA', 'apellido AA', 'formacion AA');
+insert into pro(id, nombre, apellido, formacion) values (28, 'prof AB', 'apellido AB', 'formacion AB');
+insert into pro(id, nombre, apellido, formacion) values (29, 'prof AC', 'apellido AC', 'formacion AC');
 
 --asig
 --#insert into asig(id, curso_id, mat_id, prof_id) values (1, 1, 1, 1);

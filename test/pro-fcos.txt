@@ -1,0 +1,13 @@
+realizar un script en python para llenar la tabla postgres con 20 registros utilizando la librería psycopg2.
+
+Column  |          Type          | 
+---------+--------------------------------
+ id      | integer                
+ descrip | character varying(200) 
+ costo   | double precision       
+ descu   | smallint               
+ cuota   | double precision       
+ nro     | smallint               
+ importe | double precision       
+Indexes:
+    "cos_pk" PRIMARY KEY, btree (id)

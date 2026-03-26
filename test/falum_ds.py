@@ -28,7 +28,7 @@ def insertar_datos_realistas(cantidad=2000):
             apellido = fake.last_name()
             
             cursor.execute(
-                "INSERT INTO alum (nombre, apellido) VALUES (%s, %s)",
+                "INSERT INTO alu (nombre, apellido) VALUES (%s, %s)",
                 (nombre, apellido)
             )
         
@@ -36,7 +36,7 @@ def insertar_datos_realistas(cantidad=2000):
         print(f"✅ ¡Completado! Se insertaron {cantidad} registros")
         
         # Verificar el total
-        cursor.execute("SELECT COUNT(*) FROM alum")
+        cursor.execute("SELECT COUNT(*) FROM alu")
         total = cursor.fetchone()[0]
         print(f"📊 Total de registros en tabla: {total}")
         

@@ -35,7 +35,7 @@ def fill_asig():
     cr4 = cx4.cursor()
 
     #init asig
-    cr4.execute("DELETE FROM asig")
+    cr4.execute("DELETE FROM asi")
     cx4.commit()
 
     cr1.execute("SELECT * FROM cur order by id ")
@@ -44,13 +44,13 @@ def fill_asig():
         cr2.execute("SELECT * FROM mat where gra_id=%s", (r[1],))
         for r2 in cr2.fetchall():
             print(r2[0], r2[1], r2[2])
-            prof_id = random.randint(1, 29)  # get prof aleatoriamente
-            print(prof_id)
-            cr3.execute(f"SELECT * FROM prof where id={prof_id}")
+            pro_id = random.randint(1, 29)  # get prof aleatoriamente
+            print(pro_id)
+            cr3.execute(f"SELECT * FROM pro where id={pro_id}")
             for r3 in cr3.fetchall():
                 print(r3[0], r3[1], r3[2])
                 cr4 = cx4.cursor()
-                cr4.execute("INSERT INTO asig (cur_id, mat_id, prof_id) VALUES (%s, %s, %s)", (r[0], r2[0], r3[0]))
+                cr4.execute("INSERT INTO asi (cur_id, mat_id, pro_id) VALUES (%s, %s, %s)", (r[0], r2[0], r3[0]))
                 cx4.commit()
                 cr4.close()
 

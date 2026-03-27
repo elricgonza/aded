@@ -167,7 +167,7 @@ CREATE TABLE public.ins (
 	alu_id integer,
 	cur_id integer,
 	cos_id integer NOT NULL,
-	fecha_insc date,
+	fecha_ins date,
 	CONSTRAINT ins_pk PRIMARY KEY (id),
 	CONSTRAINT ins_uq UNIQUE (alu_id)
 

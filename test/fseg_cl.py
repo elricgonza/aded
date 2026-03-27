@@ -102,19 +102,19 @@ def obtener_inscripciones_con_materias(conn):
     
     query = """
         SELECT DISTINCT
-            i.id as insc_id,
+            i.id as ins_id,
             i.cur_id,
-            i.alum_id,
+            i.alu_id,
             a.mat_id,
             m.materia as materia_nombre,
             al.nombre || ' ' || al.apellido as alumno,
             c.paralelo,
             c.gestion
-        FROM INSC i
+        FROM INS i
         INNER JOIN CUR c ON i.cur_id = c.id
-        INNER JOIN ASIG a ON c.id = a.cur_id
+        INNER JOIN ASI a ON c.id = a.cur_id
         INNER JOIN MAT m ON a.mat_id = m.id
-        INNER JOIN ALUM al ON i.alum_id = al.id
+        INNER JOIN ALU al ON i.alu_id = al.id
         ORDER BY i.id, a.mat_id;
     """
     
@@ -229,7 +229,7 @@ def poblar_seg_metodo2_python(conn):
         print("\nGenerando registros de seguimiento...")
         for idx, (insc_id, cur_id, alum_id, mat_id, materia, alumno, paralelo, gestion) in enumerate(inscripciones_materias, start=1):
             ev01, ev02, evfin, aprob = generar_notas()
-            registros_seg.append((insc_id, ev01, ev02, evfin, aprob))
+            registros_seg.append((insc_id, mat_id, ev01, ev02, evfin, aprob))
             
             # Mostrar progreso cada 100 registros
             if idx % 100 == 0:
@@ -238,7 +238,7 @@ def poblar_seg_metodo2_python(conn):
         # Insertar en batch
         cursor = conn.cursor()
         insert_query = """
-            INSERT INTO SEG (insc_id, ev01, ev02, evfin, aprob)
+            INSERT INTO SEG (ins_id, mat_id, ev01, ev02, evfin, aprob)
             VALUES (%s, %s, %s, %s, %s);
         """
         

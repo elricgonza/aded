@@ -1,0 +1,58 @@
+Dadas las siguientes tablas ya pobladas:
+
+Tabla cur (Curso): poblado con 42 cursos con id correlativo del 1 al 42
+
+ Column   |         Type          
+-----------+------------------------
+ id        | integer               
+ gra_id    | integer               
+ paralelo  | character varying(50) 
+ gestion   | smallint              
+ fecha_ini | date                  
+ fecha_fin | date                  
+Indexes:
+    "cur_pk" PRIMARY KEY, btree (id)
+
+Tabla alu (Alumnos): poblado con 2000 alumnos con id correlativo del 1 al 2000
+  Column  |          Type          | 
+----------+------------------------+-
+ id       | integer                |
+ nombre   | character varying(100) |
+ apellido | character varying(100) |
+Indexes:
+    "alu_pk" PRIMARY KEY, btree (id)
+
+
+Tabla cos (Costos): poblado con 9 registros de costos con id correlativo del 1 al 9
+
+Column  |          Type          |
+---------+------------------------
+ id      | integer                
+ descrip | character varying(200) 
+ costo   | double precision       
+ descu   | smallint               
+ cuota   | double precision       
+ nro     | smallint               
+ importe | double precision       
+Indexes:
+    "cos_pk" PRIMARY KEY, btree (id)
+
+Realizar un script en python y base de datos postgres con psycopg2 para
+poblar la tabla "ins" (Inscripciones) 
+
+
+  Column   |  Type   |
+-----------+---------+
+ id        | integer |
+ alu_id    | integer |
+ cur_id    | integer |
+ cos_id    | integer |
+ fecha_ins | date    |
+Indexes:
+    "ins_pk" PRIMARY KEY, btree (id)
+    "ins_uq" UNIQUE CONSTRAINT, btree (alu_id)
+
+Considerando que:
+-cada curso no debe exceder los 40 alumnos
+-un alumno no puede estar inscrito en más de un curso
+

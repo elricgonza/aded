@@ -300,7 +300,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pag" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="80" y="500"/>
+	<position x="80" y="520"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>

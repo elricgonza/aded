@@ -23,3 +23,46 @@ Proceso - inicio de gestión:
 		seg
 		pag
 
+
+--------------
+-se configura (genera) la tabla pag en función de:
+	-ins
+	-cos
+-¿Cómo se manejarán las actualizaciones para:
+	-nuevos alumnos que ingresan a 1/2 año? o similar? 
+	-nuevos profesores que se incorporan a la institución?
+	-cambios en los planes de estudio o en los costos de las materias?
+	-se podrían implementar procesos de actualización periódicos o manuales para reflejar estos cambios en las tablas correspondientes.
+
+	-incremento periódico más probable a 1/2 año, pero también podrían haber cambios en otras fechas (ej: nuevos profesores a mitad de año, cambios en planes de estudio a mitad de año, etc.)
+	-para manejar estos cambios, se podrían establecer procedimientos claros para la actualización de las tablas, incluyendo la identificación de los cambios necesarios, la asignación de responsabilidades para realizar las actualizaciones y la implementación de controles para garantizar la precisión y consistencia de los datos después de las actualizaciones.
+
+
+
+***
+Proceso de asignación de materias a profesores:
+	asi (pro_id debe permitir null inicialmente, para permitir la creación de registros sin asignar un profesor)
+
+Proceso de cambio de profesor asignado a una materia: (a media gestión)
+	-actualización del campo pro_id en la tabla asi para reflejar el nuevo profesor asignado a la materia.
+
+
+###
+nomas la tabla pag se llena de forma "libre"?
+con controles "mínimos"
+	-pago de 10 cuotas (max) de forma secuencial (obligatorio)
+	-no puede relizarse el pago de una cuota sin previamente haber pagado las anteriores (la cuota 2 sin haber pagado la cuota 1, etc...)
+	-id + cuota (no puede repetirse)
+	-visualizar información de: nivel, grado, curso
+
+###
+
+### programación de pagos -est-imado
+
+requiere:
+-cuantas cuotas se deben pagar
+-que cuotas y cuanto para cada cuota
+-que fecha se debe realizar cada pago
+-¿Cómo se manejarán los pagos atrasados o incumplidos?
+
+

@@ -1,0 +1,92 @@
+
+Con las tablas siguientes ya pobladas:
+
+-INSC: tabla de inscripción de alumnos en cursos (1680 registros con id del 1 al 1680)
+
+  Column   |  Type   |
+-----------+---------+
+ id        | integer |
+ alu_id    | integer |
+ cur_id    | integer |
+ cos_id    | integer |
+ fecha_ins | date    |
+Indexes:
+    "ins_pk" PRIMARY KEY, btree (id)
+    "ins_uq" UNIQUE CONSTRAINT, btree (alu_id)
+
+
+
+Tabla alu (Alumnos): poblado con 2000 alumnos con id correlativo del 1 al 2000
+  Column  |          Type          | 
+----------+------------------------+-
+ id       | integer                |
+ nombre   | character varying(100) |
+ apellido | character varying(100) |
+Indexes:
+    "alu_pk" PRIMARY KEY, btree (id)
+
+
+Tabla cur (Curso): poblado con 42 cursos con id correlativo del 1 al 42
+
+ Column   |         Type          
+-----------+------------------------
+ id        | integer               
+ gra_id    | integer               
+ paralelo  | character varying(50) 
+ gestion   | smallint              
+ fecha_ini | date                  
+ fecha_fin | date                  
+Indexes:
+    "cur_pk" PRIMARY KEY, btree (id)
+
+
+Tabla mat (Materias): poblado con 52 materias con id correlativo del 1 al 52
+Column  |          Type          
+---------+-----------------------
+ id      | integer               
+ materia | character varying(150)
+ gra_id  | integer               
+Indexes:
+    "mat_pkey" PRIMARY KEY, btree (id)
+
+
+Tabla asi (de asignación de materias, profesores a cursos)
+que tiene 168 registros con id correlativo del 1 al 102, asignando cada materia a un curso y profesor
+ Column |  Type   | 
+--------+---------+-
+ id     | integer | 
+ cur_id | integer | 
+ mat_id | integer | 
+ pro_id | integer | 
+Indexes:
+    "asi_pk" PRIMARY KEY, btree (id)
+
+
+Tabla prof: tabla de profesores, poblada con 29 profesores con id correlativo del 1 al 29
+  Column   |          Type          |
+-----------+------------------------+
+ id        | integer                |
+ nombre    | character varying(100) |
+ apellido  | character varying(100) |
+ formacion | character varying(100) |
+Indexes:
+    "pro_pk" PRIMARY KEY, btree (id)
+
+Poblar a través de un programa en python y base de datos postgres la tabla SEG:
+-SEG: tabla de seguimiento de alumnos inscritos en cursos 
+ Column |   Type   |
+--------+----------+
+ id     | integer  |
+ ins_id | integer  |
+ mat_id | integer  |
+ ev01   | smallint |
+ ev02   | smallint |
+ evfin  | smallint |
+ aprob  | boolean  |
+Indexes:
+    "seg_pk" PRIMARY KEY, btree (id)
+
+
+Considerando que para cada alumno (ALU) inscrito (en tabla INS) 
+se debe crear un registro en SEG con las materias (MAT) que tiene asignado ese curso (CUR)
+

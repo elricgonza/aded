@@ -65,4 +65,15 @@ requiere:
 -que fecha se debe realizar cada pago
 -¿Cómo se manejarán los pagos atrasados o incumplidos?
 
+###opc1 - requisito debe estar establecido plan pagos
+-para cada curso se establece un plan de pagos que define las cuotas, montos y fechas de pago...	
+---¿Cómo se manejarán los cambios en los planes de pago a lo largo del tiempo?
+	-se podrían implementar procesos de actualización para reflejar los cambios en los planes de pago, asegurando que los registros existentes se ajusten a las nuevas condiciones establecidas en el plan de pagos actualizado.
 
+--¿Cómo se manejarán los casos de estudiantes que cambian de curso o nivel a mitad de la gestión?
+	-se podrían establecer procedimientos para actualizar los registros de los estudiantes en la tabla insc, asegurando que se reflejen correctamente los cambios en su curso o nivel, y ajustando los planes de pago correspondientes si es necesario.
+
+	-costo asignado por grado y nivel, pero también podría haber casos especiales (ej: becas, descuentos, etc...) que podrían requerir ajustes en los costos para ciertos estudiantes o grupos de estudiantes.
+	-
+
+-

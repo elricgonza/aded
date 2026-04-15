@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# dado curso(s) y grado(s) obtener materias de cada grado
-# fill - asig además con prof
-
+'''
+dado curso(s) y grado(s) obtener materias de cada grado
+fill - asig además con prof
+'''
 import psycopg2 as pg
 import psycopg2.extras as pge
 import psycopg2.extensions as pge
@@ -41,7 +40,7 @@ def fill_asig():
     cr1.execute("SELECT * FROM cur order by id ")
     for r in cr1.fetchall():
         print(r[0], r[1], r[2])
-        cr2.execute("SELECT * FROM mat where gra_id=%s", (r[1],))
+        cr2.execute("SELECT * FROM mat where gra_id=%s", (r[2],))
         for r2 in cr2.fetchall():
             print(r2[0], r2[1], r2[2])
             pro_id = random.randint(1, 29)  # get prof aleatoriamente
@@ -55,7 +54,6 @@ def fill_asig():
                 cr4.close()
 
     cx1.close()
-
 
 if __name__ == "__main__":
     fill_asig()

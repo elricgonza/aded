@@ -47,8 +47,10 @@ Proceso de cambio de profesor asignado a una materia: (a media gestión)
 	-actualización del campo pro_id en la tabla asi para reflejar el nuevo profesor asignado a la materia.
 
 
-###
-nomas la tabla pag se llena de forma "libre"?
+
+#####  pagos:
+
+### opc1 - nomas la tabla pag se llena de forma "libre"?
 con controles "mínimos"
 	-pago de 10 cuotas (max) de forma secuencial (obligatorio)
 	-no puede relizarse el pago de una cuota sin previamente haber pagado las anteriores (la cuota 2 sin haber pagado la cuota 1, etc...)
@@ -57,15 +59,16 @@ con controles "mínimos"
 
 ###
 
-### programación de pagos -est-imado
-
+### opc2 - programación de pagos -est-imado - PROGRAMADO y DINÁMICO
 requiere:
 -cuantas cuotas se deben pagar
 -que cuotas y cuanto para cada cuota
--que fecha se debe realizar cada pago
+-que fecha se debe realizar cada pago  (propuesta en tabla COS)
+-tener info de descuentos o becas que puedan afectar el monto total a pagar o el monto de cada cuota (propuesta en tabla INS)
+
 -¿Cómo se manejarán los pagos atrasados o incumplidos?
 
-###opc1 - requisito debe estar establecido plan pagos
+### requisito debe estar establecido plan pagos
 -para cada curso se establece un plan de pagos que define las cuotas, montos y fechas de pago...	
 ---¿Cómo se manejarán los cambios en los planes de pago a lo largo del tiempo?
 	-se podrían implementar procesos de actualización para reflejar los cambios en los planes de pago, asegurando que los registros existentes se ajusten a las nuevas condiciones establecidas en el plan de pagos actualizado.

@@ -34,7 +34,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
 
-<table name="pla" layer="0" collapse-mode="2" max-obj-count="2">
+<table name="pla" layer="0" collapse-mode="1" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="60" y="60"/>
@@ -44,6 +44,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="plan" not-null="true">
 		<type name="character varying" length="150"/>
+	</column>
+	<column name="gestion" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="creado">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="pla_pkey" type="pk-constr" table="public.pla">
 		<columns names="id" ref-type="src-columns"/>
@@ -55,7 +64,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="niv" layer="0" collapse-mode="2" max-obj-count="3">
+<table name="niv" layer="0" collapse-mode="1" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="200" y="40"/>
@@ -69,6 +78,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="pla_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
+	<column name="gestion" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="niv_pkey" type="pk-constr" table="public.niv">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -79,10 +97,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="gra" layer="0" collapse-mode="2" max-obj-count="3">
+<table name="gra" layer="0" collapse-mode="1" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="380" y="40"/>
+	<position x="400" y="40"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -92,6 +110,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="niv_id" not-null="true">
 		<type name="integer" length="0"/>
+	</column>
+	<column name="gestion" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="gra_pkey" type="pk-constr" table="public.gra">
 		<columns names="id" ref-type="src-columns"/>
@@ -103,7 +130,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="mat" layer="0" collapse-mode="2" max-obj-count="3">
+<table name="mat" layer="0" collapse-mode="1" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="560" y="40"/>
@@ -117,6 +144,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="gra_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
+	<column name="gestion" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="mat_pkey" type="pk-constr" table="public.mat">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -127,10 +163,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="alu" layer="0" collapse-mode="2" max-obj-count="3">
+<table name="alu" layer="0" collapse-mode="1" max-obj-count="13">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="200" y="380"/>
+	<position x="60" y="400"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -138,8 +174,32 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="nombre" not-null="true">
 		<type name="character varying" length="100"/>
 	</column>
-	<column name="apellido" not-null="true">
+	<column name="paterno">
 		<type name="character varying" length="100"/>
+	</column>
+	<column name="materno">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="nacimiento">
+		<type name="date" length="0"/>
+	</column>
+	<column name="masculino" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="ci">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="direccion">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="obs">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="alu_pk" type="pk-constr" table="public.alu">
 		<columns names="id" ref-type="src-columns"/>
@@ -151,10 +211,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="ins" layer="0" collapse-mode="2" max-obj-count="4">
+<table name="ins" layer="0" collapse-mode="1" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="400" y="380"/>
+	<position x="420" y="360"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -165,7 +225,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="cur_id">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="inscrito">
+	<column name="reserva">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="inscrito" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="descu" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="motivo_descu">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="obs">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
 	<constraint name="ins_pk" type="pk-constr" table="public.ins">
@@ -181,10 +259,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="cur" layer="0" collapse-mode="2" max-obj-count="8">
+<table name="cur" layer="0" collapse-mode="1" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="280" y="200"/>
+	<position x="260" y="200"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -209,6 +287,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="date" length="0"/>
 		<comment><![CDATA[con datos cuando es diferente a una gestión anual]]></comment>
 	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="cur_pk" type="pk-constr" table="public.cur">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -219,11 +303,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="seg" layer="0" collapse-mode="2" max-obj-count="8">
+<table name="seg" layer="0" collapse-mode="1" max-obj-count="13">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
-	<position x="540" y="460"/>
+	<position x="580" y="480"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -240,11 +324,23 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="ev02">
 		<type name="smallint" length="0"/>
 	</column>
+	<column name="ev03">
+		<type name="smallint" length="0"/>
+	</column>
 	<column name="evfin">
 		<type name="smallint" length="0"/>
 	</column>
 	<column name="aprob">
 		<type name="boolean" length="0"/>
+	</column>
+	<column name="obs">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="seg_pk" type="pk-constr" table="public.seg">
 		<columns names="id" ref-type="src-columns"/>
@@ -256,10 +352,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="pro" layer="0" collapse-mode="2" max-obj-count="4">
+<table name="pro" layer="0" collapse-mode="1" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="680" y="460"/>
+	<position x="680" y="440"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -267,11 +363,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="nombre" not-null="true">
 		<type name="character varying" length="100"/>
 	</column>
-	<column name="apellido" not-null="true">
-		<type name="character varying" length="100"/>
+	<column name="paterno">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="materno">
+		<type name="varchar" length="50"/>
 	</column>
 	<column name="formacion">
 		<type name="character varying" length="100"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="pro_pk" type="pk-constr" table="public.pro">
 		<columns names="id" ref-type="src-columns"/>
@@ -283,11 +388,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asi" layer="0" collapse-mode="2" max-obj-count="4">
+<table name="asi" layer="0" collapse-mode="1" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[prof ASIgnado (enseña) a un curso y descripción de materias asignadas]]></comment>
-	<position x="600" y="260"/>
+	<position x="600" y="240"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -301,6 +406,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="pro_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="asi_pk" type="pk-constr" table="public.asi">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -311,10 +422,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="pag" layer="0" collapse-mode="2" max-obj-count="10">
+<table name="pag" layer="0" collapse-mode="1" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="80" y="420"/>
+	<position x="260" y="500"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -340,7 +451,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="actualizado" not-null="true">
+	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
 </table>
@@ -350,10 +461,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="cos" layer="0" collapse-mode="2" max-obj-count="9">
+<table name="cos" layer="0" collapse-mode="1" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="80" y="180"/>
+	<position x="120" y="200"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -376,7 +487,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="actualizado" not-null="true">
+	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
 	<constraint name="cos_pk" type="pk-constr" table="public.cos">

@@ -1,3 +1,15 @@
+-Inicio de gestión: PROCESO DE INICIALIZACIÓN DE GESTIÓN
+
+-Se reinician de 0 las tablas: pla, niv, gra, mat?
+sugerencia:
+	[considerando la cantidad de registros en estas tablas, podría ser más eficiente mantener los datos históricos y simplemente agregar nuevos registros para la nueva gestión, en lugar de eliminar y reiniciar las tablas cada vez]
+	[existe la posibilidad de que los planes de estudio, niveles, grados y materias puedan cambiar a lo largo del tiempo, por lo que mantener los datos históricos podría ser beneficioso para el análisis y la referencia futura]
+	[las tablas alu y prof podrían mantenerse con los datos históricos, ya que los estudiantes y profesores pueden continuar en la institución a lo largo de varias gestiones, aunque también se podrían agregar nuevos registros para reflejar los cambios en el personal y la matrícula]
+
+-Se dejan las tablas alum, prof, insc, seg, pag con los datos de las gestiones anteriores?
+ como una bd completa con su bakup de cada gestión, hummm gestión llave para conformación de bd?
+
+
 -las tablas son inicializadas cada gestión?
  (si es así, se deben eliminar los datos de las tablas al iniciar una nueva gestión)
 -¿Cómo se manejarán los datos históricos de las gestiones anteriores?
@@ -13,7 +25,13 @@ Proceso -cierre de gestión
 
 Proceso - inicio de gestión:
 1. Actualizaciones de las tablas, si requerido:
-		plan, niv, gra, mat, cos
+		plan, niv, gra, mat, cos (si hay cambios los datos de gestiones anteriores se reflejarán con los nuevos datos)
+				(considerar un proceso de CIERRE DE GESTIÓN para archivar los datos históricos antes de 
+				realizar las actualizaciones necesarias)
+				(SI se realizan actualizaciones en estas tablas, se deben revisar y ajustar los registros 
+				relacionados en las tablas que dependen de ellas para garantizar la integridad de los datos)
+				(o crear nuevos registros en pla, niv, gra, mat con los nuevos datos para la nueva gestión)
+
 	como parte de las actualizaciones necesarias las tablas:
 		alum, prof 
 	creación de nuevos registros "obligatorios" para la nueva gestión:

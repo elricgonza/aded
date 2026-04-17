@@ -163,10 +163,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="alu" layer="0" collapse-mode="1" max-obj-count="13">
+<table name="alu" layer="0" collapse-mode="1" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="60" y="400"/>
+	<position x="40" y="380"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -191,6 +191,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="direccion">
 		<type name="varchar" length="150"/>
+	</column>
+	<column name="activo" not-null="true">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="obs">
 		<type name="varchar" length="100"/>
@@ -352,7 +355,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="pro" layer="0" collapse-mode="1" max-obj-count="8">
+<table name="pro" layer="0" collapse-mode="1" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="680" y="440"/>
@@ -371,6 +374,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="formacion">
 		<type name="character varying" length="100"/>
+	</column>
+	<column name="activo" not-null="true">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
@@ -425,7 +431,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pag" layer="0" collapse-mode="1" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="260" y="500"/>
+	<position x="260" y="520"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>

@@ -1,0 +1,2329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="69"
+	 default-schema="public" default-owner="postgres">
+<role name="appgeo"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="flask_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="uaded"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="dbadedcla" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
+	<role name="uaded"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<extension name="uuid-ossp" cur-version="1.1">
+	<schema name="public"/>
+	<comment><![CDATA[generate universally unique identifiers (UUIDs)]]></comment>
+</extension>
+
+<extension name="pgcrypto" cur-version="1.3">
+	<schema name="public"/>
+	<comment><![CDATA[cryptographic functions]]></comment>
+</extension>
+
+<sequence name="gestion_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="gestion" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Períodos escolares (años y semestres)]]></comment>
+	<position x="80" y="40"/>
+	<column name="id" not-null="true" sequence="public.gestion_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="anio" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="periodo" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="fecha_inicio" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="fecha_fin" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="gestion_fechas_ck" type="ck-constr" table="public.gestion">
+			<expression><![CDATA[(fecha_fin > fecha_inicio)]]></expression>
+	</constraint>
+	<constraint name="gestion_pkey" type="pk-constr" table="public.gestion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="gestion_uq" type="uq-constr" table="public.gestion">
+		<columns names="anio,periodo" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="grado_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="grado" layer="0" collapse-mode="1" max-obj-count="7">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Niveles educativos (primaria, secundaria, etc.)]]></comment>
+	<position x="360" y="40"/>
+	<column name="id" not-null="true" sequence="public.grado_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nivel" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="grado" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="orden" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="descripcion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="grado_pkey" type="pk-constr" table="public.grado">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="grado_uq" type="uq-constr" table="public.grado">
+		<columns names="nivel,grado" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="materia_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="materia" layer="0" collapse-mode="1" max-obj-count="9">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Asignaturas del plan de estudios]]></comment>
+	<position x="540" y="80"/>
+	<column name="id" not-null="true" sequence="public.materia_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="grado_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="area">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="horas_semanales" default-value="0">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="materia_pkey" type="pk-constr" table="public.materia">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="materia_codigo_key" type="uq-constr" table="public.materia">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="tutor_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="tutor" layer="0" collapse-mode="1" max-obj-count="13">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Padres/apoderados de los estudiantes]]></comment>
+	<position x="780" y="60"/>
+	<column name="id" not-null="true" sequence="public.tutor_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nombres" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido_paterno" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido_materno">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="ci">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="telefono">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="direccion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="ocupacion">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="parentesco">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="tutor_pkey" type="pk-constr" table="public.tutor">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="estudiante_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="estudiante" layer="0" collapse-mode="1" max-obj-count="19">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Información de los estudiantes]]></comment>
+	<position x="1000" y="60"/>
+	<column name="id" not-null="true" sequence="public.estudiante_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo_estudiante" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombres" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido_paterno" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido_materno">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="ci">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="fecha_nacimiento" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="genero">
+		<type name="character" length="1"/>
+	</column>
+	<column name="direccion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="telefono">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="foto_url">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="tutor_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="fecha_ingreso" default-value="CURRENT_DATE">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="estudiante_genero_check" type="ck-constr" table="public.estudiante">
+			<expression><![CDATA[(genero = ANY (ARRAY['M'::bpchar, 'F'::bpchar]))]]></expression>
+	</constraint>
+	<constraint name="estudiante_pkey" type="pk-constr" table="public.estudiante">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="estudiante_codigo_estudiante_key" type="uq-constr" table="public.estudiante">
+		<columns names="codigo_estudiante" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="estudiante_ci_key" type="uq-constr" table="public.estudiante">
+		<columns names="ci" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="profesor_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="profesor" layer="0" collapse-mode="1" max-obj-count="19">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Información de los profesores]]></comment>
+	<position x="80" y="420"/>
+	<column name="id" not-null="true" sequence="public.profesor_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo_profesor" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombres" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido_paterno" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellido_materno">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="ci" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="fecha_nacimiento" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="genero">
+		<type name="character" length="1"/>
+	</column>
+	<column name="direccion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="telefono">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="formacion">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="especialidad">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="fecha_contratacion" default-value="CURRENT_DATE">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="profesor_genero_check" type="ck-constr" table="public.profesor">
+			<expression><![CDATA[(genero = ANY (ARRAY['M'::bpchar, 'F'::bpchar]))]]></expression>
+	</constraint>
+	<constraint name="profesor_pkey" type="pk-constr" table="public.profesor">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="profesor_codigo_profesor_key" type="uq-constr" table="public.profesor">
+		<columns names="codigo_profesor" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="profesor_ci_key" type="uq-constr" table="public.profesor">
+		<columns names="ci" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="curso_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="curso" layer="0" collapse-mode="1" max-obj-count="12">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Cursos organizados por grado y paralelo]]></comment>
+	<position x="320" y="540"/>
+	<column name="id" not-null="true" sequence="public.curso_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="grado_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="paralelo" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="gestion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="aula">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="turno">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="capacidad_maxima" default-value="40">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="profesor_tutor_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="curso_turno_check" type="ck-constr" table="public.curso">
+			<expression><![CDATA[((turno)::text = ANY ((ARRAY['Mañana'::character varying, 'Tarde'::character varying, 'Noche'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="curso_pkey" type="pk-constr" table="public.curso">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="curso_uq" type="uq-constr" table="public.curso">
+		<columns names="grado_id,paralelo,gestion_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="inscripcion_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="inscripcion" layer="0" collapse-mode="1" max-obj-count="10">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Inscripción de estudiantes en cursos]]></comment>
+	<position x="580" y="540"/>
+	<column name="id" not-null="true" sequence="public.inscripcion_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="estudiante_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="curso_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="gestion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="fecha_inscripcion" default-value="CURRENT_DATE">
+		<type name="date" length="0"/>
+	</column>
+	<column name="estado" default-value="'Activo'">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="observaciones">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="updated_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="inscripcion_estado_check" type="ck-constr" table="public.inscripcion">
+			<expression><![CDATA[((estado)::text = ANY ((ARRAY['Activo'::character varying, 'Retirado'::character varying, 'Trasladado'::character varying, 'Finalizado'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="inscripcion_pkey" type="pk-constr" table="public.inscripcion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="inscripcion_uq" type="uq-constr" table="public.inscripcion">
+		<columns names="estudiante_id,gestion_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="asignacion_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="asignacion" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Asignación de profesores a materias en cursos]]></comment>
+	<position x="840" y="540"/>
+	<column name="id" not-null="true" sequence="public.asignacion_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="curso_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="materia_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="profesor_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="gestion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="asignacion_pkey" type="pk-constr" table="public.asignacion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="asignacion_uq" type="uq-constr" table="public.asignacion">
+		<columns names="curso_id,materia_id,gestion_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="seguimiento_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="seguimiento" layer="0" collapse-mode="1" max-obj-count="16">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Calificaciones y seguimiento académico]]></comment>
+	<position x="1080" y="440"/>
+	<column name="id" not-null="true" sequence="public.seguimiento_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="inscripcion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="materia_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="asignacion_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="bimestre">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="evaluacion_1">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="evaluacion_2">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="evaluacion_3">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="promedio_bimestre">
+		<type name="numeric" length="5" precision="2"/>
+	</column>
+	<column name="promedio_final">
+		<type name="numeric" length="5" precision="2"/>
+	</column>
+	<column name="aprobado">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="observaciones">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="updated_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="seguimiento_bimestre_check" type="ck-constr" table="public.seguimiento">
+			<expression><![CDATA[((bimestre >= 1) AND (bimestre <= 4))]]></expression>
+	</constraint>
+	<constraint name="seguimiento_evaluacion_1_check" type="ck-constr" table="public.seguimiento">
+			<expression><![CDATA[((evaluacion_1 >= 0) AND (evaluacion_1 <= 100))]]></expression>
+	</constraint>
+	<constraint name="seguimiento_evaluacion_2_check" type="ck-constr" table="public.seguimiento">
+			<expression><![CDATA[((evaluacion_2 >= 0) AND (evaluacion_2 <= 100))]]></expression>
+	</constraint>
+	<constraint name="seguimiento_evaluacion_3_check" type="ck-constr" table="public.seguimiento">
+			<expression><![CDATA[((evaluacion_3 >= 0) AND (evaluacion_3 <= 100))]]></expression>
+	</constraint>
+	<constraint name="seguimiento_pkey" type="pk-constr" table="public.seguimiento">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="seguimiento_uq" type="uq-constr" table="public.seguimiento">
+		<columns names="inscripcion_id,materia_id,bimestre" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="asistencia_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="asistencia" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Control de asistencia de estudiantes]]></comment>
+	<position x="60" y="1100"/>
+	<column name="id" not-null="true" sequence="public.asistencia_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="inscripcion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="asignacion_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="fecha" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="estado" default-value="'Presente'">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="observaciones">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="asistencia_estado_check" type="ck-constr" table="public.asistencia">
+			<expression><![CDATA[((estado)::text = ANY ((ARRAY['Presente'::character varying, 'Ausente'::character varying, 'Tardanza'::character varying, 'Justificado'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="asistencia_pkey" type="pk-constr" table="public.asistencia">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="asistencia_uq" type="uq-constr" table="public.asistencia">
+		<columns names="inscripcion_id,asignacion_id,fecha" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="horario_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="horario" layer="0" collapse-mode="1" max-obj-count="9">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Horarios de clases]]></comment>
+	<position x="320" y="1100"/>
+	<column name="id" not-null="true" sequence="public.horario_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="asignacion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="dia_semana" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="hora_inicio" not-null="true">
+		<type name="time" length="0"/>
+	</column>
+	<column name="hora_fin" not-null="true">
+		<type name="time" length="0"/>
+	</column>
+	<column name="aula">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="horario_dia_semana_check" type="ck-constr" table="public.horario">
+			<expression><![CDATA[((dia_semana >= 1) AND (dia_semana <= 7))]]></expression>
+	</constraint>
+	<constraint name="horario_ck" type="ck-constr" table="public.horario">
+			<expression><![CDATA[(hora_fin > hora_inicio)]]></expression>
+	</constraint>
+	<constraint name="horario_pkey" type="pk-constr" table="public.horario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="concepto_pago_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="concepto_pago" layer="0" collapse-mode="1" max-obj-count="9">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tipos de conceptos de pago]]></comment>
+	<position x="560" y="1100"/>
+	<column name="id" not-null="true" sequence="public.concepto_pago_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="descripcion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="monto_base" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="tipo">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="concepto_pago_tipo_check" type="ck-constr" table="public.concepto_pago">
+			<expression><![CDATA[((tipo)::text = ANY ((ARRAY['Único'::character varying, 'Mensual'::character varying, 'Anual'::character varying, 'Variable'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="concepto_pago_pkey" type="pk-constr" table="public.concepto_pago">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="concepto_pago_codigo_key" type="uq-constr" table="public.concepto_pago">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="pago_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="pago" layer="0" collapse-mode="1" max-obj-count="18">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Registro de pagos de estudiantes]]></comment>
+	<position x="800" y="1100"/>
+	<column name="id" not-null="true" sequence="public.pago_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="inscripcion_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="concepto_pago_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="monto" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="descuento" default-value="0">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="monto_total" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="fecha_pago">
+		<type name="date" length="0"/>
+	</column>
+	<column name="fecha_vencimiento">
+		<type name="date" length="0"/>
+	</column>
+	<column name="mes_correspondiente">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="metodo_pago">
+		<type name="character varying" length="30"/>
+	</column>
+	<column name="numero_comprobante">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="estado" default-value="'Pendiente'">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="observaciones">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="updated_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="pago_mes_correspondiente_check" type="ck-constr" table="public.pago">
+			<expression><![CDATA[((mes_correspondiente >= 1) AND (mes_correspondiente <= 12))]]></expression>
+	</constraint>
+	<constraint name="pago_metodo_pago_check" type="ck-constr" table="public.pago">
+			<expression><![CDATA[((metodo_pago)::text = ANY ((ARRAY['Efectivo'::character varying, 'Transferencia'::character varying, 'Tarjeta'::character varying, 'QR'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="pago_estado_check" type="ck-constr" table="public.pago">
+			<expression><![CDATA[((estado)::text = ANY ((ARRAY['Pendiente'::character varying, 'Pagado'::character varying, 'Vencido'::character varying, 'Anulado'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="pago_pkey" type="pk-constr" table="public.pago">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="idx_estudiante_activo" table="public.estudiante"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="activo"/>
+		</idxelement>
+</index>
+
+<index name="idx_estudiante_tutor" table="public.estudiante"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="tutor_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_inscripcion_estudiante" table="public.inscripcion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="estudiante_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_inscripcion_curso" table="public.inscripcion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="curso_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_inscripcion_gestion" table="public.inscripcion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="gestion_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_inscripcion_estado" table="public.inscripcion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="estado"/>
+		</idxelement>
+</index>
+
+<index name="idx_asignacion_curso" table="public.asignacion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="curso_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_asignacion_materia" table="public.asignacion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="materia_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_asignacion_profesor" table="public.asignacion"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="profesor_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_seguimiento_inscripcion" table="public.seguimiento"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="inscripcion_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_seguimiento_materia" table="public.seguimiento"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="materia_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_seguimiento_bimestre" table="public.seguimiento"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="bimestre"/>
+		</idxelement>
+</index>
+
+<index name="idx_asistencia_inscripcion" table="public.asistencia"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="inscripcion_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_asistencia_fecha" table="public.asistencia"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="fecha"/>
+		</idxelement>
+</index>
+
+<index name="idx_asistencia_estado" table="public.asistencia"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="estado"/>
+		</idxelement>
+</index>
+
+<index name="idx_pago_inscripcion" table="public.pago"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="inscripcion_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_pago_estado" table="public.pago"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="estado"/>
+		</idxelement>
+</index>
+
+<index name="idx_pago_fecha_pago" table="public.pago"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="fecha_pago"/>
+		</idxelement>
+</index>
+
+<index name="idx_pago_mes" table="public.pago"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="mes_correspondiente"/>
+		</idxelement>
+</index>
+
+<function name="actualizar_timestamp"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="trigger" length="1"/>
+	</return-type>
+	<definition><![CDATA[
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+]]></definition>
+</function>
+
+<trigger name="trg_inscripcion_updated" firing-type="BEFORE" per-line="true" constraint="false"
+	 ins-event="false" del-event="false" upd-event="true" trunc-event="false"
+	 table="public.inscripcion">
+		<function signature="public.actualizar_timestamp()"/>
+</trigger>
+
+<trigger name="trg_seguimiento_updated" firing-type="BEFORE" per-line="true" constraint="false"
+	 ins-event="false" del-event="false" upd-event="true" trunc-event="false"
+	 table="public.seguimiento">
+		<function signature="public.actualizar_timestamp()"/>
+</trigger>
+
+<trigger name="trg_pago_updated" firing-type="BEFORE" per-line="true" constraint="false"
+	 ins-event="false" del-event="false" upd-event="true" trunc-event="false"
+	 table="public.pago">
+		<function signature="public.actualizar_timestamp()"/>
+</trigger>
+
+<function name="calcular_promedio_seguimiento"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="trigger" length="1"/>
+	</return-type>
+	<definition><![CDATA[
+BEGIN
+    -- Calcular promedio del bimestre
+    NEW.promedio_bimestre = (
+        COALESCE(NEW.evaluacion_1, 0) + 
+        COALESCE(NEW.evaluacion_2, 0) + 
+        COALESCE(NEW.evaluacion_3, 0)
+    ) / 3.0;
+    
+    -- Determinar si aprobó (nota >= 51)
+    NEW.aprobado = (NEW.promedio_bimestre >= 51);
+    
+    RETURN NEW;
+END;
+]]></definition>
+</function>
+
+<trigger name="trg_seguimiento_calcular_promedio" firing-type="BEFORE" per-line="true" constraint="false"
+	 ins-event="true" del-event="false" upd-event="true" trunc-event="false"
+	 table="public.seguimiento">
+		<function signature="public.calcular_promedio_seguimiento()"/>
+</trigger>
+
+<function name="calcular_monto_total_pago"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="trigger" length="1"/>
+	</return-type>
+	<definition><![CDATA[
+BEGIN
+    NEW.monto_total = NEW.monto - COALESCE(NEW.descuento, 0);
+    RETURN NEW;
+END;
+]]></definition>
+</function>
+
+<trigger name="trg_pago_calcular_total" firing-type="BEFORE" per-line="true" constraint="false"
+	 ins-event="true" del-event="false" upd-event="true" trunc-event="false"
+	 table="public.pago">
+		<function signature="public.calcular_monto_total_pago()"/>
+</trigger>
+
+<view name="v_estudiantes_inscritos" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Vista completa de estudiantes inscritos con información de tutor y curso]]></comment>
+	<position x="1080" y="1100"/>
+	<reference>
+		<expression><![CDATA[ SELECT e.id AS estudiante_id,
+    e.codigo_estudiante,
+    (((((e.nombres)::text || ' '::text) || (e.apellido_paterno)::text) || ' '::text) || (COALESCE(e.apellido_materno, ''::character varying))::text) AS nombre_completo,
+    e.ci,
+    e.genero,
+    e.fecha_nacimiento,
+    date_part('year'::text, age((e.fecha_nacimiento)::timestamp with time zone)) AS edad,
+    (((t.nombres)::text || ' '::text) || (t.apellido_paterno)::text) AS tutor,
+    t.telefono AS telefono_tutor,
+    i.id AS inscripcion_id,
+    c.id AS curso_id,
+    g.nivel,
+    g.grado,
+    c.paralelo,
+    ges.anio AS gestion,
+    i.estado AS estado_inscripcion,
+    (((p.nombres)::text || ' '::text) || (p.apellido_paterno)::text) AS profesor_tutor
+   FROM ((((((estudiante e
+     LEFT JOIN tutor t ON ((e.tutor_id = t.id)))
+     LEFT JOIN inscripcion i ON (((e.id = i.estudiante_id) AND ((i.estado)::text = 'Activo'::text))))
+     LEFT JOIN curso c ON ((i.curso_id = c.id)))
+     LEFT JOIN grado g ON ((c.grado_id = g.id)))
+     LEFT JOIN gestion ges ON ((i.gestion_id = ges.id)))
+     LEFT JOIN profesor p ON ((c.profesor_tutor_id = p.id)))
+  WHERE (e.activo = true);]]></expression>
+	<column name="estudiante_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo_estudiante">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombre_completo">
+		<type name="text" length="0"/>
+	</column>
+	<column name="ci">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="genero">
+		<type name="character" length="1"/>
+	</column>
+	<column name="fecha_nacimiento">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edad">
+		<type name="double precision" length="0"/>
+	</column>
+	<column name="tutor">
+		<type name="text" length="0"/>
+	</column>
+	<column name="telefono_tutor">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="inscripcion_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="curso_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nivel">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="grado">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="paralelo">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="gestion">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="estado_inscripcion">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="profesor_tutor">
+		<type name="text" length="0"/>
+	</column>
+		<reftable name="public.gestion"/>
+		<reftable name="public.grado"/>
+		<reftable name="public.tutor"/>
+		<reftable name="public.estudiante"/>
+		<reftable name="public.profesor"/>
+		<reftable name="public.curso"/>
+		<reftable name="public.inscripcion"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_estudiantes_inscritos_gestion" type="reltv" layer="0"
+	 custom-color="#db4eeb"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.gestion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_estudiantes_inscritos_grado" type="reltv" layer="0"
+	 custom-color="#22b3a7"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.grado"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_estudiantes_inscritos_tutor" type="reltv" layer="0"
+	 custom-color="#fa02e9"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.tutor"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_estudiantes_inscritos_estudiante" type="reltv" layer="0"
+	 custom-color="#cad1fc"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.estudiante"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_estudiantes_inscritos_profesor" type="reltv" layer="0"
+	 custom-color="#89725e"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.profesor"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_estudiantes_inscritos_curso" type="reltv" layer="0"
+	 custom-color="#d70521"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.curso"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_estudiantes_inscritos_inscripcion" type="reltv" layer="0"
+	 custom-color="#c77490"
+	 src-table="public.v_estudiantes_inscritos"
+	 dst-table="public.inscripcion"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_carga_profesores" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Carga académica de profesores por gestión]]></comment>
+	<position x="60" y="1640"/>
+	<reference>
+		<expression><![CDATA[ SELECT p.id AS profesor_id,
+    p.codigo_profesor,
+    (((p.nombres)::text || ' '::text) || (p.apellido_paterno)::text) AS profesor,
+    p.especialidad,
+    ges.anio AS gestion,
+    count(DISTINCT a.curso_id) AS total_cursos,
+    count(DISTINCT a.materia_id) AS total_materias,
+    string_agg(DISTINCT (m.nombre)::text, ', '::text) AS materias,
+    sum(m.horas_semanales) AS horas_semanales_totales
+   FROM (((profesor p
+     JOIN asignacion a ON ((p.id = a.profesor_id)))
+     JOIN materia m ON ((a.materia_id = m.id)))
+     JOIN gestion ges ON ((a.gestion_id = ges.id)))
+  WHERE ((a.activo = true) AND (p.activo = true))
+  GROUP BY p.id, p.codigo_profesor, p.nombres, p.apellido_paterno, p.especialidad, ges.anio;]]></expression>
+	<column name="profesor_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo_profesor">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="profesor">
+		<type name="text" length="0"/>
+	</column>
+	<column name="especialidad">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="gestion">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="total_cursos">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="total_materias">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="materias">
+		<type name="text" length="0"/>
+	</column>
+	<column name="horas_semanales_totales">
+		<type name="bigint" length="0"/>
+	</column>
+		<reftable name="public.gestion"/>
+		<reftable name="public.materia"/>
+		<reftable name="public.profesor"/>
+		<reftable name="public.asignacion"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_carga_profesores_gestion" type="reltv" layer="0"
+	 custom-color="#8d56ba"
+	 src-table="public.v_carga_profesores"
+	 dst-table="public.gestion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_carga_profesores_materia" type="reltv" layer="0"
+	 custom-color="#fa22b3"
+	 src-table="public.v_carga_profesores"
+	 dst-table="public.materia"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_carga_profesores_profesor" type="reltv" layer="0"
+	 custom-color="#1eeb4d"
+	 src-table="public.v_carga_profesores"
+	 dst-table="public.profesor"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_carga_profesores_asignacion" type="reltv" layer="0"
+	 custom-color="#82a11f"
+	 src-table="public.v_carga_profesores"
+	 dst-table="public.asignacion"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_rendimiento_estudiantes" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Rendimiento académico de estudiantes]]></comment>
+	<position x="280" y="1640"/>
+	<reference>
+		<expression><![CDATA[ SELECT i.id AS inscripcion_id,
+    e.codigo_estudiante,
+    (((e.nombres)::text || ' '::text) || (e.apellido_paterno)::text) AS estudiante,
+    (((((g.nivel)::text || ' '::text) || (g.grado)::text) || ' '::text) || (c.paralelo)::text) AS curso,
+    ges.anio AS gestion,
+    count(DISTINCT s.materia_id) AS total_materias,
+    count(
+        CASE
+            WHEN (s.aprobado = true) THEN 1
+            ELSE NULL::integer
+        END) AS materias_aprobadas,
+    count(
+        CASE
+            WHEN (s.aprobado = false) THEN 1
+            ELSE NULL::integer
+        END) AS materias_reprobadas,
+    round(avg(s.promedio_bimestre), 2) AS promedio_general,
+        CASE
+            WHEN (count(
+            CASE
+                WHEN (s.aprobado = false) THEN 1
+                ELSE NULL::integer
+            END) = 0) THEN 'Aprobado'::text
+            ELSE 'Reprobado'::text
+        END AS estado_final
+   FROM (((((inscripcion i
+     JOIN estudiante e ON ((i.estudiante_id = e.id)))
+     JOIN curso c ON ((i.curso_id = c.id)))
+     JOIN grado g ON ((c.grado_id = g.id)))
+     JOIN gestion ges ON ((i.gestion_id = ges.id)))
+     LEFT JOIN seguimiento s ON ((i.id = s.inscripcion_id)))
+  WHERE ((i.estado)::text = 'Activo'::text)
+  GROUP BY i.id, e.codigo_estudiante, e.nombres, e.apellido_paterno, g.nivel, g.grado, c.paralelo, ges.anio;]]></expression>
+	<column name="inscripcion_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codigo_estudiante">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="estudiante">
+		<type name="text" length="0"/>
+	</column>
+	<column name="curso">
+		<type name="text" length="0"/>
+	</column>
+	<column name="gestion">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="total_materias">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="materias_aprobadas">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="materias_reprobadas">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="promedio_general">
+		<type name="numeric" length="0"/>
+	</column>
+	<column name="estado_final">
+		<type name="text" length="0"/>
+	</column>
+		<reftable name="public.gestion"/>
+		<reftable name="public.grado"/>
+		<reftable name="public.estudiante"/>
+		<reftable name="public.curso"/>
+		<reftable name="public.inscripcion"/>
+		<reftable name="public.seguimiento"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_rendimiento_estudiantes_gestion" type="reltv" layer="0"
+	 custom-color="#6b5ad4"
+	 src-table="public.v_rendimiento_estudiantes"
+	 dst-table="public.gestion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_rendimiento_estudiantes_grado" type="reltv" layer="0"
+	 custom-color="#765347"
+	 src-table="public.v_rendimiento_estudiantes"
+	 dst-table="public.grado"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_rendimiento_estudiantes_estudiante" type="reltv" layer="0"
+	 custom-color="#e87695"
+	 src-table="public.v_rendimiento_estudiantes"
+	 dst-table="public.estudiante"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_rendimiento_estudiantes_curso" type="reltv" layer="0"
+	 custom-color="#1b958b"
+	 src-table="public.v_rendimiento_estudiantes"
+	 dst-table="public.curso"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_rendimiento_estudiantes_inscripcion" type="reltv" layer="0"
+	 custom-color="#928e19"
+	 src-table="public.v_rendimiento_estudiantes"
+	 dst-table="public.inscripcion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_rendimiento_estudiantes_seguimiento" type="reltv" layer="0"
+	 custom-color="#283eee"
+	 src-table="public.v_rendimiento_estudiantes"
+	 dst-table="public.seguimiento"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_asistencia_estudiantes" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Estadísticas de asistencia por estudiante]]></comment>
+	<position x="560" y="1640"/>
+	<reference>
+		<expression><![CDATA[ SELECT e.codigo_estudiante,
+    (((e.nombres)::text || ' '::text) || (e.apellido_paterno)::text) AS estudiante,
+    (((((g.nivel)::text || ' '::text) || (g.grado)::text) || ' '::text) || (c.paralelo)::text) AS curso,
+    count(*) AS total_registros,
+    count(
+        CASE
+            WHEN ((a.estado)::text = 'Presente'::text) THEN 1
+            ELSE NULL::integer
+        END) AS presentes,
+    count(
+        CASE
+            WHEN ((a.estado)::text = 'Ausente'::text) THEN 1
+            ELSE NULL::integer
+        END) AS ausentes,
+    count(
+        CASE
+            WHEN ((a.estado)::text = 'Tardanza'::text) THEN 1
+            ELSE NULL::integer
+        END) AS tardanzas,
+    count(
+        CASE
+            WHEN ((a.estado)::text = 'Justificado'::text) THEN 1
+            ELSE NULL::integer
+        END) AS justificados,
+    round((((count(
+        CASE
+            WHEN ((a.estado)::text = 'Presente'::text) THEN 1
+            ELSE NULL::integer
+        END))::numeric * 100.0) / (NULLIF(count(*), 0))::numeric), 2) AS porcentaje_asistencia
+   FROM ((((inscripcion i
+     JOIN estudiante e ON ((i.estudiante_id = e.id)))
+     JOIN curso c ON ((i.curso_id = c.id)))
+     JOIN grado g ON ((c.grado_id = g.id)))
+     LEFT JOIN asistencia a ON ((i.id = a.inscripcion_id)))
+  WHERE ((i.estado)::text = 'Activo'::text)
+  GROUP BY e.codigo_estudiante, e.nombres, e.apellido_paterno, g.nivel, g.grado, c.paralelo;]]></expression>
+	<column name="codigo_estudiante">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="estudiante">
+		<type name="text" length="0"/>
+	</column>
+	<column name="curso">
+		<type name="text" length="0"/>
+	</column>
+	<column name="total_registros">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="presentes">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="ausentes">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="tardanzas">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="justificados">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="porcentaje_asistencia">
+		<type name="numeric" length="0"/>
+	</column>
+		<reftable name="public.grado"/>
+		<reftable name="public.estudiante"/>
+		<reftable name="public.curso"/>
+		<reftable name="public.inscripcion"/>
+		<reftable name="public.asistencia"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_asistencia_estudiantes_grado" type="reltv" layer="0"
+	 custom-color="#2d6205"
+	 src-table="public.v_asistencia_estudiantes"
+	 dst-table="public.grado"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_asistencia_estudiantes_estudiante" type="reltv" layer="0"
+	 custom-color="#31bfec"
+	 src-table="public.v_asistencia_estudiantes"
+	 dst-table="public.estudiante"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_asistencia_estudiantes_curso" type="reltv" layer="0"
+	 custom-color="#b228e6"
+	 src-table="public.v_asistencia_estudiantes"
+	 dst-table="public.curso"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_asistencia_estudiantes_inscripcion" type="reltv" layer="0"
+	 custom-color="#c63f44"
+	 src-table="public.v_asistencia_estudiantes"
+	 dst-table="public.inscripcion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_asistencia_estudiantes_asistencia" type="reltv" layer="0"
+	 custom-color="#c9d119"
+	 src-table="public.v_asistencia_estudiantes"
+	 dst-table="public.asistencia"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_horarios_curso" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="820" y="1640"/>
+	<reference>
+		<expression><![CDATA[ SELECT c.id AS curso_id,
+    (((((g.nivel)::text || ' '::text) || (g.grado)::text) || ' '::text) || (c.paralelo)::text) AS curso,
+    c.turno,
+        CASE h.dia_semana
+            WHEN 1 THEN 'Lunes'::text
+            WHEN 2 THEN 'Martes'::text
+            WHEN 3 THEN 'Miércoles'::text
+            WHEN 4 THEN 'Jueves'::text
+            WHEN 5 THEN 'Viernes'::text
+            WHEN 6 THEN 'Sábado'::text
+            WHEN 7 THEN 'Domingo'::text
+            ELSE NULL::text
+        END AS dia,
+    h.hora_inicio,
+    h.hora_fin,
+    m.nombre AS materia,
+    (((p.nombres)::text || ' '::text) || (p.apellido_paterno)::text) AS profesor,
+    h.aula
+   FROM (((((curso c
+     JOIN grado g ON ((c.grado_id = g.id)))
+     JOIN asignacion a ON ((c.id = a.curso_id)))
+     JOIN materia m ON ((a.materia_id = m.id)))
+     JOIN profesor p ON ((a.profesor_id = p.id)))
+     LEFT JOIN horario h ON ((a.id = h.asignacion_id)))
+  WHERE (h.activo = true)
+  ORDER BY c.id, h.dia_semana, h.hora_inicio;]]></expression>
+	<column name="curso_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="curso">
+		<type name="text" length="0"/>
+	</column>
+	<column name="turno">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="dia">
+		<type name="text" length="0"/>
+	</column>
+	<column name="hora_inicio">
+		<type name="time" length="0"/>
+	</column>
+	<column name="hora_fin">
+		<type name="time" length="0"/>
+	</column>
+	<column name="materia">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="profesor">
+		<type name="text" length="0"/>
+	</column>
+	<column name="aula">
+		<type name="character varying" length="50"/>
+	</column>
+		<reftable name="public.grado"/>
+		<reftable name="public.materia"/>
+		<reftable name="public.profesor"/>
+		<reftable name="public.curso"/>
+		<reftable name="public.asignacion"/>
+		<reftable name="public.horario"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_horarios_curso_grado" type="reltv" layer="0"
+	 custom-color="#ca379f"
+	 src-table="public.v_horarios_curso"
+	 dst-table="public.grado"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_horarios_curso_materia" type="reltv" layer="0"
+	 custom-color="#07657d"
+	 src-table="public.v_horarios_curso"
+	 dst-table="public.materia"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_horarios_curso_profesor" type="reltv" layer="0"
+	 custom-color="#1d7f6f"
+	 src-table="public.v_horarios_curso"
+	 dst-table="public.profesor"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_horarios_curso_curso" type="reltv" layer="0"
+	 custom-color="#c80bd7"
+	 src-table="public.v_horarios_curso"
+	 dst-table="public.curso"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_horarios_curso_asignacion" type="reltv" layer="0"
+	 custom-color="#2d4e34"
+	 src-table="public.v_horarios_curso"
+	 dst-table="public.asignacion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_horarios_curso_horario" type="reltv" layer="0"
+	 custom-color="#9c5513"
+	 src-table="public.v_horarios_curso"
+	 dst-table="public.horario"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_pagos_estudiante" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Estado de pagos por estudiante]]></comment>
+	<position x="1040" y="1640"/>
+	<reference>
+		<expression><![CDATA[ SELECT e.codigo_estudiante,
+    (((e.nombres)::text || ' '::text) || (e.apellido_paterno)::text) AS estudiante,
+    (((((g.nivel)::text || ' '::text) || (g.grado)::text) || ' '::text) || (c.paralelo)::text) AS curso,
+    cp.nombre AS concepto,
+    p.monto,
+    p.descuento,
+    p.monto_total,
+    p.fecha_vencimiento,
+    p.fecha_pago,
+    p.mes_correspondiente,
+    p.estado,
+        CASE
+            WHEN ((p.estado)::text = 'Vencido'::text) THEN (p.fecha_vencimiento - CURRENT_DATE)
+            ELSE 0
+        END AS dias_vencidos
+   FROM (((((inscripcion i
+     JOIN estudiante e ON ((i.estudiante_id = e.id)))
+     JOIN curso c ON ((i.curso_id = c.id)))
+     JOIN grado g ON ((c.grado_id = g.id)))
+     JOIN pago p ON ((i.id = p.inscripcion_id)))
+     JOIN concepto_pago cp ON ((p.concepto_pago_id = cp.id)))
+  WHERE ((i.estado)::text = 'Activo'::text);]]></expression>
+	<column name="codigo_estudiante">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="estudiante">
+		<type name="text" length="0"/>
+	</column>
+	<column name="curso">
+		<type name="text" length="0"/>
+	</column>
+	<column name="concepto">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="monto">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="descuento">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="monto_total">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="fecha_vencimiento">
+		<type name="date" length="0"/>
+	</column>
+	<column name="fecha_pago">
+		<type name="date" length="0"/>
+	</column>
+	<column name="mes_correspondiente">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="estado">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="dias_vencidos">
+		<type name="integer" length="0"/>
+	</column>
+		<reftable name="public.grado"/>
+		<reftable name="public.estudiante"/>
+		<reftable name="public.curso"/>
+		<reftable name="public.inscripcion"/>
+		<reftable name="public.concepto_pago"/>
+		<reftable name="public.pago"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_pagos_estudiante_grado" type="reltv" layer="0"
+	 custom-color="#0628bf"
+	 src-table="public.v_pagos_estudiante"
+	 dst-table="public.grado"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_pagos_estudiante_estudiante" type="reltv" layer="0"
+	 custom-color="#de93a2"
+	 src-table="public.v_pagos_estudiante"
+	 dst-table="public.estudiante"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_pagos_estudiante_curso" type="reltv" layer="0"
+	 custom-color="#18845c"
+	 src-table="public.v_pagos_estudiante"
+	 dst-table="public.curso"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_pagos_estudiante_inscripcion" type="reltv" layer="0"
+	 custom-color="#51c75f"
+	 src-table="public.v_pagos_estudiante"
+	 dst-table="public.inscripcion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_pagos_estudiante_concepto_pago" type="reltv" layer="0"
+	 custom-color="#d528e7"
+	 src-table="public.v_pagos_estudiante"
+	 dst-table="public.concepto_pago"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_pagos_estudiante_pago" type="reltv" layer="0"
+	 custom-color="#801d74"
+	 src-table="public.v_pagos_estudiante"
+	 dst-table="public.pago"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_resumen_financiero" layer="0" collapse-mode="1" max-obj-count="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Resumen financiero por gestión y concepto]]></comment>
+	<position x="800" y="1900"/>
+	<reference>
+		<expression><![CDATA[ SELECT ges.anio AS gestion,
+    cp.nombre AS concepto,
+    count(DISTINCT p.inscripcion_id) AS total_estudiantes,
+    count(*) AS total_registros,
+    count(
+        CASE
+            WHEN ((p.estado)::text = 'Pagado'::text) THEN 1
+            ELSE NULL::integer
+        END) AS pagados,
+    count(
+        CASE
+            WHEN ((p.estado)::text = 'Pendiente'::text) THEN 1
+            ELSE NULL::integer
+        END) AS pendientes,
+    count(
+        CASE
+            WHEN ((p.estado)::text = 'Vencido'::text) THEN 1
+            ELSE NULL::integer
+        END) AS vencidos,
+    sum(
+        CASE
+            WHEN ((p.estado)::text = 'Pagado'::text) THEN p.monto_total
+            ELSE (0)::numeric
+        END) AS monto_recaudado,
+    sum(
+        CASE
+            WHEN ((p.estado)::text = ANY ((ARRAY['Pendiente'::character varying, 'Vencido'::character varying])::text[])) THEN p.monto_total
+            ELSE (0)::numeric
+        END) AS monto_pendiente,
+    sum(p.monto_total) AS monto_total
+   FROM (((pago p
+     JOIN inscripcion i ON ((p.inscripcion_id = i.id)))
+     JOIN gestion ges ON ((i.gestion_id = ges.id)))
+     JOIN concepto_pago cp ON ((p.concepto_pago_id = cp.id)))
+  GROUP BY ges.anio, cp.nombre;]]></expression>
+	<column name="gestion">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="concepto">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="total_estudiantes">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="total_registros">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="pagados">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="pendientes">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="vencidos">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="monto_recaudado">
+		<type name="numeric" length="0"/>
+	</column>
+	<column name="monto_pendiente">
+		<type name="numeric" length="0"/>
+	</column>
+	<column name="monto_total">
+		<type name="numeric" length="0"/>
+	</column>
+		<reftable name="public.gestion"/>
+		<reftable name="public.inscripcion"/>
+		<reftable name="public.concepto_pago"/>
+		<reftable name="public.pago"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_resumen_financiero_gestion" type="reltv" layer="0"
+	 custom-color="#19e5be"
+	 src-table="public.v_resumen_financiero"
+	 dst-table="public.gestion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_resumen_financiero_inscripcion" type="reltv" layer="0"
+	 custom-color="#2e7127"
+	 src-table="public.v_resumen_financiero"
+	 dst-table="public.inscripcion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_resumen_financiero_concepto_pago" type="reltv" layer="0"
+	 custom-color="#4e050f"
+	 src-table="public.v_resumen_financiero"
+	 dst-table="public.concepto_pago"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_resumen_financiero_pago" type="reltv" layer="0"
+	 custom-color="#066fcb"
+	 src-table="public.v_resumen_financiero"
+	 dst-table="public.pago"
+	 src-required="false" dst-required="false"/>
+
+<function name="fn_edad_estudiante"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Calcula la edad de un estudiante]]></comment>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="integer" length="1"/>
+	</return-type>
+	<parameter name="p_estudiante_id">
+		<type name="integer" length="0"/>
+	</parameter>
+	<definition><![CDATA[
+DECLARE
+    v_edad INTEGER;
+BEGIN
+    SELECT EXTRACT(YEAR FROM AGE(fecha_nacimiento))
+    INTO v_edad
+    FROM estudiante
+    WHERE id = p_estudiante_id;
+    
+    RETURN v_edad;
+END;
+]]></definition>
+</function>
+
+<function name="fn_promedio_final_estudiante"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Calcula el promedio final de un estudiante en una gestión]]></comment>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="numeric" length="1"/>
+	</return-type>
+	<parameter name="p_inscripcion_id">
+		<type name="integer" length="0"/>
+	</parameter>
+	<definition><![CDATA[
+DECLARE
+    v_promedio NUMERIC;
+BEGIN
+    SELECT ROUND(AVG(promedio_bimestre), 2)
+    INTO v_promedio
+    FROM seguimiento
+    WHERE inscripcion_id = p_inscripcion_id
+    AND promedio_bimestre IS NOT NULL;
+    
+    RETURN COALESCE(v_promedio, 0);
+END;
+]]></definition>
+</function>
+
+<function name="fn_curso_lleno"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Verifica si un curso alcanzó su capacidad máxima]]></comment>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="boolean" length="1"/>
+	</return-type>
+	<parameter name="p_curso_id">
+		<type name="integer" length="0"/>
+	</parameter>
+	<definition><![CDATA[
+DECLARE
+    v_inscritos INTEGER;
+    v_capacidad INTEGER;
+BEGIN
+    SELECT COUNT(*), MAX(c.capacidad_maxima)
+    INTO v_inscritos, v_capacidad
+    FROM inscripcion i
+    INNER JOIN curso c ON i.curso_id = c.id
+    WHERE i.curso_id = p_curso_id
+    AND i.estado = 'Activo'
+    GROUP BY c.id;
+    
+    RETURN v_inscritos >= v_capacidad;
+END;
+]]></definition>
+</function>
+
+<function name="fn_generar_codigo_estudiante"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Genera código automático para nuevo estudiante]]></comment>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="character varying" length="1"/>
+	</return-type>
+	<definition><![CDATA[
+DECLARE
+    v_anio VARCHAR(4);
+    v_correlativo VARCHAR(4);
+    v_codigo VARCHAR(20);
+BEGIN
+    v_anio := TO_CHAR(CURRENT_DATE, 'YYYY');
+    
+    SELECT LPAD((COUNT(*) + 1)::TEXT, 4, '0')
+    INTO v_correlativo
+    FROM estudiante
+    WHERE codigo_estudiante LIKE v_anio || '%';
+    
+    v_codigo := 'EST' || v_anio || v_correlativo;
+    
+    RETURN v_codigo;
+END;
+]]></definition>
+</function>
+
+<function name="fn_registrar_asistencia_masiva"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Registra asistencia para todos los estudiantes de un curso]]></comment>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="integer" length="1"/>
+	</return-type>
+	<parameter name="p_asignacion_id">
+		<type name="integer" length="0"/>
+	</parameter>
+	<parameter name="p_fecha">
+		<type name="date" length="0"/>
+	</parameter>
+	<parameter name="p_estado" default-value="'Presente'::character varying">
+		<type name="character varying" length="0"/>
+	</parameter>
+	<definition><![CDATA[
+DECLARE
+    v_registros INTEGER := 0;
+    v_inscripcion RECORD;
+BEGIN
+    -- Obtener todas las inscripciones del curso de la asignación
+    FOR v_inscripcion IN 
+        SELECT i.id
+        FROM inscripcion i
+        INNER JOIN asignacion a ON i.curso_id = a.curso_id
+        WHERE a.id = p_asignacion_id
+        AND i.estado = 'Activo'
+    LOOP
+        -- Insertar asistencia si no existe
+        INSERT INTO asistencia (inscripcion_id, asignacion_id, fecha, estado)
+        VALUES (v_inscripcion.id, p_asignacion_id, p_fecha, p_estado)
+        ON CONFLICT (inscripcion_id, asignacion_id, fecha) DO NOTHING;
+        
+        v_registros := v_registros + 1;
+    END LOOP;
+    
+    RETURN v_registros;
+END;
+]]></definition>
+</function>
+
+<function name="fn_generar_pagos_mensuales"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Genera pagos mensuales para una inscripción]]></comment>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="integer" length="1"/>
+	</return-type>
+	<parameter name="p_inscripcion_id">
+		<type name="integer" length="0"/>
+	</parameter>
+	<parameter name="p_concepto_pago_id">
+		<type name="integer" length="0"/>
+	</parameter>
+	<parameter name="p_meses" default-value="10">
+		<type name="integer" length="0"/>
+	</parameter>
+	<definition><![CDATA[
+DECLARE
+    v_monto NUMERIC;
+    v_mes INTEGER;
+    v_registros INTEGER := 0;
+    v_fecha_vencimiento DATE;
+BEGIN
+    -- Obtener monto del concepto
+    SELECT monto_base INTO v_monto
+    FROM concepto_pago
+    WHERE id = p_concepto_pago_id;
+    
+    -- Generar pagos para cada mes
+    FOR v_mes IN 1..p_meses LOOP
+        v_fecha_vencimiento := DATE_TRUNC('month', CURRENT_DATE) + 
+                               INTERVAL '1 month' * (v_mes - 1) + 
+                               INTERVAL '5 days'; -- Vence el día 5 de cada mes
+        
+        INSERT INTO pago (
+            inscripcion_id,
+            concepto_pago_id,
+            monto,
+            monto_total,
+            fecha_vencimiento,
+            mes_correspondiente,
+            estado
+        )
+        VALUES (
+            p_inscripcion_id,
+            p_concepto_pago_id,
+            v_monto,
+            v_monto,
+            v_fecha_vencimiento,
+            v_mes,
+            'Pendiente'
+        );
+        
+        v_registros := v_registros + 1;
+    END LOOP;
+    
+    RETURN v_registros;
+END;
+]]></definition>
+</function>
+
+<function name="sp_actualizar_pagos_vencidos"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="integer" length="1"/>
+	</return-type>
+	<definition><![CDATA[
+DECLARE
+    v_actualizados INTEGER;
+BEGIN
+    UPDATE pago
+    SET estado = 'Vencido'
+    WHERE estado = 'Pendiente'
+    AND fecha_vencimiento < CURRENT_DATE;
+    
+    GET DIAGNOSTICS v_actualizados = ROW_COUNT;
+    
+    RETURN v_actualizados;
+END;
+]]></definition>
+</function>
+
+<function name="sp_calcular_promedio_final"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="100"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="void" length="1"/>
+	</return-type>
+	<definition><![CDATA[
+BEGIN
+    UPDATE seguimiento s1
+    SET promedio_final = (
+        SELECT AVG(s2.promedio_bimestre)
+        FROM seguimiento s2
+        WHERE s2.inscripcion_id = s1.inscripcion_id
+        AND s2.materia_id = s1.materia_id
+        AND s2.promedio_bimestre IS NOT NULL
+    )
+    WHERE s1.bimestre = 4; -- Solo actualizar en el 4to bimestre
+END;
+]]></definition>
+</function>
+
+<constraint name="materia_grado_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.grado" table="public.materia">
+	<columns names="grado_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="estudiante_tutor_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tutor" table="public.estudiante">
+	<columns names="tutor_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="curso_grado_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.grado" table="public.curso">
+	<columns names="grado_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="curso_gestion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.gestion" table="public.curso">
+	<columns names="gestion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="curso_profesor_tutor_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.profesor" table="public.curso">
+	<columns names="profesor_tutor_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="inscripcion_estudiante_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.estudiante" table="public.inscripcion">
+	<columns names="estudiante_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="inscripcion_curso_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.curso" table="public.inscripcion">
+	<columns names="curso_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="inscripcion_gestion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.gestion" table="public.inscripcion">
+	<columns names="gestion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asignacion_curso_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.curso" table="public.asignacion">
+	<columns names="curso_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asignacion_materia_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.materia" table="public.asignacion">
+	<columns names="materia_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asignacion_profesor_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.profesor" table="public.asignacion">
+	<columns names="profesor_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asignacion_gestion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.gestion" table="public.asignacion">
+	<columns names="gestion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="seguimiento_inscripcion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.inscripcion" table="public.seguimiento">
+	<columns names="inscripcion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="seguimiento_materia_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.materia" table="public.seguimiento">
+	<columns names="materia_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="seguimiento_asignacion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.asignacion" table="public.seguimiento">
+	<columns names="asignacion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asistencia_inscripcion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.inscripcion" table="public.asistencia">
+	<columns names="inscripcion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asistencia_asignacion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.asignacion" table="public.asistencia">
+	<columns names="asignacion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="horario_asignacion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.asignacion" table="public.horario">
+	<columns names="asignacion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="pago_inscripcion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.inscripcion" table="public.pago">
+	<columns names="inscripcion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="pago_concepto_pago_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.concepto_pago" table="public.pago">
+	<columns names="concepto_pago_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_materia_grado" type="relfk" layer="0"
+	 custom-color="#1262b1"
+	 src-table="public.materia"
+	 dst-table="public.grado" reference-fk="materia_grado_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_estudiante_tutor" type="relfk" layer="0"
+	 custom-color="#a5d4ae"
+	 src-table="public.estudiante"
+	 dst-table="public.tutor" reference-fk="estudiante_tutor_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_curso_grado" type="relfk" layer="0"
+	 custom-color="#a835d6"
+	 src-table="public.curso"
+	 dst-table="public.grado" reference-fk="curso_grado_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_curso_gestion" type="relfk" layer="0"
+	 custom-color="#1d212d"
+	 src-table="public.curso"
+	 dst-table="public.gestion" reference-fk="curso_gestion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_curso_profesor" type="relfk" layer="0"
+	 custom-color="#40e223"
+	 src-table="public.curso"
+	 dst-table="public.profesor" reference-fk="curso_profesor_tutor_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_inscripcion_estudiante" type="relfk" layer="0"
+	 custom-color="#6dd8a6"
+	 src-table="public.inscripcion"
+	 dst-table="public.estudiante" reference-fk="inscripcion_estudiante_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_inscripcion_curso" type="relfk" layer="0"
+	 custom-color="#d608aa"
+	 src-table="public.inscripcion"
+	 dst-table="public.curso" reference-fk="inscripcion_curso_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_inscripcion_gestion" type="relfk" layer="0"
+	 custom-color="#86b356"
+	 src-table="public.inscripcion"
+	 dst-table="public.gestion" reference-fk="inscripcion_gestion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asignacion_curso" type="relfk" layer="0"
+	 custom-color="#a8a720"
+	 src-table="public.asignacion"
+	 dst-table="public.curso" reference-fk="asignacion_curso_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asignacion_materia" type="relfk" layer="0"
+	 custom-color="#91e7bd"
+	 src-table="public.asignacion"
+	 dst-table="public.materia" reference-fk="asignacion_materia_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asignacion_profesor" type="relfk" layer="0"
+	 custom-color="#7b8998"
+	 src-table="public.asignacion"
+	 dst-table="public.profesor" reference-fk="asignacion_profesor_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asignacion_gestion" type="relfk" layer="0"
+	 custom-color="#34c0d7"
+	 src-table="public.asignacion"
+	 dst-table="public.gestion" reference-fk="asignacion_gestion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_seguimiento_inscripcion" type="relfk" layer="0"
+	 custom-color="#b44f9d"
+	 src-table="public.seguimiento"
+	 dst-table="public.inscripcion" reference-fk="seguimiento_inscripcion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_seguimiento_materia" type="relfk" layer="0"
+	 custom-color="#dcbf4e"
+	 src-table="public.seguimiento"
+	 dst-table="public.materia" reference-fk="seguimiento_materia_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_seguimiento_asignacion" type="relfk" layer="0"
+	 custom-color="#b439a9"
+	 src-table="public.seguimiento"
+	 dst-table="public.asignacion" reference-fk="seguimiento_asignacion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asistencia_inscripcion" type="relfk" layer="0"
+	 custom-color="#cbbf37"
+	 src-table="public.asistencia"
+	 dst-table="public.inscripcion" reference-fk="asistencia_inscripcion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asistencia_asignacion" type="relfk" layer="0"
+	 custom-color="#0e4e84"
+	 src-table="public.asistencia"
+	 dst-table="public.asignacion" reference-fk="asistencia_asignacion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_horario_asignacion" type="relfk" layer="0"
+	 custom-color="#ea05d4"
+	 src-table="public.horario"
+	 dst-table="public.asignacion" reference-fk="horario_asignacion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_pago_inscripcion" type="relfk" layer="0"
+	 custom-color="#8097ab"
+	 src-table="public.pago"
+	 dst-table="public.inscripcion" reference-fk="pago_inscripcion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_pago_concepto_pago" type="relfk" layer="0"
+	 custom-color="#5b9acb"
+	 src-table="public.pago"
+	 dst-table="public.concepto_pago" reference-fk="pago_concepto_pago_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>

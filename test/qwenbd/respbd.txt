@@ -1,0 +1,522 @@
+# Propuesta de Diseño de Base de Datos para Sistema de Gestión Escolar
+
+## 📋 **Requisitos Funcionales Identificados**
+
+- ✅ Gestión de estudiantes y profesores
+- ✅ Administración de cursos y materias
+- ✅ Sistema de inscripciones
+- ✅ Gestión de pagos y matrículas
+- ✅ Seguimiento de asistencia
+- ✅ Registro de rendimiento académico
+- ✅ Asignación de materias a profesores
+- ✅ Gestión de periodos académicos
+- ✅ Control de usuarios del sistema
+
+---
+
+## 🏗️ **Diagrama Entidad-Relación (ERD)**
+
+```
+┌─────────────┐    ┌──────────────┐    ┌──────────┐
+│   Persona   │    │  Estudiante  │    │ Profesor │
+├─────────────┤    ├──────────────┤    ├──────────┤
+│ id_persona  │◄───│ id_estudiante│    │id_profesor│
+│ nombre      │    │ fecha_ingreso│    │especialidad│
+│ apellido    │    │ estado       │    │departamento│
+│ documento   │    └──────────────┘    └──────────┘
+│ email       │           │                  │
+│ telefono    │           │                  │
+│ direccion   │           │                  │
+└─────────────┘           │                  │
+                          │                  │
+┌─────────────┐           │                  │
+│   Periodo   │           │                  │
+├─────────────┤           │                  │
+│ id_periodo  │◄──────────┼──────────────────┼──────────┐
+│ nombre      │           │                  │          │
+│ fecha_inicio│        ┌──┴───┐         ┌────┴────┐     │
+│ fecha_fin   │        │Inscri│         │Asignacion│    │
+│ estado      │        │pcion │         │Profesor  │    │
+└─────────────┘        ├──────┤         ├──────────┤    │
+                       │id_ins│         │id_asignac│    │
+┌─────────────┐        │id_est│         │id_prof   │    │
+│    Curso    │        │id_cur│         │id_materia│    │
+├─────────────┤        │fecha │         │id_periodo│    │
+│  id_curso   │◄───────│estado│         └──────────┘    │
+│ nombre      │        └──────┘               │         │
+│ nivel       │                               │         │
+│ duracion    │        ┌──────────┐          │         │
+│ costo       │        │ Materia  │◄─────────┘         │
+└─────────────┘        ├──────────┤                    │
+                       │id_materia│                    │
+┌─────────────┐        │nombre    │                    │
+│   Pago      │        │creditos  │                    │
+├─────────────┤        │id_curso  │◄───────────────────┘
+│  id_pago    │        └──────────┘
+│ id_estudiante│
+│ monto       │        ┌──────────────┐
+│ fecha       │        │  Asistencia  │
+│ concepto    │        ├──────────────┤
+│ estado      │        │id_asistencia │
+└─────────────┘        │id_estudiante │
+                       │id_materia    │
+┌─────────────┐        │id_periodo    │
+│ Calificacion│        │fecha         │
+├─────────────┤        │estado        │
+│id_calificacion│      └──────────────┘
+│id_estudiante │
+│id_materia    │        ┌──────────────┐
+│id_periodo    │        │    Usuario   │
+│nota          │        ├──────────────┤
+│observacion   │        │  id_usuario  │
+└─────────────┘        │ id_persona   │
+                       │ username     │
+                       │ password     │
+                       │ rol          │
+                       │ estado       │
+                       └──────────────┘
+```
+
+---
+
+## 📊 **Estructura Detallada de Tablas**
+
+### **1. Tabla: persona**
+```sql
+CREATE TABLE persona (
+    id_persona SERIAL PRIMARY KEY,
+    tipo_documento VARCHAR(20) NOT NULL,
+    numero_documento VARCHAR(50) NOT NULL UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    genero VARCHAR(10) CHECK (genero IN ('M', 'F', 'O')),
+    email VARCHAR(150) UNIQUE,
+    telefono VARCHAR(20),
+    direccion TEXT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado BOOLEAN DEFAULT TRUE
+);
+
+-- Índices
+CREATE INDEX idx_persona_documento ON persona(tipo_documento, numero_documento);
+CREATE INDEX idx_persona_email ON persona(email);
+```
+
+### **2. Tabla: estudiante**
+```sql
+CREATE TABLE estudiante (
+    id_estudiante INTEGER PRIMARY KEY REFERENCES persona(id_persona) ON DELETE CASCADE,
+    codigo_estudiante VARCHAR(20) UNIQUE NOT NULL,
+    fecha_ingreso DATE NOT NULL,
+    estado_academico VARCHAR(20) DEFAULT 'ACTIVO' 
+        CHECK (estado_academico IN ('ACTIVO', 'INACTIVO', 'GRADUADO', 'SUSPENDIDO')),
+    promedio_general DECIMAL(3,2) DEFAULT 0.00
+);
+
+-- Índice
+CREATE INDEX idx_estudiante_codigo ON estudiante(codigo_estudiante);
+```
+
+### **3. Tabla: profesor**
+```sql
+CREATE TABLE profesor (
+    id_profesor INTEGER PRIMARY KEY REFERENCES persona(id_persona) ON DELETE CASCADE,
+    codigo_profesor VARCHAR(20) UNIQUE NOT NULL,
+    especialidad VARCHAR(100),
+    departamento VARCHAR(100),
+    titulo_academico VARCHAR(100),
+    fecha_contratacion DATE NOT NULL,
+    estado_laboral VARCHAR(20) DEFAULT 'ACTIVO'
+        CHECK (estado_laboral IN ('ACTIVO', 'INACTIVO', 'VACACIONES'))
+);
+
+-- Índice
+CREATE INDEX idx_profesor_codigo ON profesor(codigo_profesor);
+```
+
+### **4. Tabla: periodo_academico**
+```sql
+CREATE TABLE periodo_academico (
+    id_periodo SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    codigo_periodo VARCHAR(20) NOT NULL UNIQUE,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    estado VARCHAR(20) DEFAULT 'ACTIVO'
+        CHECK (estado IN ('ACTIVO', 'INACTIVO', 'FINALIZADO')),
+    CONSTRAINT chk_fechas CHECK (fecha_fin > fecha_inicio)
+);
+
+-- Índice
+CREATE INDEX idx_periodo_codigo ON periodo_academico(codigo_periodo);
+```
+
+### **5. Tabla: curso**
+```sql
+CREATE TABLE curso (
+    id_curso SERIAL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    codigo_curso VARCHAR(20) NOT NULL UNIQUE,
+    nivel VARCHAR(50) NOT NULL, -- Primaria, Secundaria, Bachillerato, etc.
+    duracion_meses INTEGER NOT NULL,
+    costo_mensual DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    descripcion TEXT,
+    estado BOOLEAN DEFAULT TRUE
+);
+
+-- Índice
+CREATE INDEX idx_curso_codigo ON curso(codigo_curso);
+```
+
+### **6. Tabla: materia**
+```sql
+CREATE TABLE materia (
+    id_materia SERIAL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    codigo_materia VARCHAR(20) NOT NULL UNIQUE,
+    creditos INTEGER NOT NULL DEFAULT 0,
+    horas_semanales INTEGER NOT NULL DEFAULT 0,
+    descripcion TEXT,
+    id_curso INTEGER NOT NULL REFERENCES curso(id_curso) ON DELETE RESTRICT,
+    estado BOOLEAN DEFAULT TRUE
+);
+
+-- Índice
+CREATE INDEX idx_materia_curso ON materia(id_curso);
+CREATE INDEX idx_materia_codigo ON materia(codigo_materia);
+```
+
+### **7. Tabla: inscripcion**
+```sql
+CREATE TABLE inscripcion (
+    id_inscripcion SERIAL PRIMARY KEY,
+    id_estudiante INTEGER NOT NULL REFERENCES estudiante(id_estudiante) ON DELETE RESTRICT,
+    id_curso INTEGER NOT NULL REFERENCES curso(id_curso) ON DELETE RESTRICT,
+    id_periodo INTEGER NOT NULL REFERENCES periodo_academico(id_periodo) ON DELETE RESTRICT,
+    fecha_inscripcion DATE DEFAULT CURRENT_DATE,
+    estado VARCHAR(20) DEFAULT 'ACTIVA'
+        CHECK (estado IN ('ACTIVA', 'CANCELADA', 'COMPLETADA', 'SUSPENDIDA')),
+    UNIQUE(id_estudiante, id_curso, id_periodo)
+);
+
+-- Índices
+CREATE INDEX idx_inscripcion_estudiante ON inscripcion(id_estudiante);
+CREATE INDEX idx_inscripcion_periodo ON inscripcion(id_periodo);
+```
+
+### **8. Tabla: asignacion_profesor**
+```sql
+CREATE TABLE asignacion_profesor (
+    id_asignacion SERIAL PRIMARY KEY,
+    id_profesor INTEGER NOT NULL REFERENCES profesor(id_profesor) ON DELETE RESTRICT,
+    id_materia INTEGER NOT NULL REFERENCES materia(id_materia) ON DELETE RESTRICT,
+    id_periodo INTEGER NOT NULL REFERENCES periodo_academico(id_periodo) ON DELETE RESTRICT,
+    fecha_asignacion DATE DEFAULT CURRENT_DATE,
+    estado VARCHAR(20) DEFAULT 'ACTIVA'
+        CHECK (estado IN ('ACTIVA', 'FINALIZADA', 'CANCELADA')),
+    observaciones TEXT,
+    UNIQUE(id_profesor, id_materia, id_periodo)
+);
+
+-- Índices
+CREATE INDEX idx_asignacion_profesor ON asignacion_profesor(id_profesor);
+CREATE INDEX idx_asignacion_materia ON asignacion_profesor(id_materia);
+CREATE INDEX idx_asignacion_periodo ON asignacion_profesor(id_periodo);
+```
+
+### **9. Tabla: pago**
+```sql
+CREATE TABLE pago (
+    id_pago SERIAL PRIMARY KEY,
+    id_estudiante INTEGER NOT NULL REFERENCES estudiante(id_estudiante) ON DELETE RESTRICT,
+    id_periodo INTEGER NOT NULL REFERENCES periodo_academico(id_periodo) ON DELETE RESTRICT,
+    monto DECIMAL(10,2) NOT NULL,
+    fecha_pago DATE DEFAULT CURRENT_DATE,
+    concepto VARCHAR(100) NOT NULL, -- Matrícula, Mensualidad, etc.
+    metodo_pago VARCHAR(50) DEFAULT 'EFECTIVO'
+        CHECK (metodo_pago IN ('EFECTIVO', 'TRANSFERENCIA', 'TARJETA', 'CHEQUE')),
+    estado VARCHAR(20) DEFAULT 'PENDIENTE'
+        CHECK (estado IN ('PENDIENTE', 'PAGADO', 'CANCELADO')),
+    referencia VARCHAR(100), -- Número de transacción, cheque, etc.
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices
+CREATE INDEX idx_pago_estudiante ON pago(id_estudiante);
+CREATE INDEX idx_pago_periodo ON pago(id_periodo);
+CREATE INDEX idx_pago_fecha ON pago(fecha_pago);
+```
+
+### **10. Tabla: asistencia**
+```sql
+CREATE TABLE asistencia (
+    id_asistencia SERIAL PRIMARY KEY,
+    id_estudiante INTEGER NOT NULL REFERENCES estudiante(id_estudiante) ON DELETE RESTRICT,
+    id_materia INTEGER NOT NULL REFERENCES materia(id_materia) ON DELETE RESTRICT,
+    id_periodo INTEGER NOT NULL REFERENCES periodo_academico(id_periodo) ON DELETE RESTRICT,
+    fecha DATE NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'AUSENTE'
+        CHECK (estado IN ('PRESENTE', 'AUSENTE', 'TARDANZA', 'JUSTIFICADO')),
+    observaciones TEXT,
+    UNIQUE(id_estudiante, id_materia, fecha)
+);
+
+-- Índices
+CREATE INDEX idx_asistencia_estudiante ON asistencia(id_estudiante);
+CREATE INDEX idx_asistencia_materia ON asistencia(id_materia);
+CREATE INDEX idx_asistencia_fecha ON asistencia(fecha);
+CREATE INDEX idx_asistencia_periodo ON asistencia(id_periodo);
+```
+
+### **11. Tabla: calificacion**
+```sql
+CREATE TABLE calificacion (
+    id_calificacion SERIAL PRIMARY KEY,
+    id_estudiante INTEGER NOT NULL REFERENCES estudiante(id_estudiante) ON DELETE RESTRICT,
+    id_materia INTEGER NOT NULL REFERENCES materia(id_materia) ON DELETE RESTRICT,
+    id_periodo INTEGER NOT NULL REFERENCES periodo_academico(id_periodo) ON DELETE RESTRICT,
+    nota DECIMAL(3,2) NOT NULL 
+        CHECK (nota >= 0.00 AND nota <= 20.00), -- Escala 0-20
+    tipo_evaluacion VARCHAR(50) NOT NULL, -- Parcial, Final, Proyecto, etc.
+    fecha_evaluacion DATE NOT NULL,
+    observaciones TEXT,
+    UNIQUE(id_estudiante, id_materia, id_periodo, tipo_evaluacion)
+);
+
+-- Índices
+CREATE INDEX idx_calificacion_estudiante ON calificacion(id_estudiante);
+CREATE INDEX idx_calificacion_materia ON calificacion(id_materia);
+CREATE INDEX idx_calificacion_periodo ON calificacion(id_periodo);
+```
+
+### **12. Tabla: usuario**
+```sql
+CREATE TABLE usuario (
+    id_usuario SERIAL PRIMARY KEY,
+    id_persona INTEGER NOT NULL UNIQUE REFERENCES persona(id_persona) ON DELETE CASCADE,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    rol VARCHAR(30) NOT NULL 
+        CHECK (rol IN ('ADMINISTRADOR', 'SECRETARIA', 'PROFESOR', 'ESTUDIANTE')),
+    ultimo_acceso TIMESTAMP,
+    intentos_fallidos INTEGER DEFAULT 0,
+    bloqueado_hasta TIMESTAMP,
+    estado BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices
+CREATE INDEX idx_usuario_username ON usuario(username);
+CREATE INDEX idx_usuario_rol ON usuario(rol);
+```
+
+---
+
+## 🔗 **Relaciones y Restricciones**
+
+### **Relaciones Principales**
+
+| Relación | Tipo | Cardinalidad |
+|----------|------|--------------|
+| Persona → Estudiante | Herencia | 1:1 |
+| Persona → Profesor | Herencia | 1:1 |
+| Curso → Materia | Composición | 1:N |
+| Estudiante → Inscripción | Asociación | 1:N |
+| Periodo → Inscripción | Asociación | 1:N |
+| Profesor → Asignación | Asociación | 1:N |
+| Materia → Asignación | Asociación | 1:N |
+| Estudiante → Pago | Asociación | 1:N |
+| Estudiante → Asistencia | Asociación | 1:N |
+| Materia → Asistencia | Asociación | 1:N |
+| Estudiante → Calificación | Asociación | 1:N |
+| Materia → Calificación | Asociación | 1:N |
+| Persona → Usuario | Asociación | 1:1 |
+
+### **Restricciones de Integridad**
+
+1. **No se puede eliminar** un curso si tiene materias asociadas
+2. **No se puede eliminar** un estudiante/profesor si tiene registros activos
+3. **Validación de fechas**: fecha_fin > fecha_inicio en periodos
+4. **Rango de notas**: 0.00 - 20.00
+5. **Documentos únicos**: número de documento no se repite
+6. **Códigos únicos**: códigos de estudiante, profesor, curso, materia
+
+---
+
+## ⚙️ **Procesos de Gestión Escolar**
+
+### **1. Proceso de Inscripción**
+```sql
+-- Transacción completa de inscripción
+BEGIN;
+
+-- Verificar cupo disponible (lógica de aplicación)
+-- Insertar estudiante si no existe
+INSERT INTO persona (...) VALUES (...);
+INSERT INTO estudiante (...) VALUES (...);
+
+-- Registrar inscripción
+INSERT INTO inscripcion (id_estudiante, id_curso, id_periodo) 
+VALUES (estudiante_id, curso_id, periodo_id);
+
+-- Registrar pagos iniciales
+INSERT INTO pago (id_estudiante, id_periodo, monto, concepto, estado) 
+VALUES (estudiante_id, periodo_id, monto_matricula, 'MATRICULA', 'PENDIENTE');
+
+COMMIT;
+```
+
+### **2. Proceso de Asignación de Profesores**
+```sql
+-- Verificar disponibilidad del profesor
+SELECT COUNT(*) FROM asignacion_profesor 
+WHERE id_profesor = ? AND id_periodo = ?;
+
+-- Asignar materia al profesor
+INSERT INTO asignacion_profesor (id_profesor, id_materia, id_periodo)
+VALUES (?, ?, ?);
+```
+
+### **3. Proceso de Registro de Asistencia**
+```sql
+-- Registrar asistencia diaria por materia
+INSERT INTO asistencia (id_estudiante, id_materia, id_periodo, fecha, estado)
+VALUES (?, ?, ?, CURRENT_DATE, ?)
+ON CONFLICT (id_estudiante, id_materia, fecha) 
+DO UPDATE SET estado = EXCLUDED.estado;
+```
+
+### **4. Proceso de Calificaciones**
+```sql
+-- Registrar nota con validación
+INSERT INTO calificacion (id_estudiante, id_materia, id_periodo, nota, tipo_evaluacion, fecha_evaluacion)
+VALUES (?, ?, ?, ?, ?, ?);
+
+-- Actualizar promedio general del estudiante
+UPDATE estudiante 
+SET promedio_general = (
+    SELECT AVG(nota) FROM calificacion WHERE id_estudiante = ?
+)
+WHERE id_estudiante = ?;
+```
+
+### **5. Proceso de Pagos**
+```sql
+-- Registrar pago y actualizar estado
+INSERT INTO pago (id_estudiante, id_periodo, monto, concepto, metodo_pago, estado)
+VALUES (?, ?, ?, ?, ?, 'PAGADO');
+
+-- Verificar estado de cuenta
+SELECT SUM(monto) FROM pago 
+WHERE id_estudiante = ? AND id_periodo = ? AND estado = 'PAGADO';
+```
+
+---
+
+## 📈 **Vistas Útiles**
+
+### **Vista: resumen_estudiante**
+```sql
+CREATE VIEW resumen_estudiante AS
+SELECT 
+    e.id_estudiante,
+    p.nombre,
+    p.apellido,
+    e.codigo_estudiante,
+    c.nombre as curso,
+    pa.nombre as periodo_actual,
+    e.promedio_general,
+    e.estado_academico
+FROM estudiante e
+JOIN persona p ON e.id_estudiante = p.id_persona
+JOIN inscripcion i ON e.id_estudiante = i.id_estudiante
+JOIN curso c ON i.id_curso = c.id_curso
+JOIN periodo_academico pa ON i.id_periodo = pa.id_periodo
+WHERE i.estado = 'ACTIVA';
+```
+
+### **Vista: asistencia_materia**
+```sql
+CREATE VIEW asistencia_materia AS
+SELECT 
+    m.nombre as materia,
+    p.nombre || ' ' || p.apellido as estudiante,
+    COUNT(CASE WHEN a.estado = 'PRESENTE' THEN 1 END) as presentes,
+    COUNT(a.id_asistencia) as total_clases,
+    ROUND(
+        COUNT(CASE WHEN a.estado = 'PRESENTE' THEN 1 END)::DECIMAL * 100 / 
+        COUNT(a.id_asistencia), 2
+    ) as porcentaje_asistencia
+FROM asistencia a
+JOIN materia m ON a.id_materia = m.id_materia
+JOIN persona p ON a.id_estudiante = p.id_persona
+GROUP BY m.nombre, p.nombre, p.apellido;
+```
+
+---
+
+## 🔐 **Seguridad y Auditoría**
+
+### **Trigger: Auditoría de cambios en calificaciones**
+```sql
+CREATE TABLE auditoria_calificaciones (
+    id_auditoria SERIAL PRIMARY KEY,
+    id_calificacion INTEGER,
+    accion VARCHAR(10),
+    usuario_modificacion VARCHAR(50),
+    fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    datos_anteriores JSONB,
+    datos_nuevos JSONB
+);
+
+CREATE FUNCTION audit_calificaciones()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'UPDATE' THEN
+        INSERT INTO auditoria_calificaciones 
+        (id_calificacion, accion, usuario_modificacion, datos_anteriores, datos_nuevos)
+        VALUES (
+            OLD.id_calificacion,
+            'UPDATE',
+            current_user,
+            row_to_json(OLD),
+            row_to_json(NEW)
+        );
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_audit_calificaciones
+    AFTER UPDATE ON calificacion
+    FOR EACH ROW EXECUTE FUNCTION audit_calificaciones();
+```
+
+---
+
+## 📊 **Índices Recomendados para Rendimiento**
+
+```sql
+-- Índices compuestos para consultas frecuentes
+CREATE INDEX idx_inscripcion_completo ON inscripcion(id_estudiante, id_periodo, estado);
+CREATE INDEX idx_calificacion_completo ON calificacion(id_estudiante, id_materia, id_periodo);
+CREATE INDEX idx_asistencia_completo ON asistencia(id_estudiante, id_materia, fecha);
+CREATE INDEX idx_pago_completo ON pago(id_estudiante, id_periodo, estado);
+CREATE INDEX idx_asignacion_completo ON asignacion_profesor(id_profesor, id_periodo, estado);
+```
+
+---
+
+## 🎯 **Características Destacadas del Diseño**
+
+✅ **Normalización adecuada**: Hasta 3FN sin sobre-normalización  
+✅ **Herencia implementada**: Persona como tabla base para estudiantes y profesores  
+✅ **Histórico completo**: Todos los procesos mantienen trazabilidad  
+✅ **Flexibilidad**: Soporta múltiples periodos, cursos y niveles  
+✅ **Seguridad**: Contraseñas hasheadas, auditoría de cambios sensibles  
+✅ **Rendimiento**: Índices estratégicos para consultas frecuentes  
+✅ **Integridad**: Restricciones CHECK y FOREIGN KEY robustas  
+✅ **Escalabilidad**: Diseño modular que permite agregar funcionalidades  
+
+Este diseño proporciona una **base sólida y flexible** para un sistema de gestión escolar completo, capaz de manejar desde instituciones pequeñas hasta grandes centros educativos con múltiples sedes y niveles académicos.

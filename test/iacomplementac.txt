@@ -1,0 +1,14 @@
+i+curso
+cupo maximo
+aula/ambiente
+
++horarios
+
++permisos
+
+*pago
+
++inscripcion
+ estado (activa, inactiva, cancelada, concluida)
+
+

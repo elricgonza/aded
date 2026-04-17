@@ -1,0 +1,212 @@
+Objetivo:
+
+Se desea contar con un sistema de gestión escolar que permita administrar la información de estudiantes, profesores, cursos, inscripciones, pagos y otros aspectos relacionados con la gestión educativa, como el seguimiento de la asistencia, el rendimiento académico, la asignación de materias a profesores, entre otros.
+
+Para este propósito se solicita una propuesta del diseño de la base de datos (en Postgres) con la estructura de tablas, respectivas llaves primarias, llaves foráneas, relaciones, etc.  y procesos para la gestión escolar:
+
+
+
+
+Inicio de gestión: PROCESO DE INICIALIZACIÓN DE GESTIÓN
+
+-Se reinician de 0 las tablas: pla, niv, gra, mat?
+sugerencia:
+	[considerando la cantidad de registros en estas tablas, podría ser más eficiente mantener los datos históricos y simplemente agregar nuevos registros para la nueva gestión, en lugar de eliminar y reiniciar las tablas cada vez]
+	[existe la posibilidad de que los planes de estudio, niveles, grados y materias puedan cambiar a lo largo del tiempo, por lo que mantener los datos históricos podría ser beneficioso para el análisis y la referencia futura]
+	[las tablas alu y prof podrían mantenerse con los datos históricos, ya que los estudiantes y profesores pueden continuar en la institución a lo largo de varias gestiones, aunque también se podrían agregar nuevos registros para reflejar los cambios en el personal y la matrícula]
+
+-Se dejan las tablas alum, prof, insc, seg, pag con los datos de las gestiones anteriores?
+ como una bd completa con su bakup de cada gestión, hummm gestión llave para conformación de bd?
+
+
+-las tablas son inicializadas cada gestión?
+ (si es así, se deben eliminar los datos de las tablas al iniciar una nueva gestión)
+-¿Cómo se manejarán los datos históricos de las gestiones anteriores?
+ (se podrían archivar en una base de datos separada o en archivos de respaldo)
+-¿Qué tipo de datos se almacenarán en cada tabla?
+
+Propuesta: Almacenamiento [por "periodos"] check
+
+Proceso -cierre de gestión
+-archivado de datos históricos
+	-no existen supresiones en: prof, alum, insc, seg, pag
+		-no existen supresiones en: plan, niv, gra, mat (para garantizar la integridad referencial)	
+
+Proceso - inicio de gestión:
+1. Actualizaciones de las tablas, si requerido:
+		plan, niv, gra, mat, cos (si hay cambios los datos de gestiones anteriores se reflejarán con los nuevos datos)
+				(considerar un proceso de CIERRE DE GESTIÓN para archivar los datos históricos antes de 
+				realizar las actualizaciones necesarias)
+				(SI se realizan actualizaciones en estas tablas, se deben revisar y ajustar los registros 
+				relacionados en las tablas que dependen de ellas para garantizar la integridad de los datos)
+				(o crear nuevos registros en pla, niv, gra, mat con los nuevos datos para la nueva gestión)
+
+	como parte de las actualizaciones necesarias las tablas:
+		alum, prof 
+	creación de nuevos registros "obligatorios" para la nueva gestión:
+		cur, 
+		asig
+		insc
+		seg
+		pag
+
+
+--------------
+-se configura (genera) la tabla pag en función de:
+	-ins
+	-cos
+-¿Cómo se manejarán las actualizaciones para:
+	-nuevos alumnos que ingresan a 1/2 año? o similar? 
+	-nuevos profesores que se incorporan a la institución?
+	-cambios en los planes de estudio o en los costos de las materias?
+	-se podrían implementar procesos de actualización periódicos o manuales para reflejar estos cambios en las tablas correspondientes.
+
+	-incremento periódico más probable a 1/2 año, pero también podrían haber cambios en otras fechas (ej: nuevos profesores a mitad de año, cambios en planes de estudio a mitad de año, etc.)
+	-para manejar estos cambios, se podrían establecer procedimientos claros para la actualización de las tablas, incluyendo la identificación de los cambios necesarios, la asignación de responsabilidades para realizar las actualizaciones y la implementación de controles para garantizar la precisión y consistencia de los datos después de las actualizaciones.
+
+
+
+***
+Proceso de asignación de materias a profesores:
+	asi (pro_id debe permitir null inicialmente, para permitir la creación de registros sin asignar un profesor)
+
+Proceso de cambio de profesor asignado a una materia: (a media gestión)
+	-actualización del campo pro_id en la tabla asi para reflejar el nuevo profesor asignado a la materia.
+
+
+
+#####  pagos:
+
+### opc1 - nomas la tabla pag se llena de forma "libre"?
+con controles "mínimos"
+	-pago de 10 cuotas (max) de forma secuencial (obligatorio)
+	-no puede relizarse el pago de una cuota sin previamente haber pagado las anteriores (la cuota 2 sin haber pagado la cuota 1, etc...)
+	-id + cuota (no puede repetirse)
+	-visualizar información de: nivel, grado, curso
+
+###
+
+### opc2 - programación de pagos -est-imado - PROGRAMADO y DINÁMICO
+requiere:
+-cuantas cuotas se deben pagar
+-que cuotas y cuanto para cada cuota
+-que fecha se debe realizar cada pago  (propuesta en tabla COS)
+-tener info de descuentos o becas que puedan afectar el monto total a pagar o el monto de cada cuota (propuesta en tabla INS)
+
+-¿Cómo se manejarán los pagos atrasados o incumplidos?
+
+### requisito debe estar establecido plan pagos
+-para cada curso se establece un plan de pagos que define las cuotas, montos y fechas de pago...	
+---¿Cómo se manejarán los cambios en los planes de pago a lo largo del tiempo?
+	-se podrían implementar procesos de actualización para reflejar los cambios en los planes de pago, asegurando que los registros existentes se ajusten a las nuevas condiciones establecidas en el plan de pagos actualizado.
+
+--¿Cómo se manejarán los casos de estudiantes que cambian de curso o nivel a mitad de la gestión?
+	-se podrían establecer procedimientos para actualizar los registros de los estudiantes en la tabla insc, asegurando que se reflejen correctamente los cambios en su curso o nivel, y ajustando los planes de pago correspondientes si es necesario.
+
+	-costo asignado por grado y nivel, pero también podría haber casos especiales (ej: becas, descuentos, etc...) que podrían requerir ajustes en los costos para ciertos estudiantes o grupos de estudiantes.
+	-
+
+-
+
+
+
+-Inicio de gestión: PROCESO DE INICIALIZACIÓN DE GESTIÓN
+
+-Se reinician de 0 las tablas: pla, niv, gra, mat?
+sugerencia:
+	[considerando la cantidad de registros en estas tablas, podría ser más eficiente mantener los datos históricos y simplemente agregar nuevos registros para la nueva gestión, en lugar de eliminar y reiniciar las tablas cada vez]
+	[existe la posibilidad de que los planes de estudio, niveles, grados y materias puedan cambiar a lo largo del tiempo, por lo que mantener los datos históricos podría ser beneficioso para el análisis y la referencia futura]
+	[las tablas alu y prof podrían mantenerse con los datos históricos, ya que los estudiantes y profesores pueden continuar en la institución a lo largo de varias gestiones, aunque también se podrían agregar nuevos registros para reflejar los cambios en el personal y la matrícula]
+
+-Se dejan las tablas alum, prof, insc, seg, pag con los datos de las gestiones anteriores?
+ como una bd completa con su bakup de cada gestión, hummm gestión llave para conformación de bd?
+
+
+-las tablas son inicializadas cada gestión?
+ (si es así, se deben eliminar los datos de las tablas al iniciar una nueva gestión)
+-¿Cómo se manejarán los datos históricos de las gestiones anteriores?
+ (se podrían archivar en una base de datos separada o en archivos de respaldo)
+-¿Qué tipo de datos se almacenarán en cada tabla?
+
+Propuesta: Almacenamiento [por "periodos"] check
+
+Proceso -cierre de gestión
+-archivado de datos históricos
+	-no existen supresiones en: prof, alum, insc, seg, pag
+		-no existen supresiones en: plan, niv, gra, mat (para garantizar la integridad referencial)	
+
+Proceso - inicio de gestión:
+1. Actualizaciones de las tablas, si requerido:
+		plan, niv, gra, mat, cos (si hay cambios los datos de gestiones anteriores se reflejarán con los nuevos datos)
+				(considerar un proceso de CIERRE DE GESTIÓN para archivar los datos históricos antes de 
+				realizar las actualizaciones necesarias)
+				(SI se realizan actualizaciones en estas tablas, se deben revisar y ajustar los registros 
+				relacionados en las tablas que dependen de ellas para garantizar la integridad de los datos)
+				(o crear nuevos registros en pla, niv, gra, mat con los nuevos datos para la nueva gestión)
+
+	como parte de las actualizaciones necesarias las tablas:
+		alum, prof 
+	creación de nuevos registros "obligatorios" para la nueva gestión:
+		cur, 
+		asig
+		insc
+		seg
+		pag
+
+
+--------------
+-se configura (genera) la tabla pag en función de:
+	-ins
+	-cos
+-¿Cómo se manejarán las actualizaciones para:
+	-nuevos alumnos que ingresan a 1/2 año? o similar? 
+	-nuevos profesores que se incorporan a la institución?
+	-cambios en los planes de estudio o en los costos de las materias?
+	-se podrían implementar procesos de actualización periódicos o manuales para reflejar estos cambios en las tablas correspondientes.
+
+	-incremento periódico más probable a 1/2 año, pero también podrían haber cambios en otras fechas (ej: nuevos profesores a mitad de año, cambios en planes de estudio a mitad de año, etc.)
+	-para manejar estos cambios, se podrían establecer procedimientos claros para la actualización de las tablas, incluyendo la identificación de los cambios necesarios, la asignación de responsabilidades para realizar las actualizaciones y la implementación de controles para garantizar la precisión y consistencia de los datos después de las actualizaciones.
+
+
+
+***
+Proceso de asignación de materias a profesores:
+	asi (pro_id debe permitir null inicialmente, para permitir la creación de registros sin asignar un profesor)
+
+Proceso de cambio de profesor asignado a una materia: (a media gestión)
+	-actualización del campo pro_id en la tabla asi para reflejar el nuevo profesor asignado a la materia.
+
+
+
+#####  pagos:
+
+### opc1 - nomas la tabla pag se llena de forma "libre"?
+con controles "mínimos"
+	-pago de 10 cuotas (max) de forma secuencial (obligatorio)
+	-no puede relizarse el pago de una cuota sin previamente haber pagado las anteriores (la cuota 2 sin haber pagado la cuota 1, etc...)
+	-id + cuota (no puede repetirse)
+	-visualizar información de: nivel, grado, curso
+
+###
+
+### opc2 - programación de pagos -est-imado - PROGRAMADO y DINÁMICO
+requiere:
+-cuantas cuotas se deben pagar
+-que cuotas y cuanto para cada cuota
+-que fecha se debe realizar cada pago  (propuesta en tabla COS)
+-tener info de descuentos o becas que puedan afectar el monto total a pagar o el monto de cada cuota (propuesta en tabla INS)
+
+-¿Cómo se manejarán los pagos atrasados o incumplidos?
+
+### requisito debe estar establecido plan pagos
+-para cada curso se establece un plan de pagos que define las cuotas, montos y fechas de pago...	
+---¿Cómo se manejarán los cambios en los planes de pago a lo largo del tiempo?
+	-se podrían implementar procesos de actualización para reflejar los cambios en los planes de pago, asegurando que los registros existentes se ajusten a las nuevas condiciones establecidas en el plan de pagos actualizado.
+
+--¿Cómo se manejarán los casos de estudiantes que cambian de curso o nivel a mitad de la gestión?
+	-se podrían establecer procedimientos para actualizar los registros de los estudiantes en la tabla insc, asegurando que se reflejen correctamente los cambios en su curso o nivel, y ajustando los planes de pago correspondientes si es necesario.
+
+	-costo asignado por grado y nivel, pero también podría haber casos especiales (ej: becas, descuentos, etc...) que podrían requerir ajustes en los costos para ciertos estudiantes o grupos de estudiantes.
+	-
+
+-

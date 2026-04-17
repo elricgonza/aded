@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="6"
+	 default-schema="public" default-owner="postgres">
+<role name="appgeo"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="flask_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="uaded"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="flask_auth_db" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
+	<role name="flask_user"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<sequence name="users_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="flask_user"/>
+</sequence>
+
+<table name="users" layer="0" collapse-mode="2" max-obj-count="8">
+	<schema name="public"/>
+	<role name="flask_user"/>
+	<position x="20" y="20"/>
+	<column name="id" not-null="true" sequence="public.users_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="username" not-null="true">
+		<type name="character varying" length="80"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="120"/>
+	</column>
+	<column name="password_hash" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="is_active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="updated_at">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="users_pkey" type="pk-constr" table="public.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="ix_users_username" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="username"/>
+		</idxelement>
+</index>
+
+<sequence name="roles_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="flask_user"/>
+</sequence>
+
+<table name="roles" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="flask_user"/>
+	<position x="260" y="220"/>
+	<column name="id" not-null="true" sequence="public.roles_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="roles_pkey" type="pk-constr" table="public.roles">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="roles_name_key" type="uq-constr" table="public.roles">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="permissions_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="flask_user"/>
+</sequence>
+
+<table name="permissions" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="flask_user"/>
+	<position x="500" y="320"/>
+	<column name="id" not-null="true" sequence="public.permissions_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="permissions_pkey" type="pk-constr" table="public.permissions">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="permissions_name_key" type="uq-constr" table="public.permissions">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user_roles" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="public"/>
+	<role name="flask_user"/>
+	<position x="240" y="20"/>
+	<column name="user_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="role_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="user_roles_pkey" type="pk-constr" table="public.user_roles">
+		<columns names="user_id,role_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="role_permissions" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="public"/>
+	<role name="flask_user"/>
+	<position x="460" y="140"/>
+	<column name="role_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="permission_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="role_permissions_pkey" type="pk-constr" table="public.role_permissions">
+		<columns names="role_id,permission_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="user_roles_user_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.users" table="public.user_roles">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="user_roles_role_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.roles" table="public.user_roles">
+	<columns names="role_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="role_permissions_role_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.roles" table="public.role_permissions">
+	<columns names="role_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="role_permissions_permission_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.permissions" table="public.role_permissions">
+	<columns names="permission_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_user_roles_users" type="relfk" layer="0"
+	 custom-color="#7d31d0"
+	 src-table="public.user_roles"
+	 dst-table="public.users" reference-fk="user_roles_user_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_user_roles_roles" type="relfk" layer="0"
+	 custom-color="#a016ca"
+	 src-table="public.user_roles"
+	 dst-table="public.roles" reference-fk="user_roles_role_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_role_permissions_roles" type="relfk" layer="0"
+	 custom-color="#7a179c"
+	 src-table="public.role_permissions"
+	 dst-table="public.roles" reference-fk="role_permissions_role_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_role_permissions_permissions" type="relfk" layer="0"
+	 custom-color="#a75df7"
+	 src-table="public.role_permissions"
+	 dst-table="public.permissions" reference-fk="role_permissions_permission_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>

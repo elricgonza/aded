@@ -95,7 +95,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Niveles educativos (primaria, secundaria, etc.)]]></comment>
-	<position x="360" y="40"/>
+	<position x="420" y="40"/>
 	<column name="id" not-null="true" sequence="public.grado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -131,7 +131,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Asignaturas del plan de estudios]]></comment>
-	<position x="540" y="80"/>
+	<position x="660" y="20"/>
 	<column name="id" not-null="true" sequence="public.materia_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -173,7 +173,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Padres/apoderados de los estudiantes]]></comment>
-	<position x="780" y="60"/>
+	<position x="920" y="40"/>
 	<column name="id" not-null="true" sequence="public.tutor_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -221,7 +221,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Información de los estudiantes]]></comment>
-	<position x="1000" y="60"/>
+	<position x="1100" y="40"/>
 	<column name="id" not-null="true" sequence="public.estudiante_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -293,7 +293,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Información de los profesores]]></comment>
-	<position x="80" y="420"/>
+	<position x="60" y="540"/>
 	<column name="id" not-null="true" sequence="public.profesor_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -416,7 +416,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Inscripción de estudiantes en cursos]]></comment>
-	<position x="580" y="540"/>
+	<position x="600" y="560"/>
 	<column name="id" not-null="true" sequence="public.inscripcion_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -464,7 +464,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Asignación de profesores a materias en cursos]]></comment>
-	<position x="840" y="540"/>
+	<position x="800" y="300"/>
 	<column name="id" not-null="true" sequence="public.asignacion_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -707,7 +707,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Registro de pagos de estudiantes]]></comment>
-	<position x="800" y="1100"/>
+	<position x="820" y="1000"/>
 	<column name="id" not-null="true" sequence="public.pago_id_seq">
 		<type name="integer" length="0"/>
 	</column>

@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.85" max-obj-count="16"
+	 default-schema="public" default-owner="postgres">
+<role name="appgeo"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="flask_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="uaded"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="dbadedgrok" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
+	<role name="uaded"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<sequence name="usuarios_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="usuarios" layer="0" collapse-mode="1" max-obj-count="9">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="140"/>
+	<column name="id" not-null="true" sequence="public.usuarios_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="username" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="password_hash" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="is_active" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="last_login">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="usuarios_pkey" type="pk-constr" table="public.usuarios">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="usuarios_username_key" type="uq-constr" table="public.usuarios">
+		<columns names="username" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="usuarios_email_key" type="uq-constr" table="public.usuarios">
+		<columns names="email" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="roles_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="roles" layer="0" collapse-mode="1" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="400" y="40"/>
+	<column name="id" not-null="true" sequence="public.roles_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="descripcion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="roles_pkey" type="pk-constr" table="public.roles">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="roles_nombre_key" type="uq-constr" table="public.roles">
+		<columns names="nombre" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="permisos_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="permisos" layer="0" collapse-mode="1" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="780" y="40"/>
+	<column name="id" not-null="true" sequence="public.permisos_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="codigo" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="descripcion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="permisos_pkey" type="pk-constr" table="public.permisos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="permisos_codigo_key" type="uq-constr" table="public.permisos">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user_roles" layer="0" collapse-mode="1" max-obj-count="3">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="220" y="40"/>
+	<column name="usuario_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="rol_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="user_roles_pkey" type="pk-constr" table="public.user_roles">
+		<columns names="usuario_id,rol_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="role_permisos" layer="0" collapse-mode="1" max-obj-count="3">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="560" y="20"/>
+	<column name="rol_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="permiso_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="role_permisos_pkey" type="pk-constr" table="public.role_permisos">
+		<columns names="rol_id,permiso_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="periodos_academicos_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="periodos_academicos" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="960" y="660"/>
+	<column name="id" not-null="true" sequence="public.periodos_academicos_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="fecha_inicio" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="fecha_fin" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="periodos_academicos_pkey" type="pk-constr" table="public.periodos_academicos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="periodos_academicos_nombre_key" type="uq-constr" table="public.periodos_academicos">
+		<columns names="nombre" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="alumnos_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="alumnos" layer="0" collapse-mode="1" max-obj-count="15">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="380"/>
+	<column name="id" not-null="true" sequence="public.alumnos_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="usuario_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="codigo_alumno" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombres" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellidos" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="fecha_nacimiento">
+		<type name="date" length="0"/>
+	</column>
+	<column name="genero">
+		<type name="character" length="1"/>
+	</column>
+	<column name="direccion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="telefono">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="alumnos_genero_check" type="ck-constr" table="public.alumnos">
+			<expression><![CDATA[(genero = ANY (ARRAY['M'::bpchar, 'F'::bpchar, 'O'::bpchar]))]]></expression>
+	</constraint>
+	<constraint name="alumnos_pkey" type="pk-constr" table="public.alumnos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="alumnos_usuario_id_key" type="uq-constr" table="public.alumnos">
+		<columns names="usuario_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="alumnos_codigo_alumno_key" type="uq-constr" table="public.alumnos">
+		<columns names="codigo_alumno" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="profesores_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="profesores" layer="0" collapse-mode="1" max-obj-count="13">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="640" y="220"/>
+	<column name="id" not-null="true" sequence="public.profesores_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="usuario_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="codigo_profesor" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombres" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="apellidos" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="especialidad">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="telefono">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="profesores_pkey" type="pk-constr" table="public.profesores">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="profesores_usuario_id_key" type="uq-constr" table="public.profesores">
+		<columns names="usuario_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="profesores_codigo_profesor_key" type="uq-constr" table="public.profesores">
+		<columns names="codigo_profesor" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="materias_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="materias" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1000" y="100"/>
+	<column name="id" not-null="true" sequence="public.materias_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="codigo_materia" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="creditos" default-value="4">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="descripcion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="materias_pkey" type="pk-constr" table="public.materias">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="materias_codigo_materia_key" type="uq-constr" table="public.materias">
+		<columns names="codigo_materia" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="cursos_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="cursos" layer="0" collapse-mode="1" max-obj-count="13">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="920" y="360"/>
+	<column name="id" not-null="true" sequence="public.cursos_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="materia_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="periodo_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="profesor_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="codigo_curso" not-null="true">
+		<type name="character varying" length="30"/>
+	</column>
+	<column name="seccion" not-null="true">
+		<type name="character" length="1"/>
+	</column>
+	<column name="horario">
+		<type name="text" length="0"/>
+	</column>
+	<column name="aula">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="capacidad" default-value="40">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="cursos_pkey" type="pk-constr" table="public.cursos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="cursos_codigo_curso_key" type="uq-constr" table="public.cursos">
+		<columns names="codigo_curso" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="inscripciones_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="inscripciones" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="460" y="400"/>
+	<column name="id" not-null="true" sequence="public.inscripciones_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="alumno_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="curso_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="fecha_inscripcion" default-value="CURRENT_DATE">
+		<type name="date" length="0"/>
+	</column>
+	<column name="estado" default-value="'activa'">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="inscripciones_estado_check" type="ck-constr" table="public.inscripciones">
+			<expression><![CDATA[((estado)::text = ANY ((ARRAY['activa'::character varying, 'retirada'::character varying, 'finalizada'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="inscripciones_pkey" type="pk-constr" table="public.inscripciones">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="inscripciones_alumno_id_curso_id_key" type="uq-constr" table="public.inscripciones">
+		<columns names="alumno_id,curso_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="asistencias_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="asistencias" layer="0" collapse-mode="1" max-obj-count="7">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="460" y="640"/>
+	<column name="id" not-null="true" sequence="public.asistencias_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="inscripcion_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="fecha" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="estado" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="observacion">
+		<type name="text" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="asistencias_estado_check" type="ck-constr" table="public.asistencias">
+			<expression><![CDATA[((estado)::text = ANY ((ARRAY['presente'::character varying, 'ausente'::character varying, 'tarde'::character varying, 'justificado'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="asistencias_pkey" type="pk-constr" table="public.asistencias">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="asistencias_inscripcion_id_fecha_key" type="uq-constr" table="public.asistencias">
+		<columns names="inscripcion_id,fecha" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="calificaciones_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="calificaciones" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="720" y="640"/>
+	<column name="id" not-null="true" sequence="public.calificaciones_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="inscripcion_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="tipo_evaluacion" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="nota">
+		<type name="numeric" length="4" precision="2"/>
+	</column>
+	<column name="peso" default-value="1">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="fecha" default-value="CURRENT_DATE">
+		<type name="date" length="0"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="calificaciones_nota_check" type="ck-constr" table="public.calificaciones">
+			<expression><![CDATA[((nota >= (0)::numeric) AND (nota <= (100)::numeric))]]></expression>
+	</constraint>
+	<constraint name="calificaciones_pkey" type="pk-constr" table="public.calificaciones">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="pagos_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="pagos" layer="0" collapse-mode="1" max-obj-count="10">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="300" y="560"/>
+	<column name="id" not-null="true" sequence="public.pagos_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="alumno_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="monto" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="fecha_pago" default-value="CURRENT_DATE">
+		<type name="date" length="0"/>
+	</column>
+	<column name="concepto" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="estado" default-value="'pagado'">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="referencia">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="created_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="updated_at" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="pagos_estado_check" type="ck-constr" table="public.pagos">
+			<expression><![CDATA[((estado)::text = ANY ((ARRAY['pendiente'::character varying, 'pagado'::character varying, 'rechazado'::character varying])::text[]))]]></expression>
+	</constraint>
+	<constraint name="pagos_pkey" type="pk-constr" table="public.pagos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="idx_usuarios_email" table="public.usuarios"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="email"/>
+		</idxelement>
+</index>
+
+<index name="idx_alumnos_usuario" table="public.alumnos"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="usuario_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_profesores_usuario" table="public.profesores"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="usuario_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_inscripciones_alumno" table="public.inscripciones"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="alumno_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_inscripciones_curso" table="public.inscripciones"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="curso_id"/>
+		</idxelement>
+</index>
+
+<index name="idx_pagos_alumno" table="public.pagos"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="alumno_id"/>
+		</idxelement>
+</index>
+
+<constraint name="user_roles_usuario_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.usuarios" table="public.user_roles">
+	<columns names="usuario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="user_roles_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.roles" table="public.user_roles">
+	<columns names="rol_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="role_permisos_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.roles" table="public.role_permisos">
+	<columns names="rol_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="role_permisos_permiso_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.permisos" table="public.role_permisos">
+	<columns names="permiso_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="alumnos_usuario_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.usuarios" table="public.alumnos">
+	<columns names="usuario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="profesores_usuario_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.usuarios" table="public.profesores">
+	<columns names="usuario_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="cursos_materia_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.materias" table="public.cursos">
+	<columns names="materia_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="cursos_periodo_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.periodos_academicos" table="public.cursos">
+	<columns names="periodo_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="cursos_profesor_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.profesores" table="public.cursos">
+	<columns names="profesor_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="inscripciones_alumno_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.alumnos" table="public.inscripciones">
+	<columns names="alumno_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="inscripciones_curso_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.cursos" table="public.inscripciones">
+	<columns names="curso_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="asistencias_inscripcion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.inscripciones" table="public.asistencias">
+	<columns names="inscripcion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="calificaciones_inscripcion_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.inscripciones" table="public.calificaciones">
+	<columns names="inscripcion_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="pagos_alumno_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.alumnos" table="public.pagos">
+	<columns names="alumno_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_user_roles_usuarios" type="relfk" layer="0"
+	 custom-color="#dc4c09"
+	 src-table="public.user_roles"
+	 dst-table="public.usuarios" reference-fk="user_roles_usuario_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_user_roles_roles" type="relfk" layer="0"
+	 custom-color="#111377"
+	 src-table="public.user_roles"
+	 dst-table="public.roles" reference-fk="user_roles_rol_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_role_permisos_roles" type="relfk" layer="0"
+	 custom-color="#c5e07f"
+	 src-table="public.role_permisos"
+	 dst-table="public.roles" reference-fk="role_permisos_rol_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_role_permisos_permisos" type="relfk" layer="0"
+	 custom-color="#f1b96d"
+	 src-table="public.role_permisos"
+	 dst-table="public.permisos" reference-fk="role_permisos_permiso_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_alumnos_usuarios" type="relfk" layer="0"
+	 custom-color="#643751"
+	 src-table="public.alumnos"
+	 dst-table="public.usuarios" reference-fk="alumnos_usuario_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_profesores_usuarios" type="relfk" layer="0"
+	 custom-color="#e65ce5"
+	 src-table="public.profesores"
+	 dst-table="public.usuarios" reference-fk="profesores_usuario_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_cursos_materias" type="relfk" layer="0"
+	 custom-color="#24c451"
+	 src-table="public.cursos"
+	 dst-table="public.materias" reference-fk="cursos_materia_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_cursos_periodos_academicos" type="relfk" layer="0"
+	 custom-color="#3477f4"
+	 src-table="public.cursos"
+	 dst-table="public.periodos_academicos" reference-fk="cursos_periodo_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_cursos_profesores" type="relfk" layer="0"
+	 custom-color="#706531"
+	 src-table="public.cursos"
+	 dst-table="public.profesores" reference-fk="cursos_profesor_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_inscripciones_alumnos" type="relfk" layer="0"
+	 custom-color="#be9cf6"
+	 src-table="public.inscripciones"
+	 dst-table="public.alumnos" reference-fk="inscripciones_alumno_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_inscripciones_cursos" type="relfk" layer="0"
+	 custom-color="#cc2d0a"
+	 src-table="public.inscripciones"
+	 dst-table="public.cursos" reference-fk="inscripciones_curso_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asistencias_inscripciones" type="relfk" layer="0"
+	 custom-color="#a91763"
+	 src-table="public.asistencias"
+	 dst-table="public.inscripciones" reference-fk="asistencias_inscripcion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_calificaciones_inscripciones" type="relfk" layer="0"
+	 custom-color="#c4ff5a"
+	 src-table="public.calificaciones"
+	 dst-table="public.inscripciones" reference-fk="calificaciones_inscripcion_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_pagos_alumnos" type="relfk" layer="0"
+	 custom-color="#dd9095"
+	 src-table="public.pagos"
+	 dst-table="public.alumnos" reference-fk="pagos_alumno_id_fkey"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>

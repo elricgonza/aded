@@ -174,7 +174,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="periodos_academicos" layer="0" collapse-mode="1" max-obj-count="8">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="960" y="660"/>
+	<position x="1120" y="680"/>
 	<column name="id" not-null="true" sequence="public.periodos_academicos_id_seq">
 		<type name="bigint" length="0"/>
 	</column>
@@ -773,7 +773,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_calificaciones_inscripciones" type="relfk" layer="0"
-	 custom-color="#c4ff5a"
+	 custom-color="#de0594"
 	 src-table="public.calificaciones"
 	 dst-table="public.inscripciones" reference-fk="calificaciones_inscripcion_id_fkey"
 	 src-required="false" dst-required="false"/>

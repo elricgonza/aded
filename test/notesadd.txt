@@ -1,0 +1,10 @@
+--add
+
+qwen- 
++curso
+	duracion, costo
+
+
+--horario--
+
+

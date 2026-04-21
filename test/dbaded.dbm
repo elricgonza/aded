@@ -34,63 +34,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
 
-<table name="pla" layer="0" collapse-mode="1" max-obj-count="6">
-	<schema name="public"/>
-	<role name="uaded"/>
-	<position x="60" y="60"/>
-	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="plan" not-null="true">
-		<type name="character varying" length="150"/>
-	</column>
-	<column name="gestion" not-null="true">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="creado">
-		<type name="date" length="0"/>
-	</column>
-	<column name="act" not-null="true">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="pla_pkey" type="pk-constr" table="public.pla">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
-
 <sequence name="pla_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
 	<schema name="public"/>
 	<role name="uaded"/>
 </sequence>
-
-<table name="niv" layer="0" collapse-mode="1" max-obj-count="7">
-	<schema name="public"/>
-	<role name="uaded"/>
-	<position x="200" y="40"/>
-	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="nivel" not-null="true">
-		<type name="character varying" length="255"/>
-	</column>
-	<column name="pla_id" not-null="true">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="gestion" not-null="true">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="creado" not-null="true">
-		<type name="date" length="0"/>
-	</column>
-	<column name="act">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="niv_pkey" type="pk-constr" table="public.niv">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
 
 <sequence name="niv_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
 	<schema name="public"/>
@@ -100,7 +47,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="gra" layer="0" collapse-mode="1" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="400" y="40"/>
+	<position x="440" y="20"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -108,11 +55,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="grado" not-null="true">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="niv_id" not-null="true">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="gestion" not-null="true">
-		<type name="smallint" length="0"/>
+	<column name="nivel" not-null="true">
+		<type name="varchar" length="150"/>
 	</column>
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
@@ -123,6 +67,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="gra_pkey" type="pk-constr" table="public.gra">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_ges" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="ges_fk" index="1"/>
+	</customidxs>
 </table>
 
 <sequence name="gra_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
@@ -130,10 +82,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="mat" layer="0" collapse-mode="1" max-obj-count="7">
+<table name="mat" layer="0" collapse-mode="1" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="560" y="40"/>
+	<position x="640" y="20"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -143,9 +95,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="gra_id" not-null="true">
 		<type name="integer" length="0"/>
-	</column>
-	<column name="gestion" not-null="true">
-		<type name="smallint" length="0"/>
 	</column>
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
@@ -166,7 +115,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alu" layer="0" collapse-mode="1" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="60" y="400"/>
+	<position x="80" y="420"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -217,7 +166,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="ins" layer="0" collapse-mode="1" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="420" y="360"/>
+	<position x="400" y="380"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -265,7 +214,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="cur" layer="0" collapse-mode="1" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="260" y="200"/>
+	<position x="280" y="200"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -273,22 +222,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="curso">
 		<type name="varchar" length="150"/>
 	</column>
-	<column name="gra_id" not-null="true">
-		<type name="integer" length="0"/>
-	</column>
 	<column name="paralelo" not-null="true">
 		<type name="character varying" length="50"/>
 	</column>
-	<column name="gestion" not-null="true">
+	<column name="gra_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="aula">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="capacidad">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="inicio">
-		<type name="date" length="0"/>
-		<comment><![CDATA[con datos cuando es diferente a una gestión anual]]></comment>
-	</column>
-	<column name="fin">
-		<type name="date" length="0"/>
-		<comment><![CDATA[con datos cuando es diferente a una gestión anual]]></comment>
+	<column name="gestion" not-null="true">
+		<type name="smallint" length="0"/>
 	</column>
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
@@ -306,11 +253,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="seg" layer="0" collapse-mode="1" max-obj-count="13">
+<table name="seg" layer="0" collapse-mode="1" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
-	<position x="580" y="480"/>
+	<position x="560" y="480"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -321,19 +268,22 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="mat_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="ev01">
+	<column name="nota1" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="ev02">
+	<column name="nota2" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="ev03">
+	<column name="nota3" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="evfin">
+	<column name="promedio" not-null="true">
+		<type name="numeric" length="5" precision="1"/>
+	</column>
+	<column name="nota_aprob" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="aprob">
+	<column name="aprobado">
 		<type name="boolean" length="0"/>
 	</column>
 	<column name="obs">
@@ -398,7 +348,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[prof ASIgnado (enseña) a un curso y descripción de materias asignadas]]></comment>
-	<position x="600" y="240"/>
+	<position x="520" y="200"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -428,10 +378,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="pag" layer="0" collapse-mode="1" max-obj-count="10">
+<table name="pag" layer="0" collapse-mode="1" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="260" y="520"/>
+	<position x="220" y="540"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -439,7 +389,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="ins_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="nro" not-null="true">
+	<column name="nro_cuota" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
 	<column name="cuota" not-null="true">
@@ -448,8 +398,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="pagado">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="pagado_en">
-		<type name="date" length="0"/>
+	<column name="metodo_pago">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="nro_comprobante">
+		<type name="varchar" length="50"/>
 	</column>
 	<column name="obs">
 		<type name="character varying" length="100"/>
@@ -467,10 +420,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="cos" layer="0" collapse-mode="1" max-obj-count="9">
+<table name="cos" layer="0" collapse-mode="1" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="120" y="200"/>
+	<position x="120" y="240"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -478,14 +431,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="cur_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="nro" not-null="true">
+	<column name="nro_cuota" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
 	<column name="cuota" not-null="true">
-		<type name="double precision" length="0"/>
-	</column>
-	<column name="costo" not-null="true">
-		<type name="double precision" length="0"/>
+		<type name="numeric" length="10" precision="2"/>
 	</column>
 	<column name="obs" not-null="true">
 		<type name="character varying" length="200"/>
@@ -506,17 +456,48 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<constraint name="niv_id_plan_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.pla" table="public.niv">
-	<columns names="pla_id" ref-type="src-columns"/>
-	<columns names="id" ref-type="dst-columns"/>
-</constraint>
+<table name="ges" layer="0" collapse-mode="2" max-obj-count="9">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="160" y="20"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="gestion">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="plan" not-null="true">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="inicio" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="fin" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activo" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="ges_pk" type="pk-constr" table="public.ges">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
 
-<constraint name="gra_id_niv_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.niv" table="public.gra">
-	<columns names="niv_id" ref-type="src-columns"/>
-	<columns names="id" ref-type="dst-columns"/>
-</constraint>
+<relationship name="ges_has_many_gra" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f511f5"
+	 src-table="public.ges"
+	 dst-table="public.gra"
+	 src-required="true" dst-required="false"/>
 
 <constraint name="mat_id_gra_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.gra" table="public.mat">
@@ -577,18 +558,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="cur_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
-
-<relationship name="rel_niv_pla" type="relfk" layer="0"
-	 custom-color="#70e44a"
-	 src-table="public.niv"
-	 dst-table="public.pla" reference-fk="niv_id_plan_fkey"
-	 src-required="false" dst-required="false"/>
-
-<relationship name="rel_gra_niv" type="relfk" layer="0"
-	 custom-color="#3f8390"
-	 src-table="public.gra"
-	 dst-table="public.niv" reference-fk="gra_id_niv_fkey"
-	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_mat_gra" type="relfk" layer="0"
 	 custom-color="#81ce40"

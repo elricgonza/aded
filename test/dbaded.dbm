@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="14"
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.85" max-obj-count="14"
 	 default-schema="public" default-owner="postgres">
 <role name="appgeo"
       inherit="true"
@@ -112,7 +112,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="alu" layer="0" collapse-mode="1" max-obj-count="14">
+<table name="est" layer="0" collapse-mode="1" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="80" y="420"/>
@@ -153,7 +153,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<constraint name="alu_pk" type="pk-constr" table="public.alu">
+	<constraint name="alu_pk" type="pk-constr" table="public.est">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -163,15 +163,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="ins" layer="0" collapse-mode="1" max-obj-count="12">
+<table name="ins" layer="0" collapse-mode="1" max-obj-count="13">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="400" y="380"/>
+	<position x="440" y="360"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="alu_id">
+	<column name="est_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="cur_id">
@@ -189,6 +189,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="motivo_descu">
 		<type name="varchar" length="100"/>
 	</column>
+	<column name="abandono" not-null="true" default-value="False">
+		<type name="boolean" length="20"/>
+	</column>
 	<column name="obs">
 		<type name="varchar" length="200"/>
 	</column>
@@ -202,7 +205,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="ins_uq" type="uq-constr" table="public.ins">
-		<columns names="alu_id" ref-type="src-columns"/>
+		<columns names="est_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -253,11 +256,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="seg" layer="0" collapse-mode="1" max-obj-count="14">
+<table name="cal" layer="0" collapse-mode="1" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
-	<position x="560" y="480"/>
+	<position x="660" y="480"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -277,7 +280,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="nota3" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="promedio" not-null="true">
+	<column name="nota_final" not-null="true">
 		<type name="numeric" length="5" precision="1"/>
 	</column>
 	<column name="nota_aprob" not-null="true">
@@ -295,7 +298,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<constraint name="seg_pk" type="pk-constr" table="public.seg">
+	<constraint name="cal_pk" type="pk-constr" table="public.cal">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -308,7 +311,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pro" layer="0" collapse-mode="1" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="680" y="440"/>
+	<position x="740" y="240"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -381,7 +384,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pag" layer="0" collapse-mode="1" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="220" y="540"/>
+	<position x="220" y="560"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -506,8 +509,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="alu_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.alu" table="public.ins">
-	<columns names="alu_id" ref-type="src-columns"/>
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.est" table="public.ins">
+	<columns names="est_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
@@ -524,7 +527,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="ins_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.ins" table="public.seg">
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.ins" table="public.cal">
 	<columns names="ins_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -565,10 +568,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.gra" reference-fk="mat_id_gra_fkey"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_ins_alu" type="relfk" layer="0"
+<relationship name="rel_ins_est" type="relfk" layer="0"
 	 custom-color="#323f0d"
 	 src-table="public.ins"
-	 dst-table="public.alu" reference-fk="alu_fk"
+	 dst-table="public.est" reference-fk="alu_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_ins_cur" type="relfk" layer="0"
@@ -587,9 +590,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<relationship name="rel_seg_ins" type="relfk" layer="0"
+<relationship name="rel_cal_ins" type="relfk" layer="0"
 	 custom-color="#eadf15"
-	 src-table="public.seg"
+	 src-table="public.cal"
 	 dst-table="public.ins" reference-fk="ins_fk"
 	 src-required="false" dst-required="false"/>
 

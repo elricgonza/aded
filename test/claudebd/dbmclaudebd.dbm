@@ -707,7 +707,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Registro de pagos de estudiantes]]></comment>
-	<position x="820" y="1000"/>
+	<position x="834" y="725"/>
 	<column name="id" not-null="true" sequence="public.pago_id_seq">
 		<type name="integer" length="0"/>
 	</column>

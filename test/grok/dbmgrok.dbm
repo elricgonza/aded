@@ -212,7 +212,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alumnos" layer="0" collapse-mode="1" max-obj-count="15">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="80" y="380"/>
+	<position x="80" y="400"/>
 	<column name="id" not-null="true" sequence="public.alumnos_id_seq">
 		<type name="bigint" length="0"/>
 	</column>
@@ -274,7 +274,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="profesores" layer="0" collapse-mode="1" max-obj-count="13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="640" y="220"/>
+	<position x="620" y="200"/>
 	<column name="id" not-null="true" sequence="public.profesores_id_seq">
 		<type name="bigint" length="0"/>
 	</column>

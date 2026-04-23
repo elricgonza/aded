@@ -97,4 +97,24 @@ requiere:
 	-costo asignado por grado y nivel, pero también podría haber casos especiales (ej: becas, descuentos, etc...) que podrían requerir ajustes en los costos para ciertos estudiantes o grupos de estudiantes.
 	-
 
--
+-------------------------------------------
+---auth - usuarios
+-¿Cómo se manejará la autenticación y autorización de los usuarios en el sistema?
+	-se podrían implementar roles de usuario con diferentes niveles de acceso y permisos para garantizar la seguridad y la integridad de los datos en el sistema.
+	-por ejemplo, se podrían definir roles como "administrador", "profesor", "estudiante", etc., cada uno con permisos específicos para acceder y modificar ciertos datos en el sistema.
+	-se podrían implementar medidas de seguridad adicionales, como la encriptación de contraseñas, la autenticación de dos factores, etc., para proteger la información de los usuarios y garantizar la seguridad del sistema en general.
+
+Proced:
+-Add usuarios
+-Asignar roles a los usuarios
+-Definir permisos para cada rol
+-Adicionar estudiantes y prof (opc: vincular con tabla de usuarios)
+
+username: admin
+password: admin123
+role: administrador	
+
+roles: administrador, profesor, estudiante, consulta, cobranza, secretaria, transcriptor
+
+
+

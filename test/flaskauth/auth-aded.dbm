@@ -39,10 +39,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="usr" layer="0" collapse-mode="2" max-obj-count="9">
+<table name="usr" layer="0" collapse-mode="1" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="60" y="60"/>
+	<position x="80" y="60"/>
 	<column name="id" not-null="true" sequence="public.usr_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -85,7 +85,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="rol" layer="0" collapse-mode="2" max-obj-count="6">
+<table name="rol" layer="0" collapse-mode="1" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="500" y="60"/>
@@ -117,7 +117,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="per" layer="0" collapse-mode="2" max-obj-count="6">
+<table name="per" layer="0" collapse-mode="1" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="280" y="300"/>
@@ -144,7 +144,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="usr_rol" layer="0" collapse-mode="2" max-obj-count="3">
+<table name="usr_rol" layer="0" collapse-mode="1" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="260" y="40"/>
@@ -159,7 +159,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="rol_per" layer="0" collapse-mode="2" max-obj-count="3">
+<table name="rol_per" layer="0" collapse-mode="1" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="500" y="300"/>
@@ -202,7 +202,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#64fa03"
 	 src-table="public.usr_rol"
 	 dst-table="public.usr" reference-fk="usr_rol_usr_id_fkey"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="48.7934" y="8.74505"/>
+	</label>
+</relationship>
 
 <relationship name="rel_usr_rol_rol" type="relfk" layer="0"
 	 custom-color="#448018"

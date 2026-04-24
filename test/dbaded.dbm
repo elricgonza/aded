@@ -89,7 +89,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="est" layer="0" collapse-mode="1" max-obj-count="18">
+<table name="est" layer="0" collapse-mode="1" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="0" y="240"/>
@@ -129,6 +129,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="usr_id_login">
 		<type name="integer" length="0"/>
+	</column>
+	<column name="foto_ruta">
+		<type name="varchar" length="150"/>
 	</column>
 	<column name="creado" not-null="true">
 		<type name="date" length="0"/>
@@ -391,7 +394,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pag" layer="0" collapse-mode="1" max-obj-count="13">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="120" y="440"/>
+	<position x="120" y="420"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -411,8 +414,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="metodo_pago">
 		<type name="character varying" length="50"/>
 	</column>
-	<column name="nro_comprobante">
-		<type name="character varying" length="50"/>
+	<column name="referencia_pago">
+		<type name="character varying" length="100"/>
 	</column>
 	<column name="obs">
 		<type name="character varying" length="100"/>

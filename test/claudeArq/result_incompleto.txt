@@ -1,0 +1,906 @@
+Arquitectura Completa - Sistema de Gestión para Unidad Educativa
+📋 Índice
+
+Visión General de la Arquitectura
+Capa de Base de Datos
+Capa de Backend (Python/Flask)
+Capa de Frontend (HTMX/Alpine.js)
+Seguridad y Autenticación
+Estructura del Proyecto
+Flujos de Datos
+Diagramas de Arquitectura
+
+
+1. Visión General de la Arquitectura {#vision-general}
+Arquitectura de 3 Capas Moderna
+┌─────────────────────────────────────────────────────────────┐
+│                    CLIENTE (Navegador)                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │   HTML5      │  │  Alpine.js   │  │    HTMX      │      │
+│  │  Tailwind CSS│  │ (Reactividad)│  │ (AJAX/SPA)   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└────────────────────────┬────────────────────────────────────┘
+                         │ HTTP/HTTPS
+                         │ (JSON/HTML Fragments)
+┌────────────────────────▼────────────────────────────────────┐
+│              SERVIDOR DE APLICACIONES                        │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │                   Flask (Python)                      │   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐│   │
+│  │  │ Routes  │  │ Models  │  │  Auth   │  │  API    ││   │
+│  │  │(Blueprints)│(SQLAlchemy)│(Login)  │  │  REST   ││   │
+│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘│   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐             │   │
+│  │  │Services │  │ Helpers │  │ Decorators│            │   │
+│  │  │(Business)│  │ (Utils) │  │(Permissions)│         │   │
+│  │  └─────────┘  └─────────┘  └─────────┘             │   │
+│  └──────────────────────────────────────────────────────┘   │
+└────────────────────────┬────────────────────────────────────┘
+                         │ psycopg2 / SQLAlchemy
+                         │
+┌────────────────────────▼────────────────────────────────────┐
+│                    BASE DE DATOS                             │
+│                   PostgreSQL 12+                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │   Académico  │  │  Financiero  │  │     Auth     │      │
+│  │ (ges,gra,mat)│  │  (cos, pag)  │  │(usr,rol,per) │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+Stack Tecnológico Detallado
+-----------------------------
+Capa    Tecnología  Propósito
+Base de Datos   PostgreSQL 12+  Almacenamiento persistente
+ORMSQLAlchemy 2.0   Mapeo objeto-relacional
+Backend FrameworkFlask 3.0Servidor web y API
+Autenticación   Flask-LoginGestión de sesiones
+SeguridadFlask-BcryptHash de contraseñas
+Frontend Base   HTML5 + Jinja2
+Templates del servidor
+Estilos Tailwind CSS 3.xDiseño responsivo
+Interactividad  Alpine.js 3.x Reactividad ligera
+AJAX/SPA    HTMX 1.9+   Navegación sin recargas
+ValidaciónFlask-WTFFormularios y CSRF
+
+
+2. Capa de Base de Datos {#capa-base-datos}
+Modelo de Datos Mejorado
+sql-- DIAGRAMA ENTIDAD-RELACIÓN LÓGICO
+
+┌─────────┐      ┌─────────┐      ┌─────────┐
+│   GES   │──┬──▶│   GRA   │──┬──▶│   MAT   │
+│(Gestión)│  │   │ (Grado) │  │   │(Materia)│
+└─────────┘  │   └─────────┘  │   └─────────┘
+             │        │        │        │
+             │        ▼        │        │
+             │   ┌─────────┐  │        │
+             └──▶│   CUR   │◀─┘        │
+                 │ (Curso) │           │
+                 └─────────┘           │
+                      │                │
+                      ▼                ▼
+                 ┌─────────┐      ┌─────────┐
+                 │   INS   │      │   ASI   │
+                 │(Inscrip)│      │(Asignac)│
+                 └─────────┘      └─────────┘
+                      │                │
+          ┌───────────┼────────────────┤
+          │           │                │
+          ▼           ▼                ▼
+     ┌─────────┐ ┌─────────┐     ┌─────────┐
+     │   PAG   │ │   CAL   │     │   PRO   │
+     │ (Pago)  │ │(Calific)│     │(Profesor)│
+     └─────────┘ └─────────┘     └─────────┘
+          ▲
+          │
+     ┌─────────┐
+     │   COS   │
+     │ (Costo) │
+     └─────────┘
+
+AUTENTICACIÓN:
+┌─────────┐     ┌─────────┐     ┌─────────┐
+│   USR   │────▶│ USR_ROL │◀────│   ROL   │
+│(Usuario)│     └─────────┘     └─────────┘
+└─────────┘                          │
+                                     ▼
+                               ┌─────────┐     ┌─────────┐
+                               │ ROL_PER │◀────│   PER   │
+                               └─────────┘     │(Permiso)│
+                                               └─────────┘
+Mejoras Sugeridas para la Base de Datos
+sql-- ÍNDICES ADICIONALES RECOMENDADOS
+CREATE INDEX idx_ins_cur_id ON ins(cur_id);
+CREATE INDEX idx_ins_est_id ON ins(est_id);
+CREATE INDEX idx_cal_ins_id ON cal(ins_id);
+CREATE INDEX idx_cal_mat_id ON cal(mat_id);
+CREATE INDEX idx_pag_ins_id ON pag(ins_id);
+CREATE INDEX idx_pag_pagado ON pag(pagado);
+CREATE INDEX idx_asi_cur_id ON asi(cur_id);
+CREATE INDEX idx_asi_pro_id ON asi(pro_id);
+CREATE INDEX idx_usr_activo ON usr(activo);
+CREATE INDEX idx_est_activo ON est(activo);
+
+-- VISTAS ÚTILES
+CREATE OR REPLACE VIEW v_estudiantes_activos AS
+SELECT 
+    e.id,
+    e.nombre || ' ' || COALESCE(e.paterno, '') || ' ' || COALESCE(e.materno, '') as nombre_completo,
+    e.ci,
+    c.paralelo,
+    g.grado,
+    g.nivel,
+    i.descu as descuento
+FROM est e
+INNER JOIN ins i ON e.id = i.est_id
+INNER JOIN cur c ON i.cur_id = c.id
+INNER JOIN gra g ON c.gra_id = g.id
+WHERE e.activo = true AND i.inscrito = true AND i.abandono = false;
+
+CREATE OR REPLACE VIEW v_resumen_pagos AS
+SELECT 
+    i.id as inscripcion_id,
+    e.nombre || ' ' || e.paterno as estudiante,
+    COUNT(p.id) as total_cuotas,
+    COUNT(CASE WHEN p.pagado = true THEN 1 END) as cuotas_pagadas,
+    COUNT(CASE WHEN p.pagado = false OR p.pagado IS NULL THEN 1 END) as cuotas_pendientes,
+    SUM(p.cuota) as monto_total,
+    SUM(CASE WHEN p.pagado = true THEN p.cuota ELSE 0 END) as monto_pagado,
+    SUM(CASE WHEN p.pagado = false OR p.pagado IS NULL THEN p.cuota ELSE 0 END) as monto_pendiente
+FROM ins i
+INNER JOIN est e ON i.est_id = e.id
+LEFT JOIN pag p ON i.id = p.ins_id
+GROUP BY i.id, e.nombre, e.paterno;
+
+-- FUNCIÓN: Generar plan de pagos automático
+CREATE OR REPLACE FUNCTION fn_generar_plan_pagos(p_ins_id INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    v_cur_id INTEGER;
+    v_cos_record RECORD;
+    v_descu SMALLINT;
+    v_cuota_final NUMERIC(10,2);
+    v_registros INTEGER := 0;
+BEGIN
+    -- Obtener datos de inscripción
+    SELECT cur_id, descu INTO v_cur_id, v_descu
+    FROM ins WHERE id = p_ins_id;
+    
+    -- Obtener configuración de costos
+    SELECT * INTO v_cos_record FROM cos WHERE cur_id = v_cur_id;
+    
+    -- Aplicar descuento
+    v_cuota_final := v_cos_record.cuota * (1 - v_descu / 100.0);
+    
+    -- Generar cuotas
+    FOR i IN 1..v_cos_record.nro_cuota LOOP
+        INSERT INTO pag (ins_id, nro_cuota, cuota, pagado, creado, act)
+        VALUES (p_ins_id, i, v_cuota_final, false, CURRENT_DATE, CURRENT_DATE);
+        v_registros := v_registros + 1;
+    END LOOP;
+    
+    RETURN v_registros;
+END;
+$$ LANGUAGE plpgsql;
+
+-- TRIGGER: Actualizar campo 'act' automáticamente
+CREATE OR REPLACE FUNCTION actualizar_fecha_act()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.act = CURRENT_DATE;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_est_act BEFORE UPDATE ON est
+    FOR EACH ROW EXECUTE FUNCTION actualizar_fecha_act();
+    
+CREATE TRIGGER trg_ins_act BEFORE UPDATE ON ins
+    FOR EACH ROW EXECUTE FUNCTION actualizar_fecha_act();
+
+3. Capa de Backend (Python/Flask) {#capa-backend}
+Estructura de Módulos Flask
+python
+# app/__init__.py
+"""
+Inicialización de la aplicación Flask
+"""
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_bcrypt import Bcrypt
+from config import Config
+
+db = SQLAlchemy()
+login_manager = LoginManager()
+bcrypt = Bcrypt()
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+    
+    # Inicializar extensiones
+    db.init_app(app)
+    login_manager.init_app(app)
+    bcrypt.init_app(app)
+    
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Por favor inicie sesión'
+    
+    # Registrar blueprints
+    from app.auth import bp as auth_bp
+    from app.academico import bp as academico_bp
+    from app.financiero import bp as financiero_bp
+    from app.reportes import bp as reportes_bp
+    
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(academico_bp, url_prefix='/academico')
+    app.register_blueprint(financiero_bp, url_prefix='/financiero')
+    app.register_blueprint(reportes_bp, url_prefix='/reportes')
+    
+    return app
+Modelos SQLAlchemy
+python# app/models.py
+"""
+Modelos de base de datos usando SQLAlchemy
+"""
+from app import db
+from flask_login import UserMixin
+from datetime import date
+
+# ============================================================================
+# MÓDULO ACADÉMICO
+# ============================================================================
+
+class Gestion(db.Model):
+    __tablename__ = 'ges'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    gestion = db.Column(db.SmallInteger)
+    plan = db.Column(db.String(150), nullable=False)
+    inicio = db.Column(db.Date, nullable=False)
+    fin = db.Column(db.Date, nullable=False)
+    activo = db.Column(db.Boolean, nullable=False, default=True)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    grados = db.relationship('Grado', backref='gestion', lazy='dynamic')
+
+class Grado(db.Model):
+    __tablename__ = 'gra'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    grado = db.Column(db.String(255), nullable=False)
+    nivel = db.Column(db.String(150), nullable=False)
+    id_ges = db.Column(db.Integer, db.ForeignKey('ges.id'), nullable=False)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    materias = db.relationship('Materia', backref='grado', lazy='dynamic')
+    cursos = db.relationship('Curso', backref='grado', lazy='dynamic')
+
+class Materia(db.Model):
+    __tablename__ = 'mat'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    materia = db.Column(db.String(150), nullable=False)
+    gra_id = db.Column(db.Integer, db.ForeignKey('gra.id'), nullable=False)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    asignaciones = db.relationship('Asignacion', backref='materia', lazy='dynamic')
+
+class Estudiante(db.Model):
+    __tablename__ = 'est'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    paterno = db.Column(db.String(100))
+    materno = db.Column(db.String(100))
+    nacimiento = db.Column(db.Date)
+    masculino = db.Column(db.Boolean, nullable=False)
+    ci = db.Column(db.Integer)
+    direccion = db.Column(db.String(150))
+    activo = db.Column(db.Boolean, nullable=False, default=True)
+    obs = db.Column(db.String(100))
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    inscripciones = db.relationship('Inscripcion', backref='estudiante', lazy='dynamic')
+    
+    @property
+    def nombre_completo(self):
+        return f"{self.nombre} {self.paterno or ''} {self.materno or ''}".strip()
+
+class Curso(db.Model):
+    __tablename__ = 'cur'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    curso = db.Column(db.String(150))
+    paralelo = db.Column(db.String(50), nullable=False)
+    gra_id = db.Column(db.Integer, db.ForeignKey('gra.id'), nullable=False)
+    aula = db.Column(db.String(50))
+    capacidad = db.Column(db.SmallInteger)
+    gestion = db.Column(db.SmallInteger, nullable=False)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    inscripciones = db.relationship('Inscripcion', backref='curso', lazy='dynamic')
+    asignaciones = db.relationship('Asignacion', backref='curso', lazy='dynamic')
+    costos = db.relationship('Costo', backref='curso', lazy='dynamic')
+
+class Inscripcion(db.Model):
+    __tablename__ = 'ins'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    est_id = db.Column(db.Integer, db.ForeignKey('est.id'))
+    cur_id = db.Column(db.Integer, db.ForeignKey('cur.id'))
+    reserva = db.Column(db.Boolean)
+    inscrito = db.Column(db.Boolean, nullable=False, default=False)
+    descu = db.Column(db.SmallInteger, nullable=False, default=0)
+    motivo_descu = db.Column(db.String(100))
+    abandono = db.Column(db.Boolean, nullable=False, default=False)
+    obs = db.Column(db.String(200))
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    calificaciones = db.relationship('Calificacion', backref='inscripcion', lazy='dynamic')
+    pagos = db.relationship('Pago', backref='inscripcion', lazy='dynamic')
+
+class Profesor(db.Model):
+    __tablename__ = 'pro'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    paterno = db.Column(db.String(50))
+    materno = db.Column(db.String(50))
+    formacion = db.Column(db.String(100))
+    activo = db.Column(db.Boolean, nullable=False, default=True)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+    
+    # Relaciones
+    asignaciones = db.relationship('Asignacion', backref='profesor', lazy='dynamic')
+    
+    @property
+    def nombre_completo(self):
+        return f"{self.nombre} {self.paterno or ''} {self.materno or ''}".strip()
+
+class Asignacion(db.Model):
+    __tablename__ = 'asi'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    cur_id = db.Column(db.Integer, db.ForeignKey('cur.id'), nullable=False)
+    mat_id = db.Column(db.Integer, db.ForeignKey('mat.id'), nullable=False)
+    pro_id = db.Column(db.Integer, db.ForeignKey('pro.id'), nullable=False)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+
+class Calificacion(db.Model):
+    __tablename__ = 'cal'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    ins_id = db.Column(db.Integer, db.ForeignKey('ins.id'), nullable=False)
+    mat_id = db.Column(db.Integer, nullable=False)
+    nota1 = db.Column(db.SmallInteger, nullable=False)
+    nota2 = db.Column(db.SmallInteger, nullable=False)
+    nota3 = db.Column(db.SmallInteger, nullable=False)
+    nota_final = db.Column(db.Numeric(5, 1), nullable=False)
+    nota_aprob = db.Column(db.SmallInteger, nullable=False)
+    aprobado = db.Column(db.Boolean)
+    obs = db.Column(db.String(150))
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+
+# ============================================================================
+# MÓDULO FINANCIERO
+# ============================================================================
+
+class Costo(db.Model):
+    __tablename__ = 'cos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    cur_id = db.Column(db.Integer, db.ForeignKey('cur.id'), nullable=False)
+    nro_cuota = db.Column(db.SmallInteger, nullable=False)
+    cuota = db.Column(db.Numeric(10, 2), nullable=False)
+    obs = db.Column(db.String(200), nullable=False)
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+
+class Pago(db.Model):
+    __tablename__ = 'pag'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    ins_id = db.Column(db.Integer, db.ForeignKey('ins.id'), nullable=False)
+    nro_cuota = db.Column(db.SmallInteger, nullable=False)
+    cuota = db.Column(db.Float, nullable=False)
+    pagado = db.Column(db.Boolean)
+    metodo_pago = db.Column(db.String(50))
+    nro_comprobante = db.Column(db.String(50))
+    obs = db.Column(db.String(100))
+    creado = db.Column(db.Date, nullable=False, default=date.today)
+    act = db.Column(db.Date, nullable=False, default=date.today)
+
+# ============================================================================
+# MÓDULO DE AUTENTICACIÓN
+# ============================================================================
+
+# Tablas de asociación
+usr_rol = db.Table('usr_rol',
+    db.Column('usr_id', db.Integer, db.ForeignKey('usr.id'), primary_key=True),
+    db.Column('rol_id', db.Integer, db.ForeignKey('rol.id'), primary_key=True)
+)
+
+rol_per = db.Table('rol_per',
+    db.Column('rol_id', db.Integer, db.ForeignKey('rol.id'), primary_key=True),
+    db.Column('per_id', db.Integer, db.ForeignKey('per.id'), primary_key=True)
+)
+
+class Usuario(UserMixin, db.Model):
+    __tablename__ = 'usr'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    usuario = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    activo = db.Column(db.Boolean, default=True)
+    ultimo_ingreso = db.Column(db.Date, nullable=False)
+    creado = db.Column(db.DateTime)
+    act = db.Column(db.DateTime)
+    
+    # Relaciones
+    roles = db.relationship('Rol', secondary=usr_rol, backref=db.backref('usuarios', lazy='dynamic'))
+    
+    def tiene_permiso(self, permiso_nombre):
+        for rol in self.roles:
+            if any(p.permiso == permiso_nombre for p in rol.permisos):
+                return True
+        return False
+    
+    def tiene_rol(self, rol_nombre):
+        return any(r.rol == rol_nombre for r in self.roles)
+
+class Rol(db.Model):
+    __tablename__ = 'rol'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    rol = db.Column(db.String(50), unique=True, nullable=False)
+    descripcion = db.Column(db.String(255))
+    creado = db.Column(db.DateTime)
+    act = db.Column(db.Date)
+    
+    # Relaciones
+    permisos = db.relationship('Permiso', secondary=rol_per, backref=db.backref('roles', lazy='dynamic'))
+
+class Permiso(db.Model):
+    __tablename__ = 'per'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    permiso = db.Column(db.String(50), unique=True, nullable=False)
+    descripcion = db.Column(db.String(255))
+    creado = db.Column(db.DateTime)
+    act = db.Column(db.DateTime)
+Servicios de Negocio
+python# app/services/academico_service.py
+"""
+Servicios de lógica de negocio para el módulo académico
+"""
+from app import db
+from app.models import Estudiante, Inscripcion, Curso, Calificacion
+from sqlalchemy import func
+
+class AcademicoService:
+    
+    @staticmethod
+    def inscribir_estudiante(est_id, cur_id, descuento=0, motivo_descu=None):
+        """Inscribe un estudiante en un curso"""
+        # Verificar capacidad del curso
+        curso = Curso.query.get_or_404(cur_id)
+        inscritos = Inscripcion.query.filter_by(cur_id=cur_id, inscrito=True).count()
+        
+        if curso.capacidad and inscritos >= curso.capacidad:
+            raise ValueError(f"El curso {curso.paralelo} está lleno")
+        
+        # Verificar inscripción previa
+        inscripcion_existente = Inscripcion.query.filter_by(est_id=est_id).first()
+        if inscripcion_existente and inscripcion_existente.inscrito:
+            raise ValueError("El estudiante ya está inscrito en un curso")
+        
+        # Crear inscripción
+        inscripcion = Inscripcion(
+            est_id=est_id,
+            cur_id=cur_id,
+            inscrito=True,
+            descu=descuento,
+            motivo_descu=motivo_descu
+        )
+        
+        db.session.add(inscripcion)
+        db.session.commit()
+        
+        return inscripcion
+    
+    @staticmethod
+    def registrar_calificaciones(ins_id, mat_id, nota1, nota2, nota3, nota_aprob=51):
+        """Registra calificaciones de un estudiante en una materia"""
+        nota_final = (nota1 + nota2 + nota3) / 3.0
+        aprobado = nota_final >= nota_aprob
+        
+        calificacion = Calificacion(
+            ins_id=ins_id,
+            mat_id=mat_id,
+            nota1=nota1,
+            nota2=nota2,
+            nota3=nota3,
+            nota_final=nota_final,
+            nota_aprob=nota_aprob,
+            aprobado=aprobado
+        )
+        
+        db.session.add(calificacion)
+        db.session.commit()
+        
+        return calificacion
+    
+    @staticmethod
+    def obtener_rendimiento_estudiante(est_id):
+        """Obtiene el rendimiento académico de un estudiante"""
+        inscripcion = Inscripcion.query.filter_by(est_id=est_id, inscrito=True).first()
+        if not inscripcion:
+            return None
+        
+        calificaciones = Calificacion.query.filter_by(ins_id=inscripcion.id).all()
+        
+        if not calificaciones:
+            return None
+        
+        promedio_general = sum(c.nota_final for c in calificaciones) / len(calificaciones)
+        materias_aprobadas = sum(1 for c in calificaciones if c.aprobado)
+        materias_reprobadas = len(calificaciones) - materias_aprobadas
+        
+        return {
+            'promedio_general': round(promedio_general, 2),
+            'materias_aprobadas': materias_aprobadas,
+            'materias_reprobadas': materias_reprobadas,
+            'total_materias': len(calificaciones),
+            'calificaciones': calificaciones
+        }
+python# app/services/financiero_service.py
+"""
+Servicios de lógica de negocio para el módulo financiero
+"""
+from app import db
+from app.models import Pago, Inscripcion, Costo
+from decimal import Decimal
+
+class FinancieroService:
+    
+    @staticmethod
+    def generar_plan_pagos(ins_id):
+        """Genera el plan de pagos para una inscripción"""
+        inscripcion = Inscripcion.query.get_or_404(ins_id)
+        costo = Costo.query.filter_by(cur_id=inscripcion.cur_id).first()
+        
+        if not costo:
+            raise ValueError("No se encontró configuración de costos para este curso")
+        
+        # Eliminar pagos previos si existen
+        Pago.query.filter_by(ins_id=ins_id).delete()
+        
+        # Calcular cuota con descuento
+        descuento_decimal = Decimal(inscripcion.descu) / Decimal(100)
+        cuota_final = costo.cuota * (Decimal(1) - descuento_decimal)
+        
+        # Generar cuotas
+        pagos_creados = []
+        for i in range(1, costo.nro_cuota + 1):
+            pago = Pago(
+                ins_id=ins_id,
+                nro_cuota=i,
+                cuota=float(cuota_final),
+                pagado=False
+            )
+            db.session.add(pago)
+            pagos_creados.append(pago)
+        
+        db.session.commit()
+        return pagos_creados
+    
+    @staticmethod
+    def registrar_pago(pago_id, metodo_pago, nro_comprobante=None):
+        """Registra un pago realizado"""
+        pago = Pago.query.get_or_404(pago_id)
+        
+        if pago.pagado:
+            raise ValueError("Esta cuota ya ha sido pagada")
+        
+        pago.pagado = True
+        pago.metodo_pago = metodo_pago
+        pago.nro_comprobante = nro_comprobante
+        
+        db.session.commit()
+        return pago
+    
+    @staticmethod
+    def obtener_estado_cuenta(ins_id):
+        """Obtiene el estado de cuenta de una inscripción"""
+        pagos = Pago.query.filter_by(ins_id=ins_id).order_by(Pago.nro_cuota).all()
+        
+        total_cuotas = len(pagos)
+        pagadas = sum(1 for p in pagos if p.pagado)
+        pendientes = total_cuotas - pagadas
+        monto_total = sum(p.cuota for p in pagos)
+        monto_pagado = sum(p.cuota for p in pagos if p.pagado)
+        monto_pendiente = monto_total - monto_pagado
+        
+        return {
+            'total_cuotas': total_cuotas,
+            'cuotas_pagadas': pagadas,
+            'cuotas_pendientes': pendientes,
+            'monto_total': monto_total,
+            'monto_pagado': monto_pagado,
+            'monto_pendiente': monto_pendiente,
+            'porcentaje_pagado': (monto_pagado / monto_total * 100) if monto_total > 0 else 0,
+            'pagos': pagos
+        }
+Decoradores de Permisos
+python# app/decorators.py
+"""
+Decoradores para control de acceso basado en roles y permisos
+"""
+from functools import wraps
+from flask import abort, flash, redirect, url_for
+from flask_login import current_user
+
+def permiso_requerido(*permisos):
+    """Decorador que verifica si el usuario tiene alguno de los permisos especificados"""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated:
+                flash('Debe iniciar sesión para acceder', 'warning')
+                return redirect(url_for('auth.login'))
+            
+            if not any(current_user.tiene_permiso(p) for p in permisos):
+                flash('No tiene permisos para acceder a esta sección', 'danger')
+                abort(403)
+            
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+def rol_requerido(*roles):
+    """Decorador que verifica si el usuario tiene alguno de los roles especificados"""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated:
+                flash('Debe iniciar sesión para acceder', 'warning')
+                return redirect(url_for('auth.login'))
+            
+            if not any(current_user.tiene_rol(r) for r in roles):
+                flash('No tiene el rol necesario para acceder', 'danger')
+                abort(403)
+            
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+4. Capa de Frontend (HTMX/Alpine.js) {#capa-frontend}
+Template Base con Tailwind CSS
+html<!-- app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Gestión Educativa{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    
+    <!-- Navegación -->
+    {% if current_user.is_authenticated %}
+    <nav class="bg-blue-600 text-white shadow-lg" x-data="{ mobileOpen: false }">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('main.index') }}" class="text-2xl font-bold">
+                        🎓 SGE
+                    </a>
+                    
+                    <!-- Menú Desktop -->
+                    <div class="hidden md:ml-10 md:flex md:space-x-4">
+                        {% if current_user.tiene_permiso('ver_estudiantes') %}
+                        <a href="{{ url_for('academico.estudiantes') }}" 
+                           class="px-3 py-2 rounded-md hover:bg-blue-700">
+                            Estudiantes
+                        </a>
+                        {% endif %}
+                        
+                        {% if current_user.tiene_permiso('ver_inscripciones') %}
+                        <a href="{{ url_for('academico.inscripciones') }}" 
+                           class="px-3 py-2 rounded-md hover:bg-blue-700">
+                            Inscripciones
+                        </a>
+                        {% endif %}
+                        
+                        {% if current_user.tiene_permiso('ver_calificaciones') %}
+                        <a href="{{ url_for('academico.calificaciones') }}" 
+                           class="px-3 py-2 rounded-md hover:bg-blue-700">
+                            Calificaciones
+                        </a>
+                        {% endif %}
+                        
+                        {% if current_user.tiene_permiso('ver_pagos') %}
+                        <a href="{{ url_for('financiero.pagos') }}" 
+                           class="px-3 py-2 rounded-md hover:bg-blue-700">
+                            Pagos
+                        </a>
+                        {% endif %}
+                        
+                        {% if current_user.tiene_rol('admin') %}
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" 
+                                    class="px-3 py-2 rounded-md hover:bg-blue-700 flex items-center">
+                                Administración
+                                <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                                </svg>
+                            </button>
+                            <div x-show="open" @click.away="open = false" x-cloak
+                                 class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                <a href="{{ url_for('admin.usuarios') }}" 
+                                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    Usuarios
+                                </a>
+                                <a href="{{ url_for('admin.roles') }}" 
+                                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    Roles y Permisos
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Usuario -->
+                <div class="flex items-center">
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="flex items-center space-x-2">
+                            <span>{{ current_user.usuario }}</span>
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                            </svg>
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-cloak
+                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                            <a href="{{ url_for('auth.logout') }}" 
+                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <!-- Mensajes Flash -->
+    <div class="max-w-7xl mx-auto px-4 mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div x-data="{ show: true }" x-show="show" x-cloak
+                     class="mb-4 p-4 rounded-md {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% elif category == 'warning' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                    <div class="flex justify-between items-center">
+                        <span>{{ message }}</span>
+                        <button @click="show = false" class="ml-4">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+Ejemplo con HTMX: Lista de Estudiantes
+html<!-- app/templates/academico/estudiantes.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div x-data="{ 
+    searchTerm: '', 
+    filterActivo: 'todos' 
+}">
+    <!-- Encabezado -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Estudiantes</h1>
+        <a href="{{ url_for('academico.crear_estudiante') }}" 
+           class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+            + Nuevo Estudiante
+        </a>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="bg-white p-4 rounded-lg shadow mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Búsqueda -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+                <input 
+                    type="text"
+                    x-model="searchTerm"
+                    hx-get="{{ url_for('academico.estudiantes_tabla') }}"
+                    hx-trigger="keyup changed delay:300ms"
+                    hx-target="#tabla-estudiantes"
+                    hx-include="[name='filter']"
+                    name="search"
+                    placeholder="Nombre, CI..."
+                    class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                >
+            </div>
+            
+            <!-- Filtro Estado -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                <select 
+                    x-model="filterActivo"
+                    hx-get="{{ url_for('academico.estudiantes_tabla') }}"
+                    hx-trigger="change"
+                    hx-target="#tabla-estudiantes"
+                    hx-include="[name='search']"
+                    name="filter"
+                    class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                >
+                    <option value="todos">Todos</option>
+                    <option value="activos">Activos</option>
+                    <option value="inactivos">Inactivos</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabla de Estudiantes -->
+    <div id="tabla-estudiantes" class="bg-white rounded-lg shadow overflow-hidden">
+        {% include 'academico/estudiantes_tabla.html' %}
+    </div>
+</div>
+{% endblock %}
+html<!-- app/templates/academico/estudiantes_tabla.html -->
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+        <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Nombre Completo
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-

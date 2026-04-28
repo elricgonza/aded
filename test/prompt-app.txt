@@ -1,3 +1,5 @@
+Escribir el código necesario para el proyecto software de gestión para una unidad educativa:
+
 Proyecto: Software de gestión para una unidad educativa
 
 Descripción del proyecto:
@@ -20,6 +22,33 @@ Descripción de tablas:
 -pag (pagos plan) se registra el plan de pagos con todas las cuotas que debe pagar el estudiante (referencia a tabla ins a través de la cual se obtiene datos del estudiante y del curso) 
  --esta tabla es generada a partir de las tablas: ins, cur y cos; por cada estudiante inscrito en un curso se genera un plan de pagos con el número de cuotas y el monto de cada cuota, aplicando el descuento (especificado en el campo descu que corresponde al porcentaje de descuento a aplicar de la cuota por curso) si corresponde 
  --esta tabla se actualiza cada vez que el estudiante realiza un pago, registrando la fecha del pago, el monto pagado y el número de cuota que se está pagando
+
+Tablas de administración de usuarios, roles y permisos:
+======================================================
+-usr (Usuarios) Administración de usuarios
+-rol (rol) administra los roles asignados a usuario
+-per (permiso) administra los permisos 
+-usr_rol (usuario_rol) roles asignados a un determinado usuario
+-rol_per (rol_permiso) permisos asignados a un determinado rol
+
+
+Software a utilizar:
+===================
+-Base de datos: Postgres
+-Backend: Python, Flask
+-Frontend: HTMX, Alpine.js, Tailwind CSS
+(utilizar otro software si es necesario y justificado)
+
+Características:
+===============
+-Debe ser responsivo
+-
+
+Requerimientos funcionales:
+==========================
+-Existirán los siguientes roles: Administrador, Profesor, Estudiante, Consulta, transcripción
+-Los permisos serán asignados según el rol asignado a cada usuario
+
 
 
 Base de datos, llaves primarias, foráneas, índices y restricciones en PostgreSQL:

@@ -1,0 +1,131 @@
+
+<style>
+body { font-family: var(--font-mono); font-size: 13px; }
+.tree { padding: 1rem 0; }
+.section { margin-bottom: 1.5rem; }
+.sec-title { font-family: var(--font-sans); font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: .5rem; padding-bottom: .35rem; border-bottom: 1px solid var(--color-border-tertiary); }
+.line { display: flex; align-items: baseline; gap: 0; line-height: 1.8; white-space: nowrap; }
+.prefix { color: var(--color-text-tertiary); user-select: none; }
+.folder { color: #185FA5; font-weight: 500; }
+.file   { color: var(--color-text-primary); }
+.new    { background: #EAF3DE; color: #3B6D11; border-radius: 3px; padding: 0 4px; font-size: 11px; margin-left: 6px; font-family: var(--font-sans); }
+.desc   { color: var(--color-text-tertiary); font-family: var(--font-sans); font-size: 11px; margin-left: 8px; }
+.badge  { display: inline-block; border-radius: 3px; padding: 0 5px; font-size: 11px; font-family: var(--font-sans); margin-left: 6px; }
+.py   { background: #E6F1FB; color: #185FA5; }
+.html { background: #FAEEDA; color: #633806; }
+.env  { background: #FBEAF0; color: #4B1528; }
+.txt  { background: #F1EFE8; color: #2C2C2A; }
+.cmd-block { background: var(--color-background-secondary); border: 1px solid var(--color-border-tertiary); border-radius: 8px; padding: 1rem 1.2rem; margin-top: .5rem; }
+.cmd-line { display: flex; align-items: center; gap: 8px; line-height: 2; }
+.prompt { color: var(--color-text-tertiary); user-select: none; }
+.cmd { color: var(--color-text-primary); }
+.comment { color: var(--color-text-tertiary); font-size: 11px; font-family: var(--font-sans); }
+.step-label { font-family: var(--font-sans); font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+</style>
+
+<div class="tree">
+
+<div class="section">
+<div class="sec-title">Estructura de carpetas del proyecto</div>
+
+<div class="line"><span class="prefix">  </span><span class="folder">sge/</span><span class="desc">— raíz del proyecto</span></div>
+<div class="line"><span class="prefix">  ├── </span><span class="file">.env</span><span class="badge env">.env</span><span class="desc">variables de entorno (DATABASE_URL, SECRET_KEY)</span></div>
+<div class="line"><span class="prefix">  ├── </span><span class="file">.env.example</span></div>
+<div class="line"><span class="prefix">  ├── </span><span class="file">requirements.txt</span><span class="badge txt">txt</span></div>
+<div class="line"><span class="prefix">  ├── </span><span class="file">run.py</span><span class="badge py">py</span><span class="desc">punto de entrada Flask</span></div>
+<div class="line"><span class="prefix">  │</span></div>
+<div class="line"><span class="prefix">  └── </span><span class="folder">app/</span><span class="desc">— paquete principal</span></div>
+<div class="line"><span class="prefix">      ├── </span><span class="file">__init__.py</span><span class="badge py">py</span><span class="desc">factory + extensiones</span></div>
+<div class="line"><span class="prefix">      ├── </span><span class="file">models.py</span><span class="badge py">py</span><span class="desc">todos los modelos SQLAlchemy</span></div>
+<div class="line"><span class="prefix">      │</span></div>
+<div class="line"><span class="prefix">      ├── </span><span class="folder">utils/</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">__init__.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   └── </span><span class="file">permisos.py</span><span class="badge py">py</span><span class="desc">decoradores RBAC</span></div>
+<div class="line"><span class="prefix">      │</span></div>
+<div class="line"><span class="prefix">      ├── </span><span class="folder">routes/</span><span class="desc">— un archivo por módulo</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">__init__.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">auth.py</span><span class="badge py">py</span><span class="desc">login / logout</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">main.py</span><span class="badge py">py</span><span class="desc">dashboard</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">ges.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">gra.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">mat.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">pro.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">cur.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">asi.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">est.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">ins.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">cal.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">cos.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="file">pag.py</span><span class="badge py">py</span></div>
+<div class="line"><span class="prefix">      │   └── </span><span class="file">usr.py</span><span class="badge py">py</span><span class="desc">usuarios + roles + permisos</span></div>
+<div class="line"><span class="prefix">      │</span></div>
+<div class="line"><span class="prefix">      ├── </span><span class="folder">static/</span></div>
+<div class="line"><span class="prefix">      │   ├── </span><span class="folder">css/</span><span class="desc">estilos adicionales (opcional)</span></div>
+<div class="line"><span class="prefix">      │   └── </span><span class="folder">js/</span><span class="desc">scripts adicionales (opcional)</span></div>
+<div class="line"><span class="prefix">      │</span></div>
+<div class="line"><span class="prefix">      └── </span><span class="folder">templates/</span><span class="desc">— Jinja2, espeja la estructura de routes/</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="file">base.html</span><span class="badge html">html</span><span class="desc">layout principal</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">auth/</span></div>
+<div class="line"><span class="prefix">          │   └── </span><span class="file">login.html</span><span class="badge html">html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">main/</span></div>
+<div class="line"><span class="prefix">          │   └── </span><span class="file">dashboard.html</span><span class="badge html">html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">partials/</span><span class="desc">fragmentos reutilizables HTMX</span></div>
+<div class="line"><span class="prefix">          │   └── </span><span class="file">table_base.html</span><span class="badge html">html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">ges/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">gra/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">mat/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">pro/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">cur/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">asi/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">est/</span><span class="desc">index.html · form.html · ver.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">ins/</span><span class="desc">index.html · form.html · ver.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">cal/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">cos/</span><span class="desc">index.html · form.html</span></div>
+<div class="line"><span class="prefix">          ├── </span><span class="folder">pag/</span><span class="desc">index.html · form_pago.html · plan.html</span></div>
+<div class="line"><span class="prefix">          └── </span><span class="folder">usr/</span><span class="desc">index.html · form.html · roles.html</span></div>
+</div>
+
+<div class="section">
+<div class="sec-title">Cómo ejecutar — paso a paso</div>
+
+<div class="step-label">1 · crear entorno virtual</div>
+<div class="cmd-block">
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">python -m venv venv</span></div>
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">source venv/bin/activate</span><span class="comment"># Linux/Mac</span></div>
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">venv\Scripts\activate</span><span class="comment"># Windows</span></div>
+</div>
+
+<div class="step-label" style="margin-top:1rem">2 · instalar dependencias</div>
+<div class="cmd-block">
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">pip install -r requirements.txt</span></div>
+</div>
+
+<div class="step-label" style="margin-top:1rem">3 · configurar .env</div>
+<div class="cmd-block">
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">cp .env.example .env</span></div>
+  <div class="cmd-line"><span class="comment">  Editar .env con DATABASE_URL y SECRET_KEY</span></div>
+</div>
+
+<div class="step-label" style="margin-top:1rem">4 · crear tablas y admin</div>
+<div class="cmd-block">
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">flask db init</span></div>
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">flask db migrate -m "inicial"</span></div>
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">flask db upgrade</span></div>
+  <div class="cmd-line"><span class="comment">  Luego ir a: /usuarios/inicializar-datos</span></div>
+</div>
+
+<div class="step-label" style="margin-top:1rem">5 · ejecutar servidor</div>
+<div class="cmd-block">
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">flask run</span><span class="comment"># desarrollo</span></div>
+  <div class="cmd-line"><span class="prompt">$</span><span class="cmd">flask run --host=0.0.0.0 --port=5000</span><span class="comment"># red local</span></div>
+</div>
+
+<div class="step-label" style="margin-top:1rem">6 · acceso inicial</div>
+<div class="cmd-block">
+  <div class="cmd-line"><span class="cmd">URL:  http://localhost:5000</span></div>
+  <div class="cmd-line"><span class="cmd">User: admin</span></div>
+  <div class="cmd-line"><span class="cmd">Pass: Admin1234!  ← cambiar inmediatamente</span></div>
+</div>
+
+</div>
+</div>

@@ -1,0 +1,72 @@
+Cómo ejecutar — paso a paso
+1 · crear entorno virtual
+python -m venv venv
+source venv/bin/activate# Linux/Mac
+venv\Scripts\activate# Windows
+2 · instalar dependencias
+pip install -r requirements.txt
+3 · configurar .env
+cp .env.example .env
+Editar .env con DATABASE_URL y SECRET_KEY
+4 · crear tablas y admin
+flask db init
+flask db migrate -m "inicial"
+flask db upgrade
+Luego ir a: /usuarios/inicializar-datos
+5 · ejecutar servidor
+flask run# desarrollo
+flask run --host=0.0.0.0 --port=5000# red local
+6 · acceso inicial
+URL: http://localhost:5000
+User: admin
+Pass: Admin1234! ← cambiar inmediatamente
+
+
+Además, necesitas crear el archivo run.py en la raíz del proyecto (faltó en la respuesta anterior):
+
+# sge/run.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+Además, necesitas crear el archivo run.py en la raíz del proyecto (faltó en la respuesta anterior):
+
+# sge/run.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# sge/run.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+Y el .env real (copia de .env.example y edita con tus datos):
+
+
+
+FLASK_APP=run.py
+FLASK_ENV=development
+SECRET_KEY=una-clave-larga-y-aleatoria-aqui
+DATABASE_URL=postgresql://uaded:tu_password@localhost:5432/dbaded1
+
+
+Regla clave de la estructura
+Cada route tiene su carpeta de templates con el mismo nombre:
+Archivo routeCarpeta de templatesroutes/ges.pytemplates/ges/routes/est.pytemplates/est/routes/usr.pytemplates/usr/
+Dentro de cada carpeta de templates van siempre: index.html (listado), form.html (crear/editar), y si aplica ver.html (detalle).
+Primer paso tras ejecutar
+Después de flask db upgrade, abre el navegador en http://localhost:5000/usuarios/inicializar-datos — ese endpoint crea automáticamente todos los roles, permisos y el usuario admin. Luego cambia la contraseña desde la interfaz.
+
+
+

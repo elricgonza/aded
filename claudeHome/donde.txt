@@ -1,0 +1,38 @@
+Aquí tienes la estructura completa de carpetas y las instrucciones para ejecutar el proyecto:Además, necesitas crear el archivo `run.py` en la raíz del proyecto (faltó en la respuesta anterior):
+
+```python
+# sge/run.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+Y el `.env` real (copia de `.env.example` y edita con tus datos):
+
+```
+FLASK_APP=run.py
+FLASK_ENV=development
+SECRET_KEY=una-clave-larga-y-aleatoria-aqui
+DATABASE_URL=postgresql://uaded:tu_password@localhost:5432/dbaded1
+```
+
+---
+
+### Regla clave de la estructura
+
+Cada **route** tiene su **carpeta de templates** con el mismo nombre:
+
+| Archivo route | Carpeta de templates |
+|---|---|
+| `routes/ges.py` | `templates/ges/` |
+| `routes/est.py` | `templates/est/` |
+| `routes/usr.py` | `templates/usr/` |
+
+Dentro de cada carpeta de templates van siempre: `index.html` (listado), `form.html` (crear/editar), y si aplica `ver.html` (detalle).
+
+### Primer paso tras ejecutar
+
+Después de `flask db upgrade`, abre el navegador en `http://localhost:5000/usuarios/inicializar-datos` — ese endpoint crea automáticamente todos los roles, permisos y el usuario `admin`. Luego cambia la contraseña desde la interfaz.

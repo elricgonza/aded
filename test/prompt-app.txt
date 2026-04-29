@@ -1,282 +1,144 @@
-Escribir el código necesario para el proyecto software de gestión para una unidad educativa:
+Escribir todo el código necesario para ejecutar el software de gestión para una unidad educativa, especificando las instrucciones para la instalación, configuración y ejecución del software, 
 
 Proyecto: Software de gestión para una unidad educativa
-
-Descripción del proyecto:
-El proyecto consiste en desarrollar un software de gestión para una unidad educativa que permita administrar su información a través de las siguientes tablas en PostgreSQL:
-
-
-Descripción de tablas:
-=====================
--ges (gestión académica): para cada gestión se registra el año
--gra (grado) se registra el nivel y el grado correspondiente a una gestión (referencia a tabla ges)
--mat (materia) se registra el nombre de la materias que corresponde a un determinado grado (referencia a tabla gra)
--pro (profesor) se registra el nombre del profesor que imparte una o varias materias (referencia a tabla asi)
--cur (curso) se registra el nombre del curso que corresponde a un determinado grado (referencia a tabla gra)
--asi (asignación) se registra la asignación de un profesor a una materia y a un curso (referencia a tabla pro, mat y cur)
- --se considerán las materias que corresponden a un determinado grado.
--est (estudiante) que deben inscribirse en un curso (referencia a tabla cur)
--ins (inscripción) se registra la inscripción de un estudiante a un curso (referencia a tabla est y cur) 
--cal (calificación) se registra la calificación obtenida por un estudiante en una materia (referencia a tabla ins a través de la cual se obtiene el curso, la asignación de profesor y materia)
--cos (costo) se registra el costo de cada curso el número de cuotas que se debe pagar y el monto de la cuota (referencia a tabla cur)
--pag (pagos plan) se registra el plan de pagos con todas las cuotas que debe pagar el estudiante (referencia a tabla ins a través de la cual se obtiene datos del estudiante y del curso) 
- --esta tabla es generada a partir de las tablas: ins, cur y cos; por cada estudiante inscrito en un curso se genera un plan de pagos con el número de cuotas y el monto de cada cuota, aplicando el descuento (especificado en el campo descu que corresponde al porcentaje de descuento a aplicar de la cuota por curso) si corresponde 
- --esta tabla se actualiza cada vez que el estudiante realiza un pago, registrando la fecha del pago, el monto pagado y el número de cuota que se está pagando
-
-Tablas de administración de usuarios, roles y permisos:
-======================================================
--usr (Usuarios) Administración de usuarios
--rol (rol) administra los roles asignados a usuario
--per (permiso) administra los permisos 
--usr_rol (usuario_rol) roles asignados a un determinado usuario
--rol_per (rol_permiso) permisos asignados a un determinado rol
-
 
 Software a utilizar:
 ===================
 -Base de datos: Postgres
 -Backend: Python, Flask
 -Frontend: HTMX, Alpine.js, Tailwind CSS
-(utilizar otro software si es necesario y justificado)
+(complementar y utilizar otro software si es necesario y justificado)
 
 Características:
 ===============
 -Debe ser responsivo
--
+-Debe contar con la autenticación y autorización de usuarios
 
 Requerimientos funcionales:
 ==========================
--Existirán los siguientes roles: Administrador, Profesor, Estudiante, Consulta, transcripción
+-Existirán los siguientes roles: Administrador, Profesor, Estudiante, Consulta, transcriptor
 -Los permisos serán asignados según el rol asignado a cada usuario
 
 
+Resumen descripción de tablas:
+=============================
+-gestion: (gestión académica): para cada gestión se registra el año
+-grado: (grado educativo) se registra el nivel y el grado correspondiente a una gestión (referencia a tabla gestion)
+-materia:  se registra el nombre de las materias que corresponde a un determinado grado (referencia a tabla grado)
+-profesor: se registra el nombre del profesor que imparte una o varias materias (referencia a tabla asignacion)
+-curso: se registra el nombre del curso que corresponde a un determinado grado (referencia a tabla grado)
+-asignacion:  se registra la asignación de un profesor a una materia y a un curso (referencia a tabla profesor, materia y curso)
+ --se considerán las materias que corresponden a un determinado grado.
+-estudiante:  que deben inscribirse en un curso (referencia a tabla curso)
+-inscrito: se registra la inscripción de un estudiante a un curso (referencia a tabla estudiante y curso) 
+-calificación: se registra la calificación obtenida por un estudiante en una materia (referencia a tabla inscrito a través de la cual se obtiene el curso, la asignación de profesor y materia)
+-costo: se registra el costo de cada curso el número de cuotas que se debe pagar y el monto de la cuota (referencia a tabla curso)
+-pago:  se registra el plan de pagos con todas las cuotas que debe pagar el estudiante , referencia a tabla inscrito a través de la cual se obtiene datos del estudiante y del curso ) 
+ --esta tabla es generada a partir de las tablas: inscrito, curso y costo; por cada estudiante inscrito en un curso se genera un plan de pagos con el número de cuotas y el monto de cada cuota, aplicando el descuento (especificado en el campo descu que corresponde al porcentaje de descuento a aplicar de la cuota por curso) si corresponde 
+ --esta tabla se actualiza cada vez que el estudiante realiza un pago, registrando la fecha del pago, el monto pagado y el número de cuota que se está pagando
 
-Base de datos, llaves primarias, foráneas, índices y restricciones en PostgreSQL:
-================================================================================
+Tablas de administración de usuarios, roles y permisos:
+======================================================
+-usr: (Usuarios) Administración de usuarios
+-rol:  administra los roles asignados a usuario
+-permiso: administra los permisos 
+-usr_rol:  (usuario_rol) roles asignados a un determinado usuario
+-rol_permiso:  permisos asignados a un determinado rol
 
--- Database generated with pgModeler (PostgreSQL Database Modeler).
--- pgModeler  version: 0.9.2
--- PostgreSQL version: 12.0
--- Project Site: pgmodeler.io
--- Model Author: ---
 
--- object: uaded | type: ROLE --
--- DROP ROLE IF EXISTS uaded;
+Estructura de la Base de datos, llaves primarias, foráneas, índices y restricciones en PostgreSQL version 12.0:
+==============================================================================================================
+
+--Creado con PGmodeler
+
 CREATE ROLE uaded WITH 
 	INHERIT
 	LOGIN
 	ENCRYPTED PASSWORD '********';
--- ddl-end --
 
-
--- Database creation must be done outside a multicommand file.
--- These commands were put in this file only as a convenience.
--- -- object: dbaded1 | type: DATABASE --
--- -- DROP DATABASE IF EXISTS dbaded1;
--- CREATE DATABASE dbaded1
--- 	ENCODING = 'UTF8'
--- 	LC_COLLATE = 'en_US.UTF-8'
--- 	LC_CTYPE = 'en_US.UTF-8'
--- 	TABLESPACE = pg_default
--- 	OWNER = uaded;
--- -- ddl-end --
--- 
-
--- -- object: public.pla_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.pla_id_seq CASCADE;
--- CREATE SEQUENCE public.pla_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.pla_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- -- object: public.niv_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.niv_id_seq CASCADE;
--- CREATE SEQUENCE public.niv_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.niv_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.gra | type: TABLE --
--- DROP TABLE IF EXISTS public.gra CASCADE;
-CREATE TABLE public.gra (
+CREATE TABLE public.grado (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	grado character varying(255) NOT NULL,
-	nivel varchar(150) NOT NULL,
-	id_ges integer NOT NULL,
+	nivel character varying(150) NOT NULL,
+	ges_id integer NOT NULL,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT gra_pkey PRIMARY KEY (id)
 
 );
--- ddl-end --
-ALTER TABLE public.gra OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.grado OWNER TO uaded;
 
--- -- object: public.gra_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.gra_id_seq CASCADE;
--- CREATE SEQUENCE public.gra_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.gra_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.mat | type: TABLE --
--- DROP TABLE IF EXISTS public.mat CASCADE;
-CREATE TABLE public.mat (
+CREATE TABLE public.materia (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	materia character varying(150) NOT NULL,
 	gra_id integer NOT NULL,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT mat_pkey PRIMARY KEY (id)
 
 );
--- ddl-end --
-ALTER TABLE public.mat OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.materia OWNER TO uaded;
 
--- -- object: public.mat_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.mat_id_seq CASCADE;
--- CREATE SEQUENCE public.mat_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.mat_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.est | type: TABLE --
--- DROP TABLE IF EXISTS public.est CASCADE;
-CREATE TABLE public.est (
+CREATE TABLE public.estudiante (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	nombre character varying(100) NOT NULL,
 	paterno character varying(100),
-	materno varchar(100),
+	materno character varying(100),
 	nacimiento date,
 	masculino boolean NOT NULL,
 	ci integer,
-	direccion varchar(150),
+	direccion character varying(150),
+	email varchar(100),
 	activo boolean NOT NULL,
-	obs varchar(100),
+	obs character varying(100),
+	usr_id_login integer,
+	foto_ruta varchar(150),
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT alu_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
-ALTER TABLE public.est OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.estudiante OWNER TO uaded;
 
--- -- object: public.alu_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.alu_id_seq CASCADE;
--- CREATE SEQUENCE public.alu_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.alu_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.ins | type: TABLE --
--- DROP TABLE IF EXISTS public.ins CASCADE;
-CREATE TABLE public.ins (
+CREATE TABLE public.inscrito (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	est_id integer,
 	cur_id integer,
 	reserva boolean,
 	inscrito boolean NOT NULL,
-	descu smallint NOT NULL,
-	motivo_descu varchar(100),
-	abandono boolean NOT NULL DEFAULT False,
-	obs varchar(200),
+	descuento smallint NOT NULL,
+	motivo_descuento character varying(100),
+	abandono boolean NOT NULL DEFAULT false,
+	obs character varying(200),
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT ins_pk PRIMARY KEY (id),
 	CONSTRAINT ins_uq UNIQUE (est_id)
 
 );
--- ddl-end --
-ALTER TABLE public.ins OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.inscrito OWNER TO uaded;
 
--- -- object: public.ins_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.ins_id_seq CASCADE;
--- CREATE SEQUENCE public.ins_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.ins_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.cur | type: TABLE --
--- DROP TABLE IF EXISTS public.cur CASCADE;
-CREATE TABLE public.cur (
+CREATE TABLE public.curso (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
-	curso varchar(150),
+	curso character varying(150),
 	paralelo character varying(50) NOT NULL,
 	gra_id integer NOT NULL,
-	aula varchar(50),
+	aula character varying(50),
 	capacidad smallint,
 	gestion smallint NOT NULL,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT cur_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
-ALTER TABLE public.cur OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.curso OWNER TO uaded;
 
--- -- object: public.cur_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.cur_id_seq CASCADE;
--- CREATE SEQUENCE public.cur_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.cur_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.cal | type: TABLE --
--- DROP TABLE IF EXISTS public.cal CASCADE;
-CREATE TABLE public.cal (
+CREATE TABLE public.calificacion (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	ins_id integer NOT NULL,
 	mat_id integer NOT NULL,
@@ -286,131 +148,66 @@ CREATE TABLE public.cal (
 	nota_final numeric(5,1) NOT NULL,
 	nota_aprob smallint NOT NULL,
 	aprobado boolean,
-	obs varchar(150),
+	obs character varying(150),
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT cal_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
-COMMENT ON TABLE public.cal IS E'SEGuimiento académico';
--- ddl-end --
-ALTER TABLE public.cal OWNER TO uaded;
--- ddl-end --
+COMMENT ON TABLE public.calificacion IS E'SEGuimiento académico';
+ALTER TABLE public.calificacion OWNER TO uaded;
 
--- -- object: public.seg_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.seg_id_seq CASCADE;
--- CREATE SEQUENCE public.seg_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.seg_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.pro | type: TABLE --
--- DROP TABLE IF EXISTS public.pro CASCADE;
-CREATE TABLE public.pro (
+CREATE TABLE public.profesor (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	nombre character varying(100) NOT NULL,
 	paterno character varying(50),
-	materno varchar(50),
+	materno character varying(50),
+	masculino boolean NOT NULL,
+	ci integer,
 	formacion character varying(100),
+	email varchar(100),
 	activo boolean NOT NULL,
+	usr_id_login integer,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT pro_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
-ALTER TABLE public.pro OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.profesor OWNER TO uaded;
 
--- -- object: public.pro_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.pro_id_seq CASCADE;
--- CREATE SEQUENCE public.pro_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.pro_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.asi | type: TABLE --
--- DROP TABLE IF EXISTS public.asi CASCADE;
-CREATE TABLE public.asi (
+CREATE TABLE public.asignacion (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	cur_id integer NOT NULL,
 	mat_id integer NOT NULL,
 	pro_id integer NOT NULL,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT asi_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
-COMMENT ON TABLE public.asi IS E'prof ASIgnado (enseña) a un curso y descripción de materias asignadas';
--- ddl-end --
-ALTER TABLE public.asi OWNER TO uaded;
--- ddl-end --
+COMMENT ON TABLE public.asignacion IS E'prof ASIgnado (enseña) a un curso y descripción de materias asignadas';
+ALTER TABLE public.asignacion OWNER TO uaded;
 
--- -- object: public.asi_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.asi_id_seq CASCADE;
--- CREATE SEQUENCE public.asi_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.asi_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.pag | type: TABLE --
--- DROP TABLE IF EXISTS public.pag CASCADE;
-CREATE TABLE public.pag (
+CREATE TABLE public.pago (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	ins_id integer NOT NULL,
 	nro_cuota smallint NOT NULL,
 	cuota double precision NOT NULL,
 	pagado boolean,
-	metodo_pago varchar(50),
-	nro_comprobante varchar(50),
+	metodo_pago character varying(50),
+	fecha_pago date,
+	referencia_pago character varying(100),
 	obs character varying(100),
 	creado date NOT NULL,
-	act date NOT NULL
+	act date NOT NULL,
+	usr_id integer NOT NULL
 );
--- ddl-end --
-ALTER TABLE public.pag OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.pago OWNER TO uaded;
 
--- -- object: public.pag_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.pag_id_seq CASCADE;
--- CREATE SEQUENCE public.pag_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.pag_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.cos | type: TABLE --
--- DROP TABLE IF EXISTS public.cos CASCADE;
-CREATE TABLE public.cos (
+CREATE TABLE public.costo (
 	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	cur_id integer NOT NULL,
 	nro_cuota smallint NOT NULL,
@@ -418,146 +215,27 @@ CREATE TABLE public.cos (
 	obs character varying(200) NOT NULL,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT cos_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
-ALTER TABLE public.cos OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.costo OWNER TO uaded;
 
--- -- object: public.cos_id_seq | type: SEQUENCE --
--- -- DROP SEQUENCE IF EXISTS public.cos_id_seq CASCADE;
--- CREATE SEQUENCE public.cos_id_seq
--- 	INCREMENT BY 1
--- 	MINVALUE 1
--- 	MAXVALUE 2147483647
--- 	START WITH 1
--- 	CACHE 1
--- 	NO CYCLE
--- 	OWNED BY NONE;
--- -- ddl-end --
--- ALTER SEQUENCE public.cos_id_seq OWNER TO uaded;
--- -- ddl-end --
--- 
--- object: public.ges | type: TABLE --
--- DROP TABLE IF EXISTS public.ges CASCADE;
-CREATE TABLE public.ges (
-	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ,
+CREATE TABLE public.gestion (
+	id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1 ),
 	gestion smallint,
-	plan varchar(150) NOT NULL,
+	plan character varying(150) NOT NULL,
 	inicio date NOT NULL,
 	fin date NOT NULL,
 	activo boolean NOT NULL,
 	creado date NOT NULL,
 	act date NOT NULL,
+	usr_id integer NOT NULL,
 	CONSTRAINT ges_pk PRIMARY KEY (id)
 
 );
--- ddl-end --
--- ALTER TABLE public.ges OWNER TO postgres;
--- ddl-end --
+ALTER TABLE public.gestion OWNER TO uaded;
 
--- object: ges_fk | type: CONSTRAINT --
--- ALTER TABLE public.gra DROP CONSTRAINT IF EXISTS ges_fk CASCADE;
-ALTER TABLE public.gra ADD CONSTRAINT ges_fk FOREIGN KEY (id_ges)
-REFERENCES public.ges (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: mat_id_gra_fkey | type: CONSTRAINT --
--- ALTER TABLE public.mat DROP CONSTRAINT IF EXISTS mat_id_gra_fkey CASCADE;
-ALTER TABLE public.mat ADD CONSTRAINT mat_id_gra_fkey FOREIGN KEY (gra_id)
-REFERENCES public.gra (id) MATCH SIMPLE
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: alu_fk | type: CONSTRAINT --
--- ALTER TABLE public.ins DROP CONSTRAINT IF EXISTS alu_fk CASCADE;
-ALTER TABLE public.ins ADD CONSTRAINT alu_fk FOREIGN KEY (est_id)
-REFERENCES public.est (id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
--- ddl-end --
-
--- object: cur_fk | type: CONSTRAINT --
--- ALTER TABLE public.ins DROP CONSTRAINT IF EXISTS cur_fk CASCADE;
-ALTER TABLE public.ins ADD CONSTRAINT cur_fk FOREIGN KEY (cur_id)
-REFERENCES public.cur (id) MATCH FULL
-ON DELETE SET NULL ON UPDATE CASCADE;
--- ddl-end --
-
--- object: gra_fk | type: CONSTRAINT --
--- ALTER TABLE public.cur DROP CONSTRAINT IF EXISTS gra_fk CASCADE;
-ALTER TABLE public.cur ADD CONSTRAINT gra_fk FOREIGN KEY (gra_id)
-REFERENCES public.gra (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: ins_fk | type: CONSTRAINT --
--- ALTER TABLE public.cal DROP CONSTRAINT IF EXISTS ins_fk CASCADE;
-ALTER TABLE public.cal ADD CONSTRAINT ins_fk FOREIGN KEY (ins_id)
-REFERENCES public.ins (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: pro_fk | type: CONSTRAINT --
--- ALTER TABLE public.asi DROP CONSTRAINT IF EXISTS pro_fk CASCADE;
-ALTER TABLE public.asi ADD CONSTRAINT pro_fk FOREIGN KEY (pro_id)
-REFERENCES public.pro (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: cur_fk | type: CONSTRAINT --
--- ALTER TABLE public.asi DROP CONSTRAINT IF EXISTS cur_fk CASCADE;
-ALTER TABLE public.asi ADD CONSTRAINT cur_fk FOREIGN KEY (cur_id)
-REFERENCES public.cur (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: mat_fk | type: CONSTRAINT --
--- ALTER TABLE public.asi DROP CONSTRAINT IF EXISTS mat_fk CASCADE;
-ALTER TABLE public.asi ADD CONSTRAINT mat_fk FOREIGN KEY (mat_id)
-REFERENCES public.mat (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: insc_fk | type: CONSTRAINT --
--- ALTER TABLE public.pag DROP CONSTRAINT IF EXISTS insc_fk CASCADE;
-ALTER TABLE public.pag ADD CONSTRAINT insc_fk FOREIGN KEY (ins_id)
-REFERENCES public.ins (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
--- object: cur_fk | type: CONSTRAINT --
--- ALTER TABLE public.cos DROP CONSTRAINT IF EXISTS cur_fk CASCADE;
-ALTER TABLE public.cos ADD CONSTRAINT cur_fk FOREIGN KEY (cur_id)
-REFERENCES public.cur (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
--- ddl-end --
-
-
----auth---
--- Database generated with pgModeler (PostgreSQL Database Modeler).
--- pgModeler  version: 0.9.2
--- PostgreSQL version: 12.0
--- Project Site: pgmodeler.io
--- Model Author: ---
-
-
--- Database creation must be done outside a multicommand file.
--- These commands were put in this file only as a convenience.
--- -- object: authtest | type: DATABASE --
--- -- DROP DATABASE IF EXISTS authtest;
--- CREATE DATABASE authtest
--- 	ENCODING = 'UTF8'
--- 	LC_COLLATE = 'en_US.UTF-8'
--- 	LC_CTYPE = 'en_US.UTF-8'
--- 	TABLESPACE = pg_default
--- 	OWNER = postgres;
--- -- ddl-end --
---
-
--- object: public.usr_id_seq | type: SEQUENCE --
--- DROP SEQUENCE IF EXISTS public.usr_id_seq CASCADE;
 CREATE SEQUENCE public.usr_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
@@ -566,40 +244,29 @@ CREATE SEQUENCE public.usr_id_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
 ALTER SEQUENCE public.usr_id_seq OWNER TO uaded;
--- ddl-end --
 
--- object: public.usr | type: TABLE --
--- DROP TABLE IF EXISTS public.usr CASCADE;
 CREATE TABLE public.usr (
 	id integer NOT NULL DEFAULT nextval('public.usr_id_seq'::regclass),
 	usuario character varying(80) NOT NULL,
-	email character varying(120) NOT NULL,
+	email character varying(100) NOT NULL,
 	password character varying(255) NOT NULL,
 	activo boolean,
-	ultimo_ingreso date NOT NULL,
+	last_login date NOT NULL,
 	creado timestamp,
 	act timestamp,
 	CONSTRAINT usr_pkey PRIMARY KEY (id)
 
 );
--- ddl-end --
 ALTER TABLE public.usr OWNER TO uaded;
--- ddl-end --
 
--- object: ix_usr_usuario | type: INDEX --
--- DROP INDEX IF EXISTS public.ix_usr_usuario CASCADE;
 CREATE UNIQUE INDEX ix_usr_usuario ON public.usr
 	USING btree
 	(
 	  usuario
 	)
 	WITH (FILLFACTOR = 90);
--- ddl-end --
 
--- object: public.rol_id_seq | type: SEQUENCE --
--- DROP SEQUENCE IF EXISTS public.rol_id_seq CASCADE;
 CREATE SEQUENCE public.rol_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
@@ -608,12 +275,8 @@ CREATE SEQUENCE public.rol_id_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
 ALTER SEQUENCE public.rol_id_seq OWNER TO uaded;
--- ddl-end --
 
--- object: public.rol | type: TABLE --
--- DROP TABLE IF EXISTS public.rol CASCADE;
 CREATE TABLE public.rol (
 	id integer NOT NULL DEFAULT nextval('public.rol_id_seq'::regclass),
 	rol character varying(50) NOT NULL,
@@ -624,12 +287,8 @@ CREATE TABLE public.rol (
 	CONSTRAINT rol_rol_key UNIQUE (rol)
 
 );
--- ddl-end --
 ALTER TABLE public.rol OWNER TO uaded;
--- ddl-end --
 
--- object: public.per_id_seq | type: SEQUENCE --
--- DROP SEQUENCE IF EXISTS public.per_id_seq CASCADE;
 CREATE SEQUENCE public.per_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
@@ -638,13 +297,9 @@ CREATE SEQUENCE public.per_id_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
 ALTER SEQUENCE public.per_id_seq OWNER TO uaded;
--- ddl-end --
 
--- object: public.per | type: TABLE --
--- DROP TABLE IF EXISTS public.per CASCADE;
-CREATE TABLE public.per (
+CREATE TABLE public.permiso (
 	id integer NOT NULL DEFAULT nextval('public.per_id_seq'::regclass),
 	permiso character varying(50) NOT NULL,
 	descripcion character varying(255),
@@ -654,64 +309,80 @@ CREATE TABLE public.per (
 	CONSTRAINT per_permiso_key UNIQUE (permiso)
 
 );
--- ddl-end --
-ALTER TABLE public.per OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.permiso OWNER TO uaded;
 
--- object: public.usr_rol | type: TABLE --
--- DROP TABLE IF EXISTS public.usr_rol CASCADE;
 CREATE TABLE public.usr_rol (
 	usr_id integer NOT NULL,
 	rol_id integer NOT NULL,
 	CONSTRAINT usr_rol_pkey PRIMARY KEY (usr_id,rol_id)
 
 );
--- ddl-end --
 ALTER TABLE public.usr_rol OWNER TO uaded;
--- ddl-end --
 
--- object: public.rol_per | type: TABLE --
--- DROP TABLE IF EXISTS public.rol_per CASCADE;
-CREATE TABLE public.rol_per (
+CREATE TABLE public.rol_permiso (
 	rol_id integer NOT NULL,
 	per_id integer NOT NULL,
 	CONSTRAINT rol_per_pkey PRIMARY KEY (rol_id,per_id)
 
 );
--- ddl-end --
-ALTER TABLE public.rol_per OWNER TO uaded;
--- ddl-end --
+ALTER TABLE public.rol_permiso OWNER TO uaded;
 
--- object: usr_rol_usr_id_fkey | type: CONSTRAINT --
--- ALTER TABLE public.usr_rol DROP CONSTRAINT IF EXISTS usr_rol_usr_id_fkey CASCADE;
+ALTER TABLE public.grado ADD CONSTRAINT ges_fk FOREIGN KEY (ges_id)
+REFERENCES public.gestion (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.materia ADD CONSTRAINT mat_id_gra_fkey FOREIGN KEY (gra_id)
+REFERENCES public.grado (id) MATCH SIMPLE
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.inscrito ADD CONSTRAINT alu_fk FOREIGN KEY (est_id)
+REFERENCES public.estudiante (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE public.inscrito ADD CONSTRAINT cur_fk FOREIGN KEY (cur_id)
+REFERENCES public.curso (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE public.curso ADD CONSTRAINT gra_fk FOREIGN KEY (gra_id)
+REFERENCES public.grado (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.calificacion ADD CONSTRAINT ins_fk FOREIGN KEY (ins_id)
+REFERENCES public.inscrito (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.asignacion ADD CONSTRAINT pro_fk FOREIGN KEY (pro_id)
+REFERENCES public.profesor (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.asignacion ADD CONSTRAINT cur_fk FOREIGN KEY (cur_id)
+REFERENCES public.curso (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.asignacion ADD CONSTRAINT mat_fk FOREIGN KEY (mat_id)
+REFERENCES public.materia (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.pago ADD CONSTRAINT insc_fk FOREIGN KEY (ins_id)
+REFERENCES public.inscrito (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE public.costo ADD CONSTRAINT cur_fk FOREIGN KEY (cur_id)
+REFERENCES public.curso (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
 ALTER TABLE public.usr_rol ADD CONSTRAINT usr_rol_usr_id_fkey FOREIGN KEY (usr_id)
 REFERENCES public.usr (id) MATCH SIMPLE
 ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
 
--- object: usr_rol_rol_id_fkey | type: CONSTRAINT --
--- ALTER TABLE public.usr_rol DROP CONSTRAINT IF EXISTS usr_rol_rol_id_fkey CASCADE;
 ALTER TABLE public.usr_rol ADD CONSTRAINT usr_rol_rol_id_fkey FOREIGN KEY (rol_id)
 REFERENCES public.rol (id) MATCH SIMPLE
 ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
 
--- object: rol_per_rol_id_fkey | type: CONSTRAINT --
--- ALTER TABLE public.rol_per DROP CONSTRAINT IF EXISTS rol_per_rol_id_fkey CASCADE;
-ALTER TABLE public.rol_per ADD CONSTRAINT rol_per_rol_id_fkey FOREIGN KEY (rol_id)
+ALTER TABLE public.rol_permiso ADD CONSTRAINT rol_per_rol_id_fkey FOREIGN KEY (rol_id)
 REFERENCES public.rol (id) MATCH SIMPLE
 ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
 
--- object: rol_per_per_id_fkey | type: CONSTRAINT --
--- ALTER TABLE public.rol_per DROP CONSTRAINT IF EXISTS rol_per_per_id_fkey CASCADE;
-ALTER TABLE public.rol_per ADD CONSTRAINT rol_per_per_id_fkey FOREIGN KEY (per_id)
-REFERENCES public.per (id) MATCH SIMPLE
+ALTER TABLE public.rol_permiso ADD CONSTRAINT rol_per_per_id_fkey FOREIGN KEY (per_id)
+REFERENCES public.permiso (id) MATCH SIMPLE
 ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
-
-
-
-
-

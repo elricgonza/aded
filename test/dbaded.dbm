@@ -23,7 +23,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="grado" layer="0" collapse-mode="1" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="220" y="20"/>
+	<position x="200" y="20"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -43,7 +43,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="gra_pkey" type="pk-constr" table="public.grado">
@@ -59,7 +59,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="materia" layer="0" collapse-mode="1" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="360" y="20"/>
+	<position x="380" y="20"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -76,7 +76,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="mat_pkey" type="pk-constr" table="public.materia">
@@ -89,7 +89,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="estudiante" layer="0" collapse-mode="1" max-obj-count="19">
+<table name="alumno" layer="0" collapse-mode="1" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="0" y="240"/>
@@ -139,10 +139,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<constraint name="alu_pk" type="pk-constr" table="public.estudiante">
+	<constraint name="alu_pk" type="pk-constr" table="public.alumno">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -155,12 +155,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="inscrito" layer="0" collapse-mode="1" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
+	<comment><![CDATA[Alumno inscrito]]></comment>
 	<position x="440" y="360"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="est_id">
+	<column name="alu_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="cur_id">
@@ -174,6 +175,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="descuento" not-null="true">
 		<type name="smallint" length="0"/>
+		<comment><![CDATA[% descuento]]></comment>
 	</column>
 	<column name="motivo_descuento">
 		<type name="character varying" length="100"/>
@@ -190,14 +192,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="ins_pk" type="pk-constr" table="public.inscrito">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="ins_uq" type="uq-constr" table="public.inscrito">
-		<columns names="est_id" ref-type="src-columns"/>
+		<columns names="alu_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -209,7 +211,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="curso" layer="0" collapse-mode="1" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="300" y="220"/>
+	<position x="280" y="220"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -238,7 +240,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="cur_pk" type="pk-constr" table="public.curso">
@@ -251,7 +253,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="calificacion" layer="0" collapse-mode="1" max-obj-count="15">
+<table name="nota" layer="0" collapse-mode="1" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[SEGuimiento académico]]></comment>
@@ -293,10 +295,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<constraint name="cal_pk" type="pk-constr" table="public.calificacion">
+	<constraint name="cal_pk" type="pk-constr" table="public.nota">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -347,7 +349,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="pro_pk" type="pk-constr" table="public.profesor">
@@ -360,11 +362,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asignacion" layer="0" collapse-mode="1" max-obj-count="8">
+<table name="asignado" layer="0" collapse-mode="1" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<comment><![CDATA[prof ASIgnado (enseña) a un curso y descripción de materias asignadas]]></comment>
-	<position x="480" y="180"/>
+	<comment><![CDATA[prof asignado enseña a un curso y  materias asignadas]]></comment>
+	<position x="500" y="180"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -384,10 +386,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<constraint name="asi_pk" type="pk-constr" table="public.asignacion">
+	<constraint name="asi_pk" type="pk-constr" table="public.asignado">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -435,7 +437,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 </table>
@@ -448,7 +450,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="costo" layer="0" collapse-mode="1" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="120" y="160"/>
+	<position x="120" y="200"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -471,7 +473,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="cos_pk" type="pk-constr" table="public.costo">
@@ -513,7 +515,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="ges_pk" type="pk-constr" table="public.gestion">
@@ -531,7 +533,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="usr" layer="0" collapse-mode="1" max-obj-count="9">
+<table name="usuario" layer="0" collapse-mode="1" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="0" y="660"/>
@@ -559,12 +561,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act">
 		<type name="timestamp" length="0"/>
 	</column>
-	<constraint name="usr_pkey" type="pk-constr" table="public.usr">
+	<constraint name="usr_pkey" type="pk-constr" table="public.usuario">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<index name="ix_usr_usuario" table="public.usr"
+<index name="ix_usr_usuario" table="public.usuario"
 	 concurrent="false" unique="true" fast-update="false" buffering="false"
 	 index-type="btree" factor="90">
 		<idxelement use-sorting="false">
@@ -636,18 +638,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="usr_rol" layer="0" collapse-mode="1" max-obj-count="3">
+<table name="usuario_rol" layer="0" collapse-mode="1" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="180" y="700"/>
-	<column name="usr_id" not-null="true">
+	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="rol_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<constraint name="usr_rol_pkey" type="pk-constr" table="public.usr_rol">
-		<columns names="usr_id,rol_id" ref-type="src-columns"/>
+	<constraint name="usr_rol_pkey" type="pk-constr" table="public.usuario_rol">
+		<columns names="usu_id,rol_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -679,8 +681,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="alu_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.estudiante" table="public.inscrito">
-	<columns names="est_id" ref-type="src-columns"/>
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.alumno" table="public.inscrito">
+	<columns names="alu_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
@@ -697,25 +699,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="ins_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.inscrito" table="public.calificacion">
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.inscrito" table="public.nota">
 	<columns names="ins_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="pro_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.profesor" table="public.asignacion">
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.profesor" table="public.asignado">
 	<columns names="pro_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="cur_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.curso" table="public.asignacion">
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.curso" table="public.asignado">
 	<columns names="cur_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="mat_fk" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.materia" table="public.asignacion">
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.materia" table="public.asignado">
 	<columns names="mat_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -733,13 +735,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="usr_rol_usr_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usr" table="public.usr_rol">
-	<columns names="usr_id" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.usuario_rol">
+	<columns names="usu_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="usr_rol_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.rol" table="public.usr_rol">
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.rol" table="public.usuario_rol">
 	<columns names="rol_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -771,7 +773,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <relationship name="rel_ins_est" type="relfk" layer="0"
 	 custom-color="#f24cb6"
 	 src-table="public.inscrito"
-	 dst-table="public.estudiante" reference-fk="alu_fk"
+	 dst-table="public.alumno" reference-fk="alu_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_ins_cur" type="relfk" layer="0"
@@ -788,25 +790,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <relationship name="rel_cal_ins" type="relfk" layer="0"
 	 custom-color="#a9919e"
-	 src-table="public.calificacion"
+	 src-table="public.nota"
 	 dst-table="public.inscrito" reference-fk="ins_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_asi_pro" type="relfk" layer="0"
 	 custom-color="#9d9b78"
-	 src-table="public.asignacion"
+	 src-table="public.asignado"
 	 dst-table="public.profesor" reference-fk="pro_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_asi_cur" type="relfk" layer="0"
 	 custom-color="#17d821"
-	 src-table="public.asignacion"
+	 src-table="public.asignado"
 	 dst-table="public.curso" reference-fk="cur_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_asi_mat" type="relfk" layer="0"
 	 custom-color="#316d1e"
-	 src-table="public.asignacion"
+	 src-table="public.asignado"
 	 dst-table="public.materia" reference-fk="mat_fk"
 	 src-required="false" dst-required="false"/>
 
@@ -824,8 +826,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <relationship name="rel_usr_rol_usr" type="relfk" layer="0"
 	 custom-color="#f64314"
-	 src-table="public.usr_rol"
-	 dst-table="public.usr" reference-fk="usr_rol_usr_id_fkey"
+	 src-table="public.usuario_rol"
+	 dst-table="public.usuario" reference-fk="usr_rol_usr_id_fkey"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
 		<position x="-53.956" y="-5.44456"/>
@@ -834,7 +836,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <relationship name="rel_usr_rol_rol" type="relfk" layer="0"
 	 custom-color="#f20f3e"
-	 src-table="public.usr_rol"
+	 src-table="public.usuario_rol"
 	 dst-table="public.rol" reference-fk="usr_rol_rol_id_fkey"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">

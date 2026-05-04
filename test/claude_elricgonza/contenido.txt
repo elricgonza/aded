@@ -1,0 +1,7 @@
+Ahora voy a construir el sistema completo. Esto incluirá:
+
+Estructura del proyecto completa
+Backend Flask con todos los modelos, rutas y autenticación
+Frontend con HTMX + Alpine.js + Tailwind
+Script SQL de la BD
+Instrucciones de instalación

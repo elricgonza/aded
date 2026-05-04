@@ -1,0 +1,126 @@
+eate grado and materia templates
+bash
+
+
+# Create index and form templates for grado, materia, profesor, curso, alumno, inscrito, nota, pago
+# Using a pattern-based approach
+
+# ── GRADO ──
+cat > /home/claude/uaded/app/templates/grado/index.html << 'EOF'
+{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block title %}Grados — UADED{% endblock %}
+{% block page_title %}Grados Educativos{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Grados', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ grados|length }} grado(s)</p>
+  {% if current_user.has_permission('grado_crear') %}
+  <a href="{{ url_for('grado.nuevo') }}" class="btn-primary">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    Nuevo Grado
+  </a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-slate-50"><tr>
+      <th class="table-header">Grado</th><th class="table-header">Nivel</th><th class="table-header">Gestión</th><th class="table-header">Acciones</th>
+    </tr></thead>
+    <tbody>
+      {% for g in grados %}
+      <tr class="table-row">
+        <td class="table-cell font-semibold">{{ g.grado }}</td>
+        <td class="table-cell">{{ g.nivel }}</td>
+        <td class="table-cell"><span class="badge-blue">{{ g.gestion.gestion }}</span></td>
+        <td class="table-cell"><div class="flex gap-2">
+          {% if current_user.has_permission('grado_editar') %}<a href="{{ url_for('grado.editar', id=g.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+          {% if current_user.has_permission('grado_borrar') %}{{ confirm_delete(url_for('grado.eliminar', id=g.id)) }}{% endif %}
+        </div></td>
+      </tr>
+      {% else %}<tr><td colspan="4" class="px-4 py-8 text-center text-slate-400 text-sm">No hay grados registrados.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+EOF
+
+cat > /home/claude/uaded/app/templates/grado/form.html << 'EOF'
+{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if grado else 'Nuevo' }} Grado{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Grados', url_for('grado.index')), ('Formulario', '#')]) }}
+<div class="max-w-lg"><div class="card">
+  <form method="POST"><div class="space-y-5">
+    <div><label class="form-label">Grado</label>
+    <input type="text" name="grado" required value="{{ grado.grado if grado else '' }}" class="form-input" placeholder="Ej: Primero de Secundaria"></div>
+    <div><label class="form-label">Nivel</label>
+    <input type="text" name="nivel" required value="{{ grado.nivel if grado else '' }}" class="form-input" placeholder="Ej: Secundaria"></div>
+    <div><label class="form-label">Gestión</label>
+    <select name="ges_id" required class="form-select">
+      <option value="">Seleccionar gestión...</option>
+      {% for gs in gestiones %}<option value="{{ gs.id }}" {% if grado and grado.ges_id==gs.id %}selected{% endif %}>{{ gs.gestion }} — {{ gs.plan }}</option>{% endfor %}
+    </select></div>
+  </div>
+  <div class="flex gap-3 mt-8">
+    <button type="submit" class="btn-primary">{{ 'Guardar' if grado else 'Crear Grado' }}</button>
+    <a href="{{ url_for('grado.index') }}" class="btn-secondary">Cancelar</a>
+  </div></form>
+</div></div>
+{% endblock %}
+EOF
+
+# ── MATERIA ──
+cat > /home/claude/uaded/app/templates/materia/index.html << 'EOF'
+{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block page_title %}Materias{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Materias', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ materias|length }} materia(s)</p>
+  {% if current_user.has_permission('materia_crear') %}
+  <a href="{{ url_for('materia.nueva') }}" class="btn-primary"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Nueva Materia</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Materia</th><th class="table-header">Grado</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for m in materias %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ m.materia }}</td>
+      <td class="table-cell">{{ m.grado.grado }}</td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('materia_editar') %}<a href="{{ url_for('materia.editar', id=m.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        {% if current_user.has_permission('materia_borrar') %}{{ confirm_delete(url_for('materia.eliminar', id=m.id)) }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400 text-sm">No hay materias.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}
+EOF
+
+cat > /home/claude/uaded/app/templates/materia/form.html << 'EOF'
+{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if materia else 'Nueva' }} Materia{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Materias', url_for('materia.index')), ('Formulario', '#')]) }}
+<div class="max-w-lg"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Nombre de la Materia</label>
+  <input type="text" name="materia" required value="{{ materia.materia if materia else '' }}" class="form-input" placeholder="Ej: Matemáticas"></div>
+  <div><label class="form-label">Grado</label>
+  <select name="gra_id" required class="form-select"><option value="">Seleccionar grado...</option>
+    {% for g in grados %}<option value="{{ g.id }}" {% if materia and materia.gra_id==g.id %}selected{% endif %}>{{ g.grado }} ({{ g.nivel }})</option>{% endfor %}
+  </select></div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if materia else 'Crear Materia' }}</button>
+  <a href="{{ url_for('materia.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}
+EOF
+
+echo "Templates created successfully"
+Output
+
+Templates created successfully

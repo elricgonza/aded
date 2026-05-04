@@ -1,0 +1,718 @@
+
+bash
+
+
+# Create all remaining templates in batch
+python3 << 'PYEOF'
+import os
+
+TEMPLATES = {
+"grado/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block page_title %}Grados Educativos{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Grados', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ grados|length }} grado(s)</p>
+  {% if current_user.has_permission('grado_crear') %}
+  <a href="{{ url_for('grado.nuevo') }}" class="btn-primary">+ Nuevo Grado</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Grado</th><th class="table-header">Nivel</th><th class="table-header">Gestión</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for g in grados %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ g.grado }}</td>
+      <td class="table-cell">{{ g.nivel }}</td>
+      <td class="table-cell"><span class="badge-blue">{{ g.gestion.gestion }}</span></td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('grado_editar') %}<a href="{{ url_for('grado.editar', id=g.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        {% if current_user.has_permission('grado_borrar') %}{{ confirm_delete(url_for('grado.eliminar', id=g.id)) }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="4" class="px-4 py-8 text-center text-slate-400 text-sm">Sin registros.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"grado/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if grado else 'Nuevo' }} Grado{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Grados', url_for('grado.index')), ('Formulario', '#')]) }}
+<div class="max-w-lg"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Nombre del Grado</label>
+  <input type="text" name="grado" required value="{{ grado.grado if grado else '' }}" class="form-input" placeholder="Ej: Primero de Secundaria"></div>
+  <div><label class="form-label">Nivel</label>
+  <input type="text" name="nivel" required value="{{ grado.nivel if grado else '' }}" class="form-input" placeholder="Ej: Secundaria"></div>
+  <div><label class="form-label">Gestión</label>
+  <select name="ges_id" required class="form-select"><option value="">Seleccionar gestión...</option>
+    {% for gs in gestiones %}<option value="{{ gs.id }}" {% if grado and grado.ges_id==gs.id %}selected{% endif %}>{{ gs.gestion }} — {{ gs.plan }}</option>{% endfor %}
+  </select></div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if grado else 'Crear' }}</button>
+  <a href="{{ url_for('grado.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"materia/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block page_title %}Materias{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Materias', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ materias|length }} materia(s)</p>
+  {% if current_user.has_permission('materia_crear') %}
+  <a href="{{ url_for('materia.nueva') }}" class="btn-primary">+ Nueva Materia</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Materia</th><th class="table-header">Grado</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for m in materias %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ m.materia }}</td>
+      <td class="table-cell">{{ m.grado.grado }}</td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('materia_editar') %}<a href="{{ url_for('materia.editar', id=m.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        {% if current_user.has_permission('materia_borrar') %}{{ confirm_delete(url_for('materia.eliminar', id=m.id)) }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400 text-sm">Sin registros.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"materia/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if materia else 'Nueva' }} Materia{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Materias', url_for('materia.index')), ('Formulario', '#')]) }}
+<div class="max-w-lg"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Nombre de la Materia</label>
+  <input type="text" name="materia" required value="{{ materia.materia if materia else '' }}" class="form-input" placeholder="Ej: Matemáticas"></div>
+  <div><label class="form-label">Grado</label>
+  <select name="gra_id" required class="form-select"><option value="">Seleccionar...</option>
+    {% for g in grados %}<option value="{{ g.id }}" {% if materia and materia.gra_id==g.id %}selected{% endif %}>{{ g.grado }}</option>{% endfor %}
+  </select></div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if materia else 'Crear' }}</button>
+  <a href="{{ url_for('materia.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"profesor/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block page_title %}Profesores{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Profesores', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ profesores|length }} profesor(es)</p>
+  {% if current_user.has_permission('profesor_crear') %}
+  <a href="{{ url_for('profesor.nuevo') }}" class="btn-primary">+ Nuevo Profesor</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Nombre</th><th class="table-header">CI</th><th class="table-header">Formación</th><th class="table-header">Email</th><th class="table-header">Estado</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for p in profesores %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ p.nombre_completo }}</td>
+      <td class="table-cell">{{ p.ci or '-' }}</td>
+      <td class="table-cell">{{ p.formacion or '-' }}</td>
+      <td class="table-cell">{{ p.email or '-' }}</td>
+      <td class="table-cell">{% if p.activo %}<span class="badge-green">Activo</span>{% else %}<span class="badge-gray">Inactivo</span>{% endif %}</td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('profesor_editar') %}<a href="{{ url_for('profesor.editar', id=p.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        {% if current_user.has_permission('profesor_borrar') %}{{ confirm_delete(url_for('profesor.eliminar', id=p.id)) }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">Sin registros.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"profesor/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if profesor else 'Nuevo' }} Profesor{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Profesores', url_for('profesor.index')), ('Formulario', '#')]) }}
+<div class="max-w-2xl"><div class="card"><form method="POST"><div class="space-y-5">
+  <div class="grid grid-cols-3 gap-4">
+    <div><label class="form-label">Nombre</label><input type="text" name="nombre" required value="{{ profesor.nombre if profesor else '' }}" class="form-input" placeholder="Nombre"></div>
+    <div><label class="form-label">Apellido Paterno</label><input type="text" name="paterno" value="{{ profesor.paterno if profesor else '' }}" class="form-input"></div>
+    <div><label class="form-label">Apellido Materno</label><input type="text" name="materno" value="{{ profesor.materno if profesor else '' }}" class="form-input"></div>
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+    <div><label class="form-label">Género</label>
+    <select name="genero" required class="form-select">
+      <option value="M" {% if not profesor or profesor.masculino %}selected{% endif %}>Masculino</option>
+      <option value="F" {% if profesor and not profesor.masculino %}selected{% endif %}>Femenino</option>
+    </select></div>
+    <div><label class="form-label">Carnet de Identidad</label><input type="number" name="ci" value="{{ profesor.ci if profesor else '' }}" class="form-input"></div>
+  </div>
+  <div><label class="form-label">Formación Académica</label><input type="text" name="formacion" value="{{ profesor.formacion if profesor else '' }}" class="form-input" placeholder="Ej: Lic. en Matemáticas"></div>
+  <div><label class="form-label">Email</label><input type="email" name="email" value="{{ profesor.email if profesor else '' }}" class="form-input"></div>
+  <div class="flex items-center gap-3">
+    <input type="checkbox" id="activo" name="activo" {% if not profesor or profesor.activo %}checked{% endif %} class="w-4 h-4 rounded border-slate-300 text-primary-600">
+    <label for="activo" class="text-sm font-medium text-slate-700">Profesor activo</label>
+  </div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if profesor else 'Registrar' }}</button>
+  <a href="{{ url_for('profesor.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"curso/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block page_title %}Cursos{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Cursos', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ cursos|length }} curso(s)</p>
+  {% if current_user.has_permission('curso_crear') %}
+  <a href="{{ url_for('curso.nuevo') }}" class="btn-primary">+ Nuevo Curso</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Curso</th><th class="table-header">Paralelo</th><th class="table-header">Grado</th><th class="table-header">Aula</th><th class="table-header">Gestión</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for c in cursos %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ c.curso or '-' }}</td>
+      <td class="table-cell">{{ c.paralelo }}</td>
+      <td class="table-cell">{{ c.grado.grado }}</td>
+      <td class="table-cell">{{ c.aula or '-' }}</td>
+      <td class="table-cell"><span class="badge-blue">{{ c.gestion }}</span></td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('curso_editar') %}<a href="{{ url_for('curso.editar', id=c.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        {% if current_user.has_permission('curso_borrar') %}{{ confirm_delete(url_for('curso.eliminar', id=c.id)) }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">Sin registros.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"curso/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if curso else 'Nuevo' }} Curso{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Cursos', url_for('curso.index')), ('Formulario', '#')]) }}
+<div class="max-w-xl"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Nombre del Curso</label><input type="text" name="curso" value="{{ curso.curso if curso else '' }}" class="form-input" placeholder="Ej: Matemáticas Avanzadas"></div>
+  <div class="grid grid-cols-2 gap-4">
+    <div><label class="form-label">Paralelo</label><input type="text" name="paralelo" required value="{{ curso.paralelo if curso else '' }}" class="form-input" placeholder="Ej: A"></div>
+    <div><label class="form-label">Gestión (Año)</label><input type="number" name="gestion" required value="{{ curso.gestion if curso else '' }}" class="form-input" placeholder="2025"></div>
+  </div>
+  <div><label class="form-label">Grado</label>
+  <select name="gra_id" required class="form-select"><option value="">Seleccionar...</option>
+    {% for g in grados %}<option value="{{ g.id }}" {% if curso and curso.gra_id==g.id %}selected{% endif %}>{{ g.grado }} ({{ g.nivel }})</option>{% endfor %}
+  </select></div>
+  <div class="grid grid-cols-2 gap-4">
+    <div><label class="form-label">Aula</label><input type="text" name="aula" value="{{ curso.aula if curso else '' }}" class="form-input" placeholder="Ej: 101"></div>
+    <div><label class="form-label">Capacidad</label><input type="number" name="capacidad" value="{{ curso.capacidad if curso else '' }}" class="form-input" placeholder="30"></div>
+  </div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if curso else 'Crear' }}</button>
+  <a href="{{ url_for('curso.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"alumno/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb, search_bar %}
+{% block page_title %}Alumnos{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Alumnos', '#')]) }}
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+  <div class="flex-1 w-full sm:max-w-sm">{{ search_bar('Buscar alumno...', 'q', q) }}</div>
+  {% if current_user.has_permission('alumno_crear') %}
+  <a href="{{ url_for('alumno.nuevo') }}" class="btn-primary whitespace-nowrap">+ Nuevo Alumno</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Nombre Completo</th><th class="table-header">CI</th><th class="table-header">Email</th><th class="table-header">Estado</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for a in alumnos %}<tr class="table-row">
+      <td class="table-cell"><div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold flex-shrink-0">{{ a.nombre[0] }}</div>
+        <span class="font-semibold">{{ a.nombre_completo }}</span>
+      </div></td>
+      <td class="table-cell">{{ a.ci or '-' }}</td>
+      <td class="table-cell text-slate-500">{{ a.email or '-' }}</td>
+      <td class="table-cell">{% if a.activo %}<span class="badge-green">Activo</span>{% else %}<span class="badge-gray">Inactivo</span>{% endif %}</td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('alumno_editar') %}<a href="{{ url_for('alumno.editar', id=a.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        {% if current_user.has_permission('alumno_borrar') %}{{ confirm_delete(url_for('alumno.eliminar', id=a.id)) }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="5" class="px-4 py-8 text-center text-slate-400 text-sm">No se encontraron alumnos.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"alumno/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if alumno else 'Nuevo' }} Alumno{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Alumnos', url_for('alumno.index')), ('Formulario', '#')]) }}
+<div class="max-w-2xl"><div class="card"><form method="POST"><div class="space-y-5">
+  <div class="grid grid-cols-3 gap-4">
+    <div><label class="form-label">Nombre(s)</label><input type="text" name="nombre" required value="{{ alumno.nombre if alumno else '' }}" class="form-input"></div>
+    <div><label class="form-label">Ap. Paterno</label><input type="text" name="paterno" value="{{ alumno.paterno if alumno else '' }}" class="form-input"></div>
+    <div><label class="form-label">Ap. Materno</label><input type="text" name="materno" value="{{ alumno.materno if alumno else '' }}" class="form-input"></div>
+  </div>
+  <div class="grid grid-cols-3 gap-4">
+    <div><label class="form-label">Fecha Nacimiento</label><input type="date" name="nacimiento" value="{{ alumno.nacimiento.isoformat() if alumno and alumno.nacimiento else '' }}" class="form-input"></div>
+    <div><label class="form-label">Género</label>
+    <select name="genero" required class="form-select">
+      <option value="M" {% if not alumno or alumno.masculino %}selected{% endif %}>Masculino</option>
+      <option value="F" {% if alumno and not alumno.masculino %}selected{% endif %}>Femenino</option>
+    </select></div>
+    <div><label class="form-label">Carnet de Identidad</label><input type="number" name="ci" value="{{ alumno.ci if alumno else '' }}" class="form-input"></div>
+  </div>
+  <div><label class="form-label">Dirección</label><input type="text" name="direccion" value="{{ alumno.direccion if alumno else '' }}" class="form-input"></div>
+  <div><label class="form-label">Email</label><input type="email" name="email" value="{{ alumno.email if alumno else '' }}" class="form-input"></div>
+  <div><label class="form-label">Observaciones</label><input type="text" name="obs" value="{{ alumno.obs if alumno else '' }}" class="form-input"></div>
+  <div class="flex items-center gap-3">
+    <input type="checkbox" id="activo" name="activo" {% if not alumno or alumno.activo %}checked{% endif %} class="w-4 h-4 rounded border-slate-300 text-primary-600">
+    <label for="activo" class="text-sm font-medium text-slate-700">Alumno activo</label>
+  </div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if alumno else 'Registrar' }}</button>
+  <a href="{{ url_for('alumno.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"inscrito/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Inscripciones{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Inscripciones', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ inscritos|length }} inscripción(es)</p>
+  {% if current_user.has_permission('inscrito_crear') %}
+  <a href="{{ url_for('inscrito.nuevo') }}" class="btn-primary">+ Nueva Inscripción</a>{% endif %}
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Alumno</th><th class="table-header">Curso</th><th class="table-header">Estado</th><th class="table-header">Descuento</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for i in inscritos %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ i.alumno.nombre_completo if i.alumno else '-' }}</td>
+      <td class="table-cell">{{ i.curso.curso or i.curso.paralelo if i.curso else '-' }}</td>
+      <td class="table-cell">
+        {% if i.abandono %}<span class="badge-red">Abandono</span>
+        {% elif i.inscrito %}<span class="badge-green">Inscrito</span>
+        {% elif i.reserva %}<span class="badge-yellow">Reserva</span>
+        {% else %}<span class="badge-gray">Pendiente</span>{% endif %}
+      </td>
+      <td class="table-cell">{{ i.descuento }}%</td>
+      <td class="table-cell"><div class="flex gap-2">
+        {% if current_user.has_permission('inscrito_editar') %}<a href="{{ url_for('inscrito.editar', id=i.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}
+        <a href="{{ url_for('pago.index', alu_id=i.alu_id) }}" class="btn-secondary text-xs px-3 py-1.5">Ver Pagos</a>
+      </div></td>
+    </tr>{% else %}<tr><td colspan="5" class="px-4 py-8 text-center text-slate-400 text-sm">Sin registros.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"inscrito/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if inscrito else 'Nueva' }} Inscripción{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Inscripciones', url_for('inscrito.index')), ('Formulario', '#')]) }}
+<div class="max-w-xl"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Alumno</label>
+  <select name="alu_id" required class="form-select" {% if inscrito %}disabled{% endif %}>
+    <option value="">Seleccionar alumno...</option>
+    {% for a in alumnos %}<option value="{{ a.id }}" {% if inscrito and inscrito.alu_id==a.id %}selected{% endif %}>{{ a.nombre_completo }}</option>{% endfor %}
+  </select>
+  {% if inscrito %}<input type="hidden" name="alu_id" value="{{ inscrito.alu_id }}">{% endif %}
+  </div>
+  <div><label class="form-label">Curso</label>
+  <select name="cur_id" required class="form-select"><option value="">Seleccionar curso...</option>
+    {% for c in cursos %}<option value="{{ c.id }}" {% if inscrito and inscrito.cur_id==c.id %}selected{% endif %}>{{ c.gestion }} — {{ c.curso or '' }} {{ c.paralelo }}</option>{% endfor %}
+  </select></div>
+  <div class="grid grid-cols-2 gap-4">
+    <div><label class="form-label">% Descuento</label><input type="number" name="descuento" min="0" max="100" value="{{ inscrito.descuento if inscrito else 0 }}" class="form-input"></div>
+    <div><label class="form-label">Motivo Descuento</label><input type="text" name="motivo_descuento" value="{{ inscrito.motivo_descuento if inscrito else '' }}" class="form-input"></div>
+  </div>
+  <div class="flex gap-6">
+    <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+      <input type="checkbox" name="reserva" {% if inscrito and inscrito.reserva %}checked{% endif %} class="w-4 h-4 rounded border-slate-300 text-primary-600"> Reserva
+    </label>
+    <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+      <input type="checkbox" name="inscrito" {% if not inscrito or inscrito.inscrito %}checked{% endif %} class="w-4 h-4 rounded border-slate-300 text-primary-600"> Inscrito
+    </label>
+    {% if inscrito %}
+    <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+      <input type="checkbox" name="abandono" {% if inscrito and inscrito.abandono %}checked{% endif %} class="w-4 h-4 rounded border-slate-300 text-red-500"> Abandono
+    </label>{% endif %}
+  </div>
+  <div><label class="form-label">Observaciones</label><input type="text" name="obs" value="{{ inscrito.obs if inscrito else '' }}" class="form-input"></div>
+  {% if not inscrito %}
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-700">
+    <strong>Nota:</strong> Al confirmar la inscripción, se generará automáticamente el plan de pagos según el costo del curso.
+  </div>{% endif %}
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if inscrito else 'Inscribir' }}</button>
+  <a href="{{ url_for('inscrito.index') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"nota/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Calificaciones{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Calificaciones', '#')]) }}
+<div class="card mb-5">
+  <form method="GET" class="flex gap-4 items-end">
+    <div class="flex-1"><label class="form-label">Filtrar por Curso</label>
+    <select name="cur_id" class="form-select">
+      <option value="">Todos los cursos</option>
+      {% for c in cursos %}<option value="{{ c.id }}" {% if cur_id==c.id %}selected{% endif %}>{{ c.gestion }} — {{ c.curso or '' }} {{ c.paralelo }}</option>{% endfor %}
+    </select></div>
+    <button type="submit" class="btn-primary">Filtrar</button>
+    {% if current_user.has_permission('nota_crear') %}
+    <a href="{{ url_for('nota.nueva') }}" class="btn-success">+ Nueva Nota</a>{% endif %}
+  </form>
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Alumno</th><th class="table-header">Materia</th><th class="table-header">N1</th><th class="table-header">N2</th><th class="table-header">N3</th><th class="table-header">Final</th><th class="table-header">Estado</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for n in notas %}<tr class="table-row">
+      <td class="table-cell font-semibold">{{ n.inscrito.alumno.nombre_completo if n.inscrito.alumno else '-' }}</td>
+      <td class="table-cell">{{ n.materia.materia }}</td>
+      <td class="table-cell text-center">{{ n.nota1 }}</td>
+      <td class="table-cell text-center">{{ n.nota2 }}</td>
+      <td class="table-cell text-center">{{ n.nota3 }}</td>
+      <td class="table-cell text-center font-bold {% if n.aprobado %}text-emerald-700{% else %}text-red-600{% endif %}">{{ n.nota_final }}</td>
+      <td class="table-cell">{% if n.aprobado %}<span class="badge-green">Aprobado</span>{% else %}<span class="badge-red">Reprobado</span>{% endif %}</td>
+      <td class="table-cell">{% if current_user.has_permission('nota_editar') %}<a href="{{ url_for('nota.editar', id=n.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>{% endif %}</td>
+    </tr>{% else %}<tr><td colspan="8" class="px-4 py-8 text-center text-slate-400 text-sm">Sin calificaciones. Seleccione un curso o registre una nota.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"nota/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if nota else 'Nueva' }} Nota{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Calificaciones', url_for('nota.index')), ('Formulario', '#')]) }}
+<div class="max-w-lg"><div class="card"><form method="POST" x-data="{n1:{{ nota.nota1 if nota else 0 }},n2:{{ nota.nota2 if nota else 0 }},n3:{{ nota.nota3 if nota else 0 }}}">
+  <div class="space-y-5">
+    <div><label class="form-label">Inscripción (Alumno)</label>
+    <select name="ins_id" required class="form-select"><option value="">Seleccionar...</option>
+      {% for i in inscritos %}<option value="{{ i.id }}" {% if nota and nota.ins_id==i.id %}selected{% endif %}>{{ i.alumno.nombre_completo if i.alumno else i.id }}</option>{% endfor %}
+    </select></div>
+    <div><label class="form-label">Materia</label>
+    <select name="mat_id" required class="form-select"><option value="">Seleccionar...</option>
+      {% for m in materias %}<option value="{{ m.id }}" {% if nota and nota.mat_id==m.id %}selected{% endif %}>{{ m.materia }}</option>{% endfor %}
+    </select></div>
+    <div class="grid grid-cols-3 gap-4">
+      <div><label class="form-label">Nota 1</label><input type="number" name="nota1" x-model.number="n1" min="0" max="100" class="form-input text-center font-bold text-lg"></div>
+      <div><label class="form-label">Nota 2</label><input type="number" name="nota2" x-model.number="n2" min="0" max="100" class="form-input text-center font-bold text-lg"></div>
+      <div><label class="form-label">Nota 3</label><input type="number" name="nota3" x-model.number="n3" min="0" max="100" class="form-input text-center font-bold text-lg"></div>
+    </div>
+    <div class="bg-slate-50 rounded-xl p-4 flex justify-between items-center">
+      <span class="text-sm font-semibold text-slate-700">Nota Final (promedio)</span>
+      <span class="text-2xl font-heading font-bold text-primary-700" x-text="((n1+n2+n3)/3).toFixed(1)"></span>
+    </div>
+    <div><label class="form-label">Nota Mínima de Aprobación</label><input type="number" name="nota_aprob" value="{{ nota.nota_aprob if nota else 51 }}" min="0" max="100" class="form-input"></div>
+    <div><label class="form-label">Observaciones</label><input type="text" name="obs" value="{{ nota.obs if nota else '' }}" class="form-input"></div>
+  </div>
+  <div class="flex gap-3 mt-8">
+    <button type="submit" class="btn-primary">{{ 'Guardar' if nota else 'Registrar Nota' }}</button>
+    <a href="{{ url_for('nota.index') }}" class="btn-secondary">Cancelar</a>
+  </div>
+</form></div></div>
+{% endblock %}''',
+
+"pago/index.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Pagos{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Pagos', '#')]) }}
+<div class="card mb-5">
+  <form method="GET" class="flex gap-4 items-end">
+    <div class="flex-1"><label class="form-label">Buscar Alumno</label>
+    <select name="alu_id" class="form-select"><option value="">Seleccionar alumno...</option>
+      {% for a in alumnos %}<option value="{{ a.id }}" {% if alu_id==a.id %}selected{% endif %}>{{ a.nombre_completo }}</option>{% endfor %}
+    </select></div>
+    <button type="submit" class="btn-primary">Ver Pagos</button>
+  </form>
+</div>
+{% if alumno_sel %}
+<div class="mb-4 flex items-center gap-3">
+  <h2 class="font-heading font-bold text-slate-800">Plan de Pagos: {{ alumno_sel.nombre_completo }}</h2>
+</div>
+{% set total = pagos|sum(attribute='cuota') %}
+{% set pagado = pagos|selectattr('pagado')|list|sum(attribute='cuota') %}
+<div class="grid grid-cols-3 gap-4 mb-5">
+  <div class="card text-center"><p class="text-2xl font-bold text-slate-800">Bs. {{ "%.2f"|format(total) }}</p><p class="text-xs text-slate-500">Total</p></div>
+  <div class="card text-center"><p class="text-2xl font-bold text-emerald-700">Bs. {{ "%.2f"|format(pagado) }}</p><p class="text-xs text-slate-500">Pagado</p></div>
+  <div class="card text-center"><p class="text-2xl font-bold text-red-600">Bs. {{ "%.2f"|format(total - pagado) }}</p><p class="text-xs text-slate-500">Pendiente</p></div>
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Cuota</th><th class="table-header">Monto</th><th class="table-header">Estado</th><th class="table-header">Método</th><th class="table-header">Fecha Pago</th><th class="table-header">Referencia</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for p in pagos %}<tr class="table-row">
+      <td class="table-cell text-center font-bold"># {{ p.nro_cuota }}</td>
+      <td class="table-cell font-semibold">Bs. {{ "%.2f"|format(p.cuota) }}</td>
+      <td class="table-cell">{% if p.pagado %}<span class="badge-green">Pagado</span>{% else %}<span class="badge-red">Pendiente</span>{% endif %}</td>
+      <td class="table-cell">{{ p.metodo_pago or '-' }}</td>
+      <td class="table-cell">{{ p.fecha_pago.strftime('%d/%m/%Y') if p.fecha_pago else '-' }}</td>
+      <td class="table-cell text-slate-500 text-xs">{{ p.referencia_pago or '-' }}</td>
+      <td class="table-cell">
+        {% if not p.pagado and current_user.has_permission('pago_crear') %}
+        <a href="{{ url_for('pago.registrar', id=p.id) }}" class="btn-success text-xs px-3 py-1.5">Registrar Pago</a>{% endif %}
+      </td>
+    </tr>{% else %}<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">Sin cuotas registradas.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+{% endblock %}''',
+
+"pago/form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Registrar Pago — Cuota #{{ pago.nro_cuota }}{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Pagos', url_for('pago.index')), ('Registrar Pago', '#')]) }}
+<div class="max-w-lg"><div class="card">
+  <div class="bg-primary-50 border border-primary-200 rounded-xl p-4 mb-6 flex justify-between items-center">
+    <div>
+      <p class="font-semibold text-primary-800">Cuota #{{ pago.nro_cuota }}</p>
+      <p class="text-sm text-primary-600">Alumno: {{ pago.inscrito.alumno.nombre_completo if pago.inscrito.alumno else '-' }}</p>
+    </div>
+    <p class="text-2xl font-heading font-bold text-primary-700">Bs. {{ "%.2f"|format(pago.cuota) }}</p>
+  </div>
+  <form method="POST"><div class="space-y-5">
+    <div><label class="form-label">Método de Pago</label>
+    <select name="metodo_pago" required class="form-select">
+      <option value="">Seleccionar...</option>
+      <option value="Efectivo">Efectivo</option>
+      <option value="Transferencia">Transferencia Bancaria</option>
+      <option value="QR">Pago QR</option>
+      <option value="Cheque">Cheque</option>
+    </select></div>
+    <div><label class="form-label">Fecha de Pago</label><input type="date" name="fecha_pago" required value="{{ today }}" class="form-input"></div>
+    <div><label class="form-label">Nro. Referencia / Comprobante</label><input type="text" name="referencia_pago" class="form-input" placeholder="Ej: TRF-0001"></div>
+    <div><label class="form-label">Observaciones</label><input type="text" name="obs" class="form-input"></div>
+  </div>
+  <div class="flex gap-3 mt-8">
+    <button type="submit" class="btn-success">Confirmar Pago</button>
+    <a href="{{ url_for('pago.index') }}" class="btn-secondary">Cancelar</a>
+  </div></form>
+</div></div>
+{% endblock %}''',
+
+"admin/usuarios.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import confirm_delete, breadcrumb %}
+{% block page_title %}Administración de Usuarios{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Administración', '#'), ('Usuarios', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ usuarios|length }} usuario(s)</p>
+  <div class="flex gap-3">
+    <a href="{{ url_for('admin.roles') }}" class="btn-secondary">Gestionar Roles</a>
+    <a href="{{ url_for('admin.permisos') }}" class="btn-secondary">Ver Permisos</a>
+    <a href="{{ url_for('admin.usuario_nuevo') }}" class="btn-primary">+ Nuevo Usuario</a>
+  </div>
+</div>
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Usuario</th><th class="table-header">Email</th><th class="table-header">Roles</th><th class="table-header">Estado</th><th class="table-header">Último Login</th><th class="table-header">Acciones</th>
+  </tr></thead>
+  <tbody>
+    {% for u in usuarios %}<tr class="table-row">
+      <td class="table-cell"><div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">{{ u.usuario[0].upper() }}</div>
+        <span class="font-semibold">{{ u.usuario }}</span>
+      </div></td>
+      <td class="table-cell text-slate-500">{{ u.email }}</td>
+      <td class="table-cell">
+        {% for r in u.roles %}<span class="badge-blue mr-1">{{ r.rol }}</span>{% else %}<span class="text-slate-400 text-xs">Sin rol</span>{% endfor %}
+      </td>
+      <td class="table-cell">{% if u.activo %}<span class="badge-green">Activo</span>{% else %}<span class="badge-red">Inactivo</span>{% endif %}</td>
+      <td class="table-cell text-sm text-slate-500">{{ u.last_login.strftime('%d/%m/%Y') }}</td>
+      <td class="table-cell"><div class="flex gap-2">
+        <a href="{{ url_for('admin.usuario_editar', id=u.id) }}" class="btn-secondary text-xs px-3 py-1.5">Editar</a>
+        {% if u.id != current_user.id %}{{ confirm_delete(url_for('admin.usuario_eliminar', id=u.id), '¿Eliminar el usuario ' ~ u.usuario ~ '?') }}{% endif %}
+      </div></td>
+    </tr>{% else %}<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">Sin usuarios.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"admin/usuario_form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if usuario else 'Nuevo' }} Usuario{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Administración', '#'), ('Usuarios', url_for('admin.usuarios')), ('Formulario', '#')]) }}
+<div class="max-w-lg"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Nombre de Usuario</label>
+  <input type="text" name="usuario" required value="{{ usuario.usuario if usuario else '' }}" {% if usuario %}readonly{% endif %} class="form-input {% if usuario %}bg-slate-50{% endif %}"></div>
+  <div><label class="form-label">Email</label><input type="email" name="email" required value="{{ usuario.email if usuario else '' }}" class="form-input"></div>
+  <div><label class="form-label">{{ 'Nueva Contraseña (dejar vacío para no cambiar)' if usuario else 'Contraseña' }}</label>
+  <input type="password" name="password" {% if not usuario %}required{% endif %} minlength="6" class="form-input" placeholder="Mínimo 6 caracteres"></div>
+  <div>
+    <label class="form-label">Roles Asignados</label>
+    <div class="space-y-2 mt-2">
+      {% for r in roles %}
+      <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-primary-300 cursor-pointer">
+        <input type="checkbox" name="roles" value="{{ r.id }}"
+               {% if usuario and r in usuario.roles %}checked{% endif %}
+               class="w-4 h-4 rounded border-slate-300 text-primary-600">
+        <div>
+          <p class="text-sm font-semibold text-slate-700">{{ r.rol }}</p>
+          {% if r.descripcion %}<p class="text-xs text-slate-500">{{ r.descripcion }}</p>{% endif %}
+        </div>
+      </label>{% endfor %}
+    </div>
+  </div>
+  {% if usuario %}
+  <div class="flex items-center gap-3">
+    <input type="checkbox" id="activo" name="activo" {% if usuario.activo %}checked{% endif %} class="w-4 h-4 rounded border-slate-300 text-primary-600">
+    <label for="activo" class="text-sm font-medium text-slate-700">Usuario activo</label>
+  </div>{% endif %}
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if usuario else 'Crear Usuario' }}</button>
+  <a href="{{ url_for('admin.usuarios') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"admin/roles.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Roles del Sistema{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Administración', '#'), ('Roles', '#')]) }}
+<div class="flex justify-between items-center mb-5">
+  <p class="text-sm text-slate-500">{{ roles|length }} rol(es)</p>
+  <a href="{{ url_for('admin.rol_nuevo') }}" class="btn-primary">+ Nuevo Rol</a>
+</div>
+<div class="grid gap-4">
+  {% for r in roles %}
+  <div class="card">
+    <div class="flex items-start justify-between gap-4">
+      <div class="flex-1">
+        <div class="flex items-center gap-3 mb-2">
+          <h3 class="font-heading font-bold text-slate-800">{{ r.rol }}</h3>
+          <span class="badge-blue">{{ r.permisos|length }} permisos</span>
+        </div>
+        {% if r.descripcion %}<p class="text-sm text-slate-500 mb-3">{{ r.descripcion }}</p>{% endif %}
+        <div class="flex flex-wrap gap-1.5">
+          {% for p in r.permisos %}<span class="badge-gray">{{ p.permiso }}</span>{% endfor %}
+        </div>
+      </div>
+      <a href="{{ url_for('admin.rol_editar', id=r.id) }}" class="btn-secondary text-xs px-3 py-1.5 flex-shrink-0">Editar</a>
+    </div>
+  </div>{% else %}<p class="text-center text-slate-400 py-8">Sin roles registrados.</p>{% endfor %}
+</div>
+{% endblock %}''',
+
+"admin/rol_form.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}{{ 'Editar' if rol else 'Nuevo' }} Rol{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Administración', '#'), ('Roles', url_for('admin.roles')), ('Formulario', '#')]) }}
+<div class="max-w-2xl"><div class="card"><form method="POST"><div class="space-y-5">
+  <div><label class="form-label">Nombre del Rol</label><input type="text" name="rol" required value="{{ rol.rol if rol else '' }}" class="form-input" placeholder="Ej: administrador"></div>
+  <div><label class="form-label">Descripción</label><input type="text" name="descripcion" value="{{ rol.descripcion if rol else '' }}" class="form-input"></div>
+  <div>
+    <label class="form-label mb-3 block">Permisos</label>
+    <div class="grid grid-cols-2 gap-2 max-h-96 overflow-y-auto p-1">
+      {% for p in permisos %}
+      <label class="flex items-start gap-2 p-2.5 rounded-lg border border-slate-200 hover:border-primary-300 cursor-pointer text-sm">
+        <input type="checkbox" name="permisos" value="{{ p.id }}"
+               {% if rol and p in rol.permisos %}checked{% endif %}
+               class="w-4 h-4 rounded border-slate-300 text-primary-600 mt-0.5 flex-shrink-0">
+        <div>
+          <p class="font-medium text-slate-700">{{ p.permiso }}</p>
+          {% if p.descripcion %}<p class="text-xs text-slate-500">{{ p.descripcion }}</p>{% endif %}
+        </div>
+      </label>{% endfor %}
+    </div>
+  </div>
+</div><div class="flex gap-3 mt-8">
+  <button type="submit" class="btn-primary">{{ 'Guardar' if rol else 'Crear Rol' }}</button>
+  <a href="{{ url_for('admin.roles') }}" class="btn-secondary">Cancelar</a>
+</div></form></div></div>
+{% endblock %}''',
+
+"admin/permisos.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Permisos del Sistema{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Administración', '#'), ('Permisos', '#')]) }}
+<div class="card p-0 overflow-hidden"><table class="w-full">
+  <thead class="bg-slate-50"><tr>
+    <th class="table-header">Permiso</th><th class="table-header">Descripción</th><th class="table-header">Creado</th>
+  </tr></thead>
+  <tbody>
+    {% for p in permisos %}<tr class="table-row">
+      <td class="table-cell"><span class="font-mono text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">{{ p.permiso }}</span></td>
+      <td class="table-cell">{{ p.descripcion or '-' }}</td>
+      <td class="table-cell text-xs text-slate-400">{{ p.creado.strftime('%d/%m/%Y') if p.creado else '-' }}</td>
+    </tr>{% else %}<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400 text-sm">Sin permisos.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}''',
+
+"auth/cambiar_password.html": '''{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Cambiar Contraseña{% endblock %}
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Cambiar Contraseña', '#')]) }}
+<div class="max-w-md"><div class="card">
+  <h2 class="font-heading font-bold text-slate-800 mb-6">Cambiar Contraseña</h2>
+  <form method="POST"><div class="space-y-5">
+    <div><label class="form-label">Contraseña Actual</label><input type="password" name="password_actual" required class="form-input"></div>
+    <div><label class="form-label">Nueva Contraseña</label><input type="password" name="password_nueva" required minlength="6" class="form-input"></div>
+    <div><label class="form-label">Confirmar Nueva Contraseña</label><input type="password" name="confirmar" required class="form-input"></div>
+  </div><div class="flex gap-3 mt-8">
+    <button type="submit" class="btn-primary">Actualizar Contraseña</button>
+    <a href="/" class="btn-secondary">Cancelar</a>
+  </div></form>
+</div></div>
+{% endblock %}''',
+}
+
+BASE = "/home/claude/uaded/app/templates"
+for path, content in TEMPLATES.items():
+    full_path = os.path.join(BASE, path)
+    os.makedirs(os.path.dirname(full_path), exist_ok=True)
+    with open(full_path, 'w') as f:
+        f.write(content)
+    print(f"✓ {path}")
+
+print("\nAll templates created!")
+PYEOF
+Output
+
+✓ grado/index.html
+✓ grado/form.html
+✓ materia/index.html
+✓ materia/form.html
+✓ profesor/index.html
+✓ profesor/form.html
+✓ curso/index.html
+✓ curso/form.html
+✓ alumno/index.html
+✓ alumno/form.html
+✓ inscrito/index.html
+✓ inscrito/form.html
+✓ nota/index.html
+✓ nota/form.html
+✓ pago/index.html
+✓ pago/form.html
+✓ admin/usuarios.html
+✓ admin/usuario_form.html
+✓ admin/roles.html
+✓ admin/rol_form.html
+✓ admin/permisos.html
+✓ auth/cambiar_password.html
+
+All templates created!

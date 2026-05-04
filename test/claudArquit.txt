@@ -1,0 +1,971 @@
+Arquitectura Completa del Sistema de Gestión Educativa
+📋 Índice
+
+Visión General
+Arquitectura del Sistema
+Capa de Datos
+Capa de Backend
+Capa de Frontend
+Seguridad y Autenticación
+Estructura del Proyecto
+Flujos de Trabajo
+Despliegue
+
+
+🎯 Visión General {#visión-general}
+Stack Tecnológico
+┌─────────────────────────────────────────────────────────────┐
+│                    CLIENTE / NAVEGADOR                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │   HTML5      │  │  Alpine.js   │  │    HTMX      │      │
+│  │  Tailwind    │  │  (Estado)    │  │  (AJAX)      │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                            ↕ HTTP/HTTPS
+┌─────────────────────────────────────────────────────────────┐
+│                   SERVIDOR DE APLICACIÓN                     │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │                   Flask (Python)                      │   │
+│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐     │   │
+│  │  │  Blueprints│  │   Jinja2   │  │Flask-Login │     │   │
+│  │  │  (Rutas)   │  │ (Templates)│  │   (Auth)   │     │   │
+│  │  └────────────┘  └────────────┘  └────────────┘     │   │
+│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐     │   │
+│  │  │SQLAlchemy  │  │   WTForms  │  │   Bcrypt   │     │   │
+│  │  │   (ORM)    │  │(Validación)│  │  (Hash)    │     │   │
+│  │  └────────────┘  └────────────┘  └────────────┘     │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            ↕ psycopg2
+┌─────────────────────────────────────────────────────────────┐
+│                   BASE DE DATOS                              │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              PostgreSQL 12+                           │   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐ │   │
+│  │  │ Gestión │  │  Auth   │  │ Pagos   │  │ Reportes│ │   │
+│  │  │Académica│  │Usuarios │  │  Plan   │  │  Vistas │ │   │
+│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘ │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+
+🏗️ Arquitectura del Sistema {#arquitectura-del-sistema}
+Patrón Arquitectónico: MVC + REST
+┌──────────────────────────────────────────────────────────────┐
+│                         MODELO MVC                            │
+├──────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌────────────┐      ┌────────────┐      ┌────────────┐     │
+│  │   VISTA    │◄────▶│ CONTROLADOR│◄────▶│   MODELO   │     │
+│  │            │      │            │      │            │     │
+│  │  Jinja2    │      │   Flask    │      │SQLAlchemy  │     │
+│  │  Templates │      │  Blueprints│      │  Models    │     │
+│  │  + HTMX    │      │   Routes   │      │            │     │
+│  │  + Alpine  │      │            │      │ PostgreSQL │     │
+│  └────────────┘      └────────────┘      └────────────┘     │
+│       ▲                    ▲                    ▲            │
+│       │                    │                    │            │
+│   (Renderiza)         (Procesa)           (Persiste)        │
+│                                                               │
+└──────────────────────────────────────────────────────────────┘
+Arquitectura de Capas
+┌─────────────────────────────────────────────────────────┐
+│  CAPA DE PRESENTACIÓN                                   │
+│  ├─ Templates HTML (Jinja2)                             │
+│  ├─ Alpine.js (Reactividad del lado del cliente)        │
+│  ├─ HTMX (Peticiones AJAX sin JavaScript complejo)      │
+│  └─ Tailwind CSS (Estilos)                              │
+└─────────────────────────────────────────────────────────┘
+                        ↕
+┌─────────────────────────────────────────────────────────┐
+│  CAPA DE APLICACIÓN (Flask)                             │
+│  ├─ Blueprints (Módulos funcionales)                    │
+│  │  ├─ auth_bp (Autenticación)                          │
+│  │  ├─ estudiantes_bp                                   │
+│  │  ├─ profesores_bp                                    │
+│  │  ├─ cursos_bp                                        │
+│  │  ├─ calificaciones_bp                                │
+│  │  └─ pagos_bp                                         │
+│  ├─ Decoradores (Control de acceso)                     │
+│  ├─ Forms (Validación WTForms)                          │
+│  └─ Services (Lógica de negocio)                        │
+└─────────────────────────────────────────────────────────┘
+                        ↕
+┌─────────────────────────────────────────────────────────┐
+│  CAPA DE ACCESO A DATOS                                 │
+│  ├─ SQLAlchemy ORM                                      │
+│  ├─ Modelos de Datos                                    │
+│  ├─ Repositorios                                        │
+│  └─ Queries complejas                                   │
+└─────────────────────────────────────────────────────────┘
+                        ↕
+┌─────────────────────────────────────────────────────────┐
+│  CAPA DE PERSISTENCIA (PostgreSQL)                      │
+│  ├─ Tablas Académicas (ges, gra, mat, cur, etc.)        │
+│  ├─ Tablas de Autenticación (usr, rol, per)             │
+│  ├─ Vistas (Reportes)                                   │
+│  ├─ Funciones (Cálculos)                                │
+│  └─ Triggers (Automatización)                           │
+└─────────────────────────────────────────────────────────┘
+
+💾 Capa de Datos {#capa-de-datos}
+Modelo de Datos Mejorado
+sql-- ============================================================================
+-- ESQUEMA MEJORADO BASADO EN LA BD PROPORCIONADA
+-- ============================================================================
+
+-- MÓDULO ACADÉMICO
+-- ----------------
+ges (Gestión)
+├── id (PK)
+├── gestion (año)
+├── plan
+├── inicio, fin
+└── activo
+
+gra (Grado)
+├── id (PK)
+├── grado
+├── nivel
+├── id_ges (FK → ges)
+└── creado, act
+
+mat (Materia)
+├── id (PK)
+├── materia
+├── gra_id (FK → gra)
+└── creado, act
+
+pro (Profesor)
+├── id (PK)
+├── nombre, paterno, materno
+├── formacion
+├── activo
+└── creado, act
+
+cur (Curso)
+├── id (PK)
+├── curso, paralelo
+├── gra_id (FK → gra)
+├── aula, capacidad
+├── gestion
+└── creado, act
+
+asi (Asignación)
+├── id (PK)
+├── cur_id (FK → cur)
+├── mat_id (FK → mat)
+├── pro_id (FK → pro)
+└── creado, act
+
+est (Estudiante)
+├── id (PK)
+├── nombre, paterno, materno
+├── nacimiento, masculino
+├── ci, direccion
+├── activo, obs
+└── creado, act
+
+ins (Inscripción)
+├── id (PK)
+├── est_id (FK → est) UNIQUE
+├── cur_id (FK → cur)
+├── reserva, inscrito
+├── descu (descuento %)
+├── motivo_descu
+├── abandono
+└── creado, act
+
+cal (Calificación)
+├── id (PK)
+├── ins_id (FK → ins)
+├── mat_id (FK → mat)
+├── nota1, nota2, nota3
+├── nota_final, nota_aprob
+├── aprobado
+└── creado, act
+
+-- MÓDULO FINANCIERO
+-- -----------------
+cos (Costo)
+├── id (PK)
+├── cur_id (FK → cur)
+├── nro_cuota
+├── cuota (monto)
+└── creado, act
+
+pag (Pago/Plan)
+├── id (PK)
+├── ins_id (FK → ins)
+├── nro_cuota
+├── cuota
+├── pagado
+├── metodo_pago
+├── nro_comprobante
+└── creado, act
+
+-- MÓDULO AUTENTICACIÓN
+-- --------------------
+usr (Usuario)
+├── id (PK)
+├── usuario UNIQUE
+├── email
+├── password (hashed)
+├── activo
+├── ultimo_ingreso
+└── creado, act
+
+rol (Rol)
+├── id (PK)
+├── rol UNIQUE
+├── descripcion
+└── creado, act
+
+per (Permiso)
+├── id (PK)
+├── permiso UNIQUE
+├── descripcion
+└── creado, act
+
+usr_rol (Usuario-Rol)
+├── usr_id (FK → usr)
+└── rol_id (FK → rol)
+PK: (usr_id, rol_id)
+
+rol_per (Rol-Permiso)
+├── rol_id (FK → rol)
+└── per_id (FK → per)
+PK: (rol_id, per_id)
+Vistas Útiles a Crear
+sql-- Vista: Estudiantes inscritos con información completa
+CREATE OR REPLACE VIEW v_estudiantes_detalle AS
+SELECT 
+    e.id,
+    e.nombre || ' ' || e.paterno || ' ' || COALESCE(e.materno, '') as nombre_completo,
+    e.ci,
+    g.nivel,
+    g.grado,
+    c.paralelo,
+    c.gestion,
+    i.inscrito,
+    i.descu as descuento,
+    i.abandono
+FROM est e
+INNER JOIN ins i ON e.id = i.est_id
+INNER JOIN cur c ON i.cur_id = c.id
+INNER JOIN gra g ON c.gra_id = g.id
+WHERE e.activo = TRUE;
+
+-- Vista: Calificaciones con detalles
+CREATE OR REPLACE VIEW v_calificaciones_completas AS
+SELECT 
+    e.nombre || ' ' || e.paterno as estudiante,
+    m.materia,
+    g.nivel || ' ' || g.grado || ' ' || c.paralelo as curso,
+    cal.nota1,
+    cal.nota2,
+    cal.nota3,
+    cal.nota_final,
+    cal.aprobado
+FROM cal
+INNER JOIN ins i ON cal.ins_id = i.id
+INNER JOIN est e ON i.est_id = e.id
+INNER JOIN mat m ON cal.mat_id = m.id
+INNER JOIN cur c ON i.cur_id = c.id
+INNER JOIN gra g ON c.gra_id = g.id;
+
+-- Vista: Estado de pagos
+CREATE OR REPLACE VIEW v_estado_pagos AS
+SELECT 
+    e.nombre || ' ' || e.paterno as estudiante,
+    c.curso || ' ' || c.paralelo as curso,
+    COUNT(p.id) as total_cuotas,
+    COUNT(CASE WHEN p.pagado THEN 1 END) as cuotas_pagadas,
+    COUNT(CASE WHEN NOT COALESCE(p.pagado, FALSE) THEN 1 END) as cuotas_pendientes,
+    SUM(p.cuota) as monto_total,
+    SUM(CASE WHEN p.pagado THEN p.cuota ELSE 0 END) as monto_pagado,
+    SUM(CASE WHEN NOT COALESCE(p.pagado, FALSE) THEN p.cuota ELSE 0 END) as saldo_pendiente
+FROM ins i
+INNER JOIN est e ON i.est_id = e.id
+INNER JOIN cur c ON i.cur_id = c.id
+LEFT JOIN pag p ON i.id = p.ins_id
+GROUP BY e.id, e.nombre, e.paterno, c.curso, c.paralelo;
+
+-- Vista: Carga académica profesores
+CREATE OR REPLACE VIEW v_carga_profesores AS
+SELECT 
+    p.nombre || ' ' || p.paterno as profesor,
+    p.formacion,
+    COUNT(DISTINCT a.cur_id) as total_cursos,
+    COUNT(DISTINCT a.mat_id) as total_materias,
+    STRING_AGG(DISTINCT m.materia, ', ') as materias
+FROM pro p
+INNER JOIN asi a ON p.id = a.pro_id
+INNER JOIN mat m ON a.mat_id = m.id
+WHERE p.activo = TRUE
+GROUP BY p.id, p.nombre, p.paterno, p.formacion;
+Funciones Útiles
+sql-- Función: Generar plan de pagos automáticamente
+CREATE OR REPLACE FUNCTION fn_generar_plan_pagos(p_ins_id INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    v_cur_id INTEGER;
+    v_nro_cuotas SMALLINT;
+    v_monto_cuota NUMERIC(10,2);
+    v_descuento SMALLINT;
+    v_monto_final NUMERIC(10,2);
+    v_registros INTEGER := 0;
+    v_i INTEGER;
+BEGIN
+    -- Obtener datos de la inscripción
+    SELECT i.cur_id, i.descu, co.nro_cuota, co.cuota
+    INTO v_cur_id, v_descuento, v_nro_cuotas, v_monto_cuota
+    FROM ins i
+    INNER JOIN cos co ON i.cur_id = co.cur_id
+    WHERE i.id = p_ins_id;
+    
+    -- Calcular monto con descuento
+    v_monto_final := v_monto_cuota - (v_monto_cuota * v_descuento / 100.0);
+    
+    -- Generar cuotas
+    FOR v_i IN 1..v_nro_cuotas LOOP
+        INSERT INTO pag (ins_id, nro_cuota, cuota, pagado, creado, act)
+        VALUES (p_ins_id, v_i, v_monto_final, FALSE, CURRENT_DATE, CURRENT_DATE);
+        
+        v_registros := v_registros + 1;
+    END LOOP;
+    
+    RETURN v_registros;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Función: Calcular nota final
+CREATE OR REPLACE FUNCTION fn_calcular_nota_final()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.nota_final := (NEW.nota1 + NEW.nota2 + NEW.nota3) / 3.0;
+    NEW.aprobado := (NEW.nota_final >= NEW.nota_aprob);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_cal_calcular_nota
+    BEFORE INSERT OR UPDATE ON cal
+    FOR EACH ROW
+    EXECUTE FUNCTION fn_calcular_nota_final();
+
+🔧 Capa de Backend {#capa-de-backend}
+Estructura de Directorios
+proyecto_gestion_educativa/
+├── app/
+│   ├── __init__.py              # Inicialización Flask
+│   ├── config.py                # Configuraciones
+│   ├── extensions.py            # Extensiones (db, login_manager, etc.)
+│   │
+│   ├── models/                  # Modelos SQLAlchemy
+│   │   ├── __init__.py
+│   │   ├── gestion.py           # Gestión, Grado
+│   │   ├── academico.py         # Materia, Curso, Asignación
+│   │   ├── estudiante.py        # Estudiante, Inscripción
+│   │   ├── profesor.py          # Profesor
+│   │   ├── calificacion.py      # Calificación
+│   │   ├── financiero.py        # Costo, Pago
+│   │   └── auth.py              # Usuario, Rol, Permiso
+│   │
+│   ├── forms/                   # Formularios WTForms
+│   │   ├── __init__.py
+│   │   ├── auth_forms.py
+│   │   ├── estudiante_forms.py
+│   │   ├── profesor_forms.py
+│   │   ├── curso_forms.py
+│   │   ├── calificacion_forms.py
+│   │   └── pago_forms.py
+│   │
+│   ├── blueprints/              # Módulos de rutas
+│   │   ├── __init__.py
+│   │   ├── auth/                # Autenticación
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   └── decorators.py    # @login_required, @permission_required
+│   │   │
+│   │   ├── estudiantes/         # Gestión de estudiantes
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── profesores/          # Gestión de profesores
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── cursos/              # Gestión de cursos
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── calificaciones/      # Registro de notas
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── pagos/               # Gestión de pagos
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
+│   │   └── reportes/            # Reportes
+│   │       ├── __init__.py
+│   │       └── routes.py
+│   │
+│   ├── services/                # Lógica de negocio
+│   │   ├── __init__.py
+│   │   ├── estudiante_service.py
+│   │   ├── inscripcion_service.py
+│   │   ├── calificacion_service.py
+│   │   ├── pago_service.py
+│   │   └── reporte_service.py
+│   │
+│   ├── utils/                   # Utilidades
+│   │   ├── __init__.py
+│   │   ├── validators.py
+│   │   └── helpers.py
+│   │
+│   ├── static/                  # Archivos estáticos
+│   │   ├── css/
+│   │   │   └── custom.css
+│   │   ├── js/
+│   │   │   └── app.js
+│   │   └── img/
+│   │
+│   └── templates/               # Templates Jinja2
+│       ├── base.html
+│       ├── index.html
+│       │
+│       ├── auth/
+│       │   ├── login.html
+│       │   └── register.html
+│       │
+│       ├── estudiantes/
+│       │   ├── lista.html
+│       │   ├── crear.html
+│       │   ├── editar.html
+│       │   └── detalle.html
+│       │
+│       ├── profesores/
+│       │   └── ...
+│       │
+│       ├── cursos/
+│       │   └── ...
+│       │
+│       ├── calificaciones/
+│       │   ├── lista.html
+│       │   ├── registro.html
+│       │   └── boleta.html
+│       │
+│       ├── pagos/
+│       │   ├── plan.html
+│       │   ├── registrar.html
+│       │   └── historial.html
+│       │
+│       ├── reportes/
+│       │   └── ...
+│       │
+│       └── components/          # Componentes reutilizables
+│           ├── navbar.html
+│           ├── sidebar.html
+│           └── pagination.html
+│
+├── migrations/                  # Migraciones Alembic
+│   └── versions/
+│
+├── tests/                       # Tests
+│   ├── test_models.py
+│   ├── test_routes.py
+│   └── test_services.py
+│
+├── .env                         # Variables de entorno
+├── .gitignore
+├── requirements.txt
+├── run.py                       # Punto de entrada
+└── README.md
+Ejemplo de Modelo (SQLAlchemy)
+python# app/models/estudiante.py
+from app.extensions import db
+from datetime import datetime
+
+class Estudiante(db.Model):
+    __tablename__ = 'est'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    paterno = db.Column(db.String(100))
+    materno = db.Column(db.String(100))
+    nacimiento = db.Column(db.Date)
+    masculino = db.Column(db.Boolean, nullable=False)
+    ci = db.Column(db.Integer)
+    direccion = db.Column(db.String(150))
+    activo = db.Column(db.Boolean, nullable=False, default=True)
+    obs = db.Column(db.String(100))
+    creado = db.Column(db.Date, nullable=False, default=datetime.utcnow)
+    act = db.Column(db.Date, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relaciones
+    inscripcion = db.relationship('Inscripcion', backref='estudiante', uselist=False)
+    
+    @property
+    def nombre_completo(self):
+        return f"{self.nombre} {self.paterno} {self.materno or ''}".strip()
+    
+    @property
+    def edad(self):
+        if self.nacimiento:
+            today = datetime.today()
+            return today.year - self.nacimiento.year - (
+                (today.month, today.day) < (self.nacimiento.month, self.nacimiento.day)
+            )
+        return None
+    
+    def __repr__(self):
+        return f'<Estudiante {self.nombre_completo}>'
+Ejemplo de Blueprint
+python# app/blueprints/estudiantes/routes.py
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required
+from app.models.estudiante import Estudiante
+from app.models.inscripcion import Inscripcion
+from app.forms.estudiante_forms import EstudianteForm
+from app.services.estudiante_service import EstudianteService
+from app.blueprints.auth.decorators import permission_required
+from app.extensions import db
+
+estudiantes_bp = Blueprint('estudiantes', __name__, url_prefix='/estudiantes')
+
+@estudiantes_bp.route('/')
+@login_required
+@permission_required('ver_estudiantes')
+def lista():
+    """Lista de estudiantes con búsqueda y paginación"""
+    page = request.args.get('page', 1, type=int)
+    search = request.args.get('search', '', type=str)
+    
+    query = Estudiante.query.filter_by(activo=True)
+    
+    if search:
+        query = query.filter(
+            db.or_(
+                Estudiante.nombre.ilike(f'%{search}%'),
+                Estudiante.paterno.ilike(f'%{search}%'),
+                Estudiante.ci.ilike(f'%{search}%')
+            )
+        )
+    
+    estudiantes = query.paginate(page=page, per_page=20, error_out=False)
+    
+    # Si es petición HTMX, solo devolver la tabla
+    if request.headers.get('HX-Request'):
+        return render_template('estudiantes/tabla_estudiantes.html', 
+                             estudiantes=estudiantes, 
+                             search=search)
+    
+    return render_template('estudiantes/lista.html', 
+                         estudiantes=estudiantes, 
+                         search=search)
+
+@estudiantes_bp.route('/crear', methods=['GET', 'POST'])
+@login_required
+@permission_required('crear_estudiantes')
+def crear():
+    """Crear nuevo estudiante"""
+    form = EstudianteForm()
+    
+    if form.validate_on_submit():
+        estudiante = EstudianteService.crear_estudiante(form)
+        flash(f'Estudiante {estudiante.nombre_completo} creado exitosamente', 'success')
+        return redirect(url_for('estudiantes.lista'))
+    
+    return render_template('estudiantes/crear.html', form=form)
+
+@estudiantes_bp.route('/<int:id>')
+@login_required
+@permission_required('ver_estudiantes')
+def detalle(id):
+    """Ver detalle de estudiante"""
+    estudiante = Estudiante.query.get_or_404(id)
+    return render_template('estudiantes/detalle.html', estudiante=estudiante)
+
+@estudiantes_bp.route('/<int:id>/editar', methods=['GET', 'POST'])
+@login_required
+@permission_required('editar_estudiantes')
+def editar(id):
+    """Editar estudiante"""
+    estudiante = Estudiante.query.get_or_404(id)
+    form = EstudianteForm(obj=estudiante)
+    
+    if form.validate_on_submit():
+        EstudianteService.actualizar_estudiante(estudiante, form)
+        flash('Estudiante actualizado exitosamente', 'success')
+        return redirect(url_for('estudiantes.detalle', id=id))
+    
+    return render_template('estudiantes/editar.html', form=form, estudiante=estudiante)
+Ejemplo de Service
+python# app/services/estudiante_service.py
+from app.models.estudiante import Estudiante
+from app.extensions import db
+from datetime import datetime
+
+class EstudianteService:
+    
+    @staticmethod
+    def crear_estudiante(form):
+        """Crear un nuevo estudiante"""
+        estudiante = Estudiante(
+            nombre=form.nombre.data,
+            paterno=form.paterno.data,
+            materno=form.materno.data,
+            nacimiento=form.nacimiento.data,
+            masculino=form.masculino.data,
+            ci=form.ci.data,
+            direccion=form.direccion.data,
+            activo=True,
+            obs=form.obs.data
+        )
+        
+        db.session.add(estudiante)
+        db.session.commit()
+        
+        return estudiante
+    
+    @staticmethod
+    def actualizar_estudiante(estudiante, form):
+        """Actualizar estudiante existente"""
+        estudiante.nombre = form.nombre.data
+        estudiante.paterno = form.paterno.data
+        estudiante.materno = form.materno.data
+        estudiante.nacimiento = form.nacimiento.data
+        estudiante.masculino = form.masculino.data
+        estudiante.ci = form.ci.data
+        estudiante.direccion = form.direccion.data
+        estudiante.obs = form.obs.data
+        estudiante.act = datetime.utcnow()
+        
+        db.session.commit()
+        
+        return estudiante
+    
+    @staticmethod
+    def buscar_estudiantes(criterio):
+        """Buscar estudiantes por nombre o CI"""
+        return Estudiante.query.filter(
+            db.or_(
+                Estudiante.nombre.ilike(f'%{criterio}%'),
+                Estudiante.paterno.ilike(f'%{criterio}%'),
+                Estudiante.ci.ilike(f'%{criterio}%')
+            )
+        ).filter_by(activo=True).all()
+
+🎨 Capa de Frontend {#capa-de-frontend}
+Template Base con HTMX y Alpine.js
+html<!-- app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Gestión Educativa{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    {% if current_user.is_authenticated %}
+    <!-- Navbar -->
+    <nav class="bg-blue-600 shadow-lg" x-data="{ mobileMenu: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-white text-xl font-bold">📚 Gestión Educativa</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="{{ url_for('main.index') }}" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md">
+                            Inicio
+                        </a>
+                        {% if current_user.tiene_permiso('ver_estudiantes') %}
+                        <a href="{{ url_for('estudiantes.lista') }}" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md">
+                            Estudiantes
+                        </a>
+                        {% endif %}
+                        {% if current_user.tiene_permiso('ver_profesores') %}
+                        <a href="{{ url_for('profesores.lista') }}" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md">
+                            Profesores
+                        </a>
+                        {% endif %}
+                        {% if current_user.tiene_permiso('ver_cursos') %}
+                        <a href="{{ url_for('cursos.lista') }}" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md">
+                            Cursos
+                        </a>
+                        {% endif %}
+                        {% if current_user.tiene_permiso('ver_calificaciones') %}
+                        <a href="{{ url_for('calificaciones.lista') }}" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md">
+                            Calificaciones
+                        </a>
+                        {% endif %}
+                        {% if current_user.tiene_permiso('ver_pagos') %}
+                        <a href="{{ url_for('pagos.lista') }}" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md">
+                            Pagos
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <div x-data="{ open: false }" class="ml-3 relative">
+                        <button @click="open = !open" class="flex text-sm text-white">
+                            {{ current_user.usuario }} ▼
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-cloak
+                             class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
+                            <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <!-- Mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            {% for category, message in messages %}
+            <div x-data="{ show: true }" x-show="show" x-cloak
+                 class="rounded-md p-4 mb-4 {% if category == 'success' %}bg-green-50 text-green-800{% elif category == 'danger' %}bg-red-50 text-red-800{% else %}bg-blue-50 text-blue-800{% endif %}">
+                <div class="flex justify-between items-center">
+                    <span>{{ message }}</span>
+                    <button @click="show = false" class="ml-4">✕</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-gray-500 text-sm">
+                © 2025 Sistema de Gestión Educativa
+            </p>
+        </div>
+    </footer>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+Ejemplo con HTMX (Lista de Estudiantes)
+html<!-- app/templates/estudiantes/lista.html -->
+{% extends "base.html" %}
+
+{% block title %}Lista de Estudiantes{% endblock %}
+
+{% block content %}
+<div x-data="{ deleteModal: false, estudianteId: null, estudianteNombre: '' }">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-3xl font-semibold text-gray-900">Estudiantes</h1>
+            <p class="mt-2 text-sm text-gray-700">Lista de todos los estudiantes registrados</p>
+        </div>
+        {% if current_user.tiene_permiso('crear_estudiantes') %}
+        <div class="mt-4 sm:mt-0">
+            <a href="{{ url_for('estudiantes.crear') }}" 
+               class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                + Nuevo Estudiante
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Buscador con HTMX -->
+    <div class="mt-6">
+        <input 
+            type="text" 
+            name="search"
+            placeholder="Buscar por nombre o CI..."
+            class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md"
+            hx-get="{{ url_for('estudiantes.lista') }}"
+            hx-trigger="keyup changed delay:500ms"
+            hx-target="#tabla-estudiantes"
+            hx-include="[name='search']"
+        >
+    </div>
+
+    <!-- Tabla con HTMX -->
+    <div id="tabla-estudiantes" class="mt-8">
+        {% include 'estudiantes/tabla_estudiantes.html' %}
+    </div>
+
+    <!-- Modal de confirmación (Alpine.js) -->
+    <div x-show="deleteModal" x-cloak class="fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+            <div class="relative bg-white rounded-lg p-6 max-w-md">
+                <h3 class="text-lg font-medium text-gray-900">Confirmar Eliminación</h3>
+                <p class="mt-2 text-sm text-gray-500">
+                    ¿Está seguro de eliminar al estudiante <strong x-text="estudianteNombre"></strong>?
+                </p>
+                <div class="mt-4 flex justify-end space-x-2">
+                    <button @click="deleteModal = false" 
+                            class="px-4 py-2 border rounded-md text-sm text-gray-700 hover:bg-gray-50">
+                        Cancelar
+                    </button>
+                    <button @click="eliminarEstudiante()" 
+                            class="px-4 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+Tabla Parcial (HTMX)
+html<!-- app/templates/estudiantes/tabla_estudiantes.html -->
+<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+    <table class="min-w-full divide-y divide-gray-300">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Nombre</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">CI</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Curso</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Estado</th>
+                <th class="px-6 py-3 text-right text-sm font-semibold text-gray-900">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 bg-white">
+            {% for estudiante in estudiantes.items %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    {{ estudiante.nombre_completo }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ estudiante.ci or '-' }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {% if estudiante.inscripcion %}
+                        {{ estudiante.inscripcion.curso.curso }} {{ estudiante.inscripcion.curso.paralelo }}
+                    {% else %}
+                        Sin inscripción
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                 {% if estudiante.activo %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ 'Activo' if estudiante.activo else 'Inactivo' }}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                    <a href="{{ url_for('estudiantes.detalle', id=estudiante.id) }}" 
+                       class="text-blue-600 hover:text-blue-900">Ver</a>
+                    {% if current_user.tiene_permiso('editar_estudiantes') %}
+                    <a href="{{ url_for('estudiantes.editar', id=estudiante.id) }}" 
+                       class="text-green-600 hover:text-green-900">Editar</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Paginación -->
+{% if estudiantes.pages > 1 %}
+<div class="flex justify-center mt-4">
+    <nav class="inline-flex rounded-md shadow-sm -space-x-px">
+        {% if estudiantes.has_prev %}
+        <a href="#" 
+           hx-get="{{ url_for('estudiantes.lista', page=estudiantes.prev_num, search=search) }}"
+           hx-target="#tabla-estudiantes"
+           class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            Anterior
+        </a>
+        {% endif %}
+        
+        <span class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+            Página {{ estudiantes.page }} de {{ estudiantes.pages }}
+        </span>
+        
+        {% if estudiantes.has_next %}
+        <a href="#" 
+           hx-get="{{ url_for('estudiantes.lista', page=estudiantes.next_num, search=search) }}"
+           hx-target="#tabla-estudiantes"
+           class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            Siguiente
+        </a>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+
+🔐 Seguridad y Autenticación {#seguridad}
+Sistema de Permisos
+python# app/blueprints/auth/decorators.py
+from functools import wraps
+from flask import abort, flash, redirect, url_for
+from flask_login import current_user
+
+def permission_required(*permisos):
+    """Decorador para verificar permisos"""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated:
+                flash('Debes iniciar sesión', 'warning')
+                return redirect(url_for('auth.login'))
+            
+            if not any(current_user.tiene_permiso(p) for p in permisos):
+                flash('No tienes permisos para esta acción', 'danger')
+                abort(403)
+            
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+Modelo de Usuario
+python# app/models/auth.py
+from app.extensions import db
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class Usuario(UserMixin, db.Model):
+    __tablename__ = 'usr'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    usuario = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    activo = db.Column(db.Boolean, default=True)
+    
+    # Relaciones
+    roles = db.relationship('Rol', secondary='usr_rol', backref='usuarios')
+    
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+    
+    def tiene_permiso(self, permiso):
+        """Verifica si el usuario tiene un permiso específico"""
+        for rol in self.roles:
+            if any(p.permiso == permiso for p in rol.permisos):
+                return True

@@ -1,0 +1,6 @@
+bash
+
+mkdir -p /home/claude/uaded/{app/{models,routes,templates/{auth,admin,gestion,grado,materia,profesor,curso,alumno,inscrito,nota,pago,partials},static/{css,js,img}},migrations,scripts} && echo "Structure created"
+Output
+
+Structure created

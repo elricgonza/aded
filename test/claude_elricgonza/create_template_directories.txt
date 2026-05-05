@@ -1,0 +1,4 @@
+mkdir -p /home/claude/uaded/app/templates/{grado,materia,profesor,curso,alumno,inscrito,nota,pago,admin,auth} && echo "ok"
+Output
+
+ok

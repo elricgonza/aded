@@ -1,0 +1,11 @@
+bash
+
+
+# Split all_routes.py into individual route files
+for module in grado materia profesor curso alumno inscrito nota pago; do
+  cp /home/claude/uaded/app/routes/all_routes.py /home/claude/uaded/app/routes/${module}.py
+done
+echo "done"
+Output
+
+done

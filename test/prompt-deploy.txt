@@ -1,0 +1,1 @@
+Describir los pasos necesarios para el "deploy" o publicar la aplicación web generada (con el stack tecnológico:  Python / Flask  +  PostgreSQL  +  HTMX / Alpine.js / Tailwind CSS), sugerir el proveedor de hosting, preferible en un host gratuito para pruebas

@@ -1,0 +1,30 @@
+f_alu
+
+realizar un script python para poblar la siguiente tabla en postgres con 2000 registros de prueba
+
+                                                           Table "public.alumno"
+    Column    |          Type          | Collation | Nullable |              Default               | Storage  | Stats target | Description 
+--------------+------------------------+-----------+----------+------------------------------------+----------+--------------+-------------
+ id           | integer                |           | not null | nextval('alumno_id_seq'::regclass) | plain    |              | 
+ nombre       | character varying(100) |           | not null |                                    | extended |              | 
+ paterno      | character varying(100) |           |          |                                    | extended |              | 
+ materno      | character varying(100) |           |          |                                    | extended |              | 
+ nacimiento   | date                   |           |          |                                    | plain    |              | 
+ masculino    | boolean                |           | not null |                                    | plain    |              | 
+ ci           | integer                |           |          |                                    | plain    |              | 
+ direccion    | character varying(150) |           |          |                                    | extended |              | 
+ email        | character varying(100) |           |          |                                    | extended |              | 
+ activo       | boolean                |           | not null |                                    | plain    |              | 
+ obs          | character varying(100) |           |          |                                    | extended |              | 
+ usr_id_login | integer                |           |          |                                    | plain    |              | 
+ foto_ruta    | character varying(150) |           |          |                                    | extended |              | 
+ creado       | date                   |           | not null |                                    | plain    |              | 
+ act          | date                   |           | not null |                                    | plain    |              | 
+ usu_id       | integer                |           | not null |                                    | plain    |              | 
+Indexes:
+    "alumno_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "inscrito" CONSTRAINT "inscrito_alu_id_fkey" FOREIGN KEY (alu_id) REFERENCES alumno(id) ON UPDATE CASCADE ON DELETE SET NULL
+Access method: heap
+
+~

@@ -1,5 +1,7 @@
 import psycopg2
 import random
+from datetime import datetime
+
 
 # Configuración de conexión
 conn = psycopg2.connect(
@@ -23,17 +25,18 @@ print(f"✓ Se encontraron {len(cursos)} cursos disponibles")
 
 print(cursos)
 # iterar sobre cursos y generar registros
-while cursos:
-    curso_id = cursos.pop(0)[0]
+for curso in cursos:
+    #curso_id = cursos.pop(0)[0]
+    curso_id = curso[0]
     print(f"\nGenerando registros para curso ID: {curso_id} ")
 
-    for i in range(1, 10):
+    for i in range(1, 11):
         cuota = 100 if i < 3 else 120  # Para los primeros 2 registros, cuota fija de 100
 
         cursor.execute("""
-            INSERT INTO costo (id, cur_id, nro_cuota, cuota, obs, creado, act, usu_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (curso_id, i, cuota, 's/o', now(), now(), 1))
+            INSERT INTO costo (cur_id, nro_cuota, cuota, obs, creado, act, usu_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (curso_id, i, cuota, 's/o', datetime.now(), datetime.now(), 1))
         
         print(f"Insertado registro {curso_id }: {i} - ${cuota}")
 

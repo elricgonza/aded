@@ -1,0 +1,6 @@
+...Poblar la tabla pago con los siguientes datos:
+
+por cada registro en la tabla INSCRITO crear en la tabla PAGO 
+la cantidad de registros en COSTO para ese curso
+
+un registro en la tabla PAGO con los siguientes datos:

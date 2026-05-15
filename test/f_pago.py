@@ -14,74 +14,78 @@ DB_CONFIG = {
 # ── Parámetros del negocio ─────────────────────────────────────────────────────
 MAX_ALUMNOS_POR_CURSO = 40   # límite de alumnos por curso
 FECHA_BASE            = date(2026, 1, 15)   # fecha mínima de inscripción
-FECHA_TOP             = date(2026, 1, 30)  # fecha máxima de inscripción
+FECHA_TOP             = date(2026, 12, 30)  # fecha máxima de inscripción
 
 def fecha_aleatoria(ini: date, fin: date) -> date:
     delta = (fin - ini).days
     return ini + timedelta(days=random.randint(0, delta))
 
-def poblar_inscripciones():
+def get_cuotas_por_curso(cur_id):
+    cnx = psycopg2.connect(**DB_CONFIG)
+    cur = cnx.cursor()
+    try:
+        cur.execute("select nro_cuota, cuota from costo where cur_id = {cur_id}")
+        cuotas = cur.fetchall()
+    except psycopg2.Error as e:
+        print(f"Error al obtener cuotas para curso {cur_id}: {e}")
+        cuotas = []
+    finally:
+        cur.close()
+        cnx.close()
+    return cuotas
+
+
+def poblar_pagos():
     conn = psycopg2.connect(**DB_CONFIG)
     cur  = conn.cursor()
 
     try:
         # --0 init --
-        cur.execute("DELETE FROM inscrito;")  # limpiar tabla antes de poblar
-        cur.execute("ALTER SEQUENCE inscrito_id_seq RESTART WITH 1;")  # reiniciar secuencia de IDs
-        #cur.execute("TRUNCATE TABLE inscrito;") 
+        cur.execute("DELETE FROM pago;")  # limpiar tabla antes de poblar
+        cur.execute("ALTER SEQUENCE pago_id_seq RESTART WITH 1;")  # reiniciar secuencia de IDs
+        #cur.execute("TRUNCATE TABLE pago;") 
 
         # ── 1. Leer IDs disponibles ────────────────────────────────────────────
-        cur.execute("SELECT id FROM curso ORDER BY id;")
-        cursos = [r[0] for r in cur.fetchall()]          # 42 cursos
+        cur.execute("SELECT a.id, a.cur_id FROM inscrito a, curso b where a.cur_id=b.id and b.gestion=2026 ORDER BY a.id;")
+        inscritos = [(r[0], r[1]) for r in cur.fetchall()]          # 
+        print(inscritos[:5])  # mostrar primeros 5 para ver formato
+        print(inscritos[0][0])
+        print(inscritos[0][1])
+        print(inscritos[2][0])
+        print(inscritos[2][1])
 
-        cur.execute("SELECT id FROM alumno ORDER BY id;")
-        alumnos = [r[0] for r in cur.fetchall()]          # 2000 alumnos
-
-        cur.execute("SELECT id FROM costo ORDER BY id;")
-        costos = [r[0] for r in cur.fetchall()]           # 9 costos
+        '''
 
         # ── 2. Barajar alumnos para asignación aleatoria ───────────────────────
         random.shuffle(alumnos)
 
-        # ── 3. Construir inscripciones respetando restricciones ────────────────
-        #   · Máximo 40 alumnos por curso
-        #   · Un alumno en un solo curso  (garantizado por el shuffle + iteración)
-        inscripciones = []
-        alumno_iter   = iter(alumnos)
-        ins_id        = 1
-        descuentos    = [10, 30, 50, 100]  # posibles descuentos
-        motivo_descuentos = {10:"Descuento", 30:"Descuento Especial", 50:"Beca", 100:"3er.Hermanito"}
-        reserva       = False
-        inscrito      = True
-        abandono       = False
-        obs           = ""
+        # ── 3. Construir pagos 
+        #   · por curso el nro de registros en costo
+        pagos = []
+        pagado = False
+        metodo_pago = ""
+        fecha_pago =  Null
+        referencia_pago = Null
+        obs = ""
         creado        = date.today()
         act           = date.today()
-        usu_id        = 1  # usuario ficticio   
+        usu_id        = 1  # usuario ficticio
 
-        for cur_id in cursos:
-            for _ in range(MAX_ALUMNOS_POR_CURSO):
-                try:
-                    alu_id = next(alumno_iter)
-                except StopIteration:
-                    break   # sin más alumnos disponibles
+        pag_id        = 1  # usuario ficticio   
 
-                if random.random() < 0.25:  # 10% de probabilidad 
-                    descuento = random.choice(descuentos)
-                    motivo_descuento = motivo_descuentos[descuento]
-                else:
-                    descuento = 0
-                    motivo_descuento = ""
+        for inscrito in inscritos:
+            ins_id, cur_id = inscrito
+            cuotas = get_cuotas_por_curso(cur_id)
+            for cuota in cuotas:
+                nro_cuota, cuota = cuota
 
-                fecha_ins = fecha_aleatoria(FECHA_BASE, FECHA_TOP)
-
-                inscripciones.append((ins_id, alu_id, cur_id, reserva, inscrito, descuento, \
-                                      motivo_descuento, abandono, obs, creado, act, usu_id))
-                ins_id += 1
+            pagos.append((ins_id, alu_id, cur_id, reserva, pago, descuento, \
+                                  motivo_descuento, abandono, obs, creado, act, usu_id))
+            pag_id += 1
 
         # ── 4. Insertar en lotes ───────────────────────────────────────────────
         insert_sql = """
-            INSERT INTO inscrito (id, alu_id, cur_id, reserva, inscrito, descuento, \
+            INSERT INTO pago (id, alu_id, cur_id, reserva, pago, descuento, \
                     motivo_descuento, abandono, obs, creado, act, usu_id)
             VALUES (%s, %s, %s, %s,  %s, %s, %s, %s,  %s, %s, %s, %s)
             ON CONFLICT DO NOTHING;
@@ -90,15 +94,15 @@ def poblar_inscripciones():
         conn.commit()
 
         # ── 5. Reporte ─────────────────────────────────────────────────────────
-        cur.execute("SELECT COUNT(*) FROM inscrito;")
+        cur.execute("SELECT COUNT(*) FROM pago;")
         total = cur.fetchone()[0]
 
         print(f"✔  Inscripciones insertadas : {len(inscripciones)}")
-        print(f"✔  Total en tabla inscrito       : {total}")
+        print(f"✔  Total en tabla pago       : {total}")
         print(f"   Cursos utilizados         : {len(cursos)}")
         print(f"   Alumnos asignados         : {len(inscripciones)}")
         print(f"   Alumnos sin inscribir     : {len(alumnos) - len(inscripciones)}")
-
+        '''
     except psycopg2.Error as e:
         conn.rollback()
         print(f"✘  Error PostgreSQL: {e}")
@@ -108,4 +112,4 @@ def poblar_inscripciones():
         conn.close()
 
 if __name__ == "__main__":
-    poblar_inscripciones()
+    poblar_pagos()

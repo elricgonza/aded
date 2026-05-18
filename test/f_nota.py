@@ -1,3 +1,5 @@
+# 
+
 import psycopg2
 import random
 from datetime import date, timedelta
@@ -35,15 +37,14 @@ def get_cuotas_por_curso(cur_id):
     return cuotas
 
 
-def poblar_pagos():
+def poblar_notas():
     conn = psycopg2.connect(**DB_CONFIG)
     cur  = conn.cursor()
 
     try:
         # --0 init --
-        cur.execute("DELETE FROM pago;")  # limpiar tabla antes de poblar
-        cur.execute("ALTER SEQUENCE pago_id_seq RESTART WITH 1;")  # reiniciar secuencia de IDs
-        #cur.execute("TRUNCATE TABLE pago;") 
+        cur.execute("DELETE FROM nota;")  # limpiar tabla antes de poblar
+        cur.execute("ALTER SEQUENCE nota_id_seq RESTART WITH 1;")  # reiniciar secuencia de IDs
 
         # ── 1. Leer IDs disponibles ────────────────────────────────────────────
         cur.execute("SELECT a.id, a.cur_id FROM inscrito a, curso b where a.cur_id=b.id and b.gestion=2026 ORDER BY a.id;")

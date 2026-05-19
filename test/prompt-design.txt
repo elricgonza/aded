@@ -1,0 +1,4 @@
+design
+
+mejorar la presentación en los templates especialmente en la captura de datos de forma que se encuentren alineados y simétricos, asignar íconos para una mejor comprensión de las opciones (ejemplo: adicionar, editar, grabar, borrar, etc). 
+Mejorar la visualización en el index.html de todas las opciones (gestiones, grados, materias, profesores, cursos, estudiantes, alumnos, inscripciones, calificaciones, pagos, usuarios) adicionando opciones de filtro y/o búsqueda rápida.

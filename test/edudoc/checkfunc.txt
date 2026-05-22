@@ -1,0 +1,30 @@
+-gestiones ok 
+-grados - filtro err (resto ok)
+-materias - filtro err (resto ok),  
+ humm aprox crear 14 cursos x 10 materias aprox 140 cursos 
+ (mejor crear una relación grado_materia? se evita duplicar descripción de materia)
+
+-profesores - filtro err (resto ok)
+-cursos - filtro err (resto ok) (nombre predefinir?)
+-alumnos - ok
+-inscripciones - filtro err (modificar opc Pagos)
+-calificaciones - 
+	-si usr profesor: filtro por cursos que dicta
+	-si usr admin/transcriptor - previo filtrado por cursos que dicta el profesor, 
+	luego filtro por alumnos inscriptos en esos cursos
+-pagos- mejorar la búsqueda de alumno
+	-restricción pago secuencial (no se puede pagar el siguiente sin haber pagado el anterior)
+
+
+-----------------------------------
+-add modu de asignación profesor a curso (solo admin)
+	-crear relación profesor_curso
+	-crear vista para mostrar cursos dictados por cada profesor
+	-crear vista para mostrar profesores que dictan cada curso
+	-crear formulario para asignar profesor a curso (seleccionar curso, luego seleccionar profesor)
+	-crear formulario para eliminar asignación profesor a curso (seleccionar curso, luego seleccionar profesor)
+	-crear filtro en calificaciones para mostrar solo cursos dictados por el profesor logueado
+	-crear filtro en calificaciones para mostrar solo alumnos inscriptos en los cursos dictados
+
+--pr
+Adjunto la aplicación en archivo compriido, se solicita corregir la opción de filtrado en: grados, materias, profesores, inscripciones, adicionar también la paginación en la visualización pudiendo utilizar librerias más convenientes, retornar las correcciones de los archivos necesarios modificados en un archivo comprimido.

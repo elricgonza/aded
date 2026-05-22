@@ -1,0 +1,39 @@
+y cual la solución de forma general y equivalente a **kwargs , ya que macros.html es invocado también  por otros templates
+
+3:17 PM
+Buena pregunta. La solución general en Jinja2 es usar un diccionario como parámetro único que actúe como equivalente a **kwargs.
+
+La estrategia: pasar un dict en lugar de **kwargs
+macros.html — cambio en la firma y en los url_for
+jinja2
+{% macro pagination_widget(pagination, endpoint, filters={}) %}
+...
+    href="{{ url_for(endpoint, page=1, **filters) }}"
+    href="{{ url_for(endpoint, page=pagination.prev_num, **filters) }}"
+    href="{{ url_for(endpoint, page=p, **filters) }}"
+    href="{{ url_for(endpoint, page=pagination.next_num, **filters) }}"
+    href="{{ url_for(endpoint, page=pagination.pages, **filters) }}"
+...
+{% endmacro %}
+Jinja2 sí soporta **dict dentro de llamadas a funciones como url_for(...). Lo que no soporta es **kwargs en la firma del macro. Esta distinción es clave.
+
+Cómo llamar desde cada template
+Cada template construye su propio dict de filtros activos y lo pasa como argumento:
+
+grado/index.html
+jinja2
+{{ pagination_widget(pagination, 'grado.index', filters={'q': q, 'ges_id': ges_id or '', 'nivel': nivel}) }}
+Otro template, por ejemplo estudiante/index.html
+jinja2
+{{ pagination_widget(pagination, 'estudiante.index', filters={'q': q, 'estado': estado}) }}
+Otro template sin filtros
+jinja2
+{{ pagination_widget(pagination, 'materia.index') }}
+Al omitir filters, toma el valor por defecto {} y url_for simplemente no añade parámetros extra.
+
+Por qué esto es equivalente a **kwargs
+Python	Jinja2 (equivalente)
+def fn(**kwargs) en la firma	{% macro fn(filters={}) %}
+url_for(ep, **kwargs) en el cuerpo	url_for(ep, **filters) ✅ funciona igual
+fn(q=q, estado=estado) al llamar	fn(filters={'q': q, 'estado': estado})
+El comportamiento es idéntico: los filtros se propagan dinámicamente a url_for sin que el macro necesite saber de antemano qué parámetros existen.

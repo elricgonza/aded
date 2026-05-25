@@ -1,13 +1,13 @@
 -gestiones ok 
--grados - filtro err (resto ok)
--materias - filtro err (resto ok),  
+-grados - filtro err correg (resto ok)
+-materias - filtro err correg (resto ok),  
  humm aprox crear 14 cursos x 10 materias aprox 140 cursos 
  (mejor crear una relación grado_materia? se evita duplicar descripción de materia)
 
--profesores - filtro err (resto ok)
--cursos - filtro err (resto ok) (nombre predefinir?)
--alumnos - ok
--inscripciones - filtro err (modificar opc Pagos)
+-profesores - filtro err correg (resto ok)
+-cursos - filtro err, s/paginación (resto ok) (nombre predefinir?)
+-alumnos - visualiza sólo 10 (filtro ok)
+-inscripciones - filtro err correg (modificar opc Pagos)
 -calificaciones - 
 	-si usr profesor: filtro por cursos que dicta
 	-si usr admin/transcriptor - previo filtrado por cursos que dicta el profesor, 

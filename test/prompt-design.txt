@@ -1,4 +1,10 @@
 design
 
-mejorar la presentación en los templates especialmente en la captura de datos de forma que se encuentren alineados y simétricos, asignar íconos para una mejor comprensión de las opciones (ejemplo: adicionar, editar, grabar, borrar, etc). 
-Mejorar la visualización en el index.html de todas las opciones (gestiones, grados, materias, profesores, cursos, estudiantes, alumnos, inscripciones, calificaciones, pagos, usuarios) adicionando opciones de filtro y/o búsqueda rápida.
+en la aplicación (archivo adjunto) mejorar el modulos de Calificaciones (templates/nota/index.html, templates/nota/form.html) y los que sean necesarios (se podría adicionar filtros de profesor y materia), de forma que el usuario con rol de "profesor" sólo pueda actualizar los cursos y materias asignadas, en cambio el usuario con rol de "transcriptor" ó "admin" puedan actualizar sin restricciones las calificaciones o notas
+
+en el registro de pagos restringir de forma que los pagos se realicen de forma secuencial por el número de cuota (archivo templates/pago/form.html ó templates/pago/index.html)
+
+
+en la aplicación (archivo adjunto) modificar la actualización de notas con las siguientes consideraciones:
+-el usuario que ingresó (logueado) a la app, se vincula con la tabla profesor a través del campo 'usr_id_login' es decir que el id de usuario se encuentra en el campo "usr_id_login" de la tabla profesor, para determinar a que profesor corresponde el usuario, para luego obtener el curso(s) y materia(s) asignadas al profesor.
+-

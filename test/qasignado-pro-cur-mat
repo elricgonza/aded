@@ -1,0 +1,32 @@
+--get: asig - prof - curso - mat -- p notas
+
+select * from usuario;  --j p  3
+
+select * from profesor;
+
+--asignado
+select * 
+	from asignado where pro_id = 3  -- c 10, m 13
+
+select * from profesor
+select * from curso where id= 10 -- p3 b
+select * from materia where id= 13 -- ed fis
+
+--
+select a.id as asi_id, 
+		b.id as pro_id, b.nombre, b.paterno, b.materno, b.usr_id_login,
+		c.id as cur_id, c.curso, c.paralelo,
+		d.id as mat_id, d.materia, d.gra_id
+	from asignado a, 
+		profesor b,
+		curso c,
+		materia d
+	where a.pro_id = b.id 
+		and a.cur_id = c.id
+		and a.mat_id = d.id
+		and b.paterno ilike '%pinto%'
+		
+		--and b.nombre like '%juancito%'
+
+update profesor set usr_id_login= 3 where id= 31;  --	juancito.pinto
+

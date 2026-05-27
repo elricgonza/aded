@@ -377,7 +377,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="mat_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="pro_id" not-null="true">
+	<column name="pro_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="creado" not-null="true">
@@ -786,7 +786,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#9df0ae"
 	 src-table="public.curso"
 	 dst-table="public.grado" reference-fk="gra_fk"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-7.10502" y="31.6393"/>
+	</label>
+</relationship>
 
 <relationship name="rel_cal_ins" type="relfk" layer="0"
 	 custom-color="#a9919e"
@@ -810,7 +814,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#316d1e"
 	 src-table="public.asignado"
 	 dst-table="public.materia" reference-fk="mat_fk"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="21.6294" y="28.8042"/>
+	</label>
+</relationship>
 
 <relationship name="rel_pag_ins" type="relfk" layer="0"
 	 custom-color="#c27e8c"

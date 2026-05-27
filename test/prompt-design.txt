@@ -11,3 +11,32 @@ en la aplicación (archivo adjunto) modificar la actualización de notas y los a
 -el usuario que ingresó (logueado) a la app, se vincula con la tabla profesor a través del campo 'usr_id_login' es decir que el id de usuario se encuentra en el campo "usr_id_login" de la tabla profesor, para determinar a que profesor corresponde el usuario y luego obtener el curso(s) y materia(s) asignadas al profesor.
 -con la consideración descrita la opción EDITAR debe permitir si es que el profesor se encuentra asignado al curso y materia asignada.
 Retornar sólo los archivos a corregir.
+
+----260527b
+En la aplicación (archivo adjunto) adicionar una opción en la aplicación (opción: Asigna Usuario como Profesor) que:
+-Permita asociar la tabla USUARIO con la tabla PROFESOR (campo: usr_login_id), esta asociación implica que debe grabar el id de USUARIO en el campo: usr_login_id de la tabla PROFESOR
+-que este disponible sólo para el usuario 'administrador' 
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+----260527c
+En la aplicación (archivo adjunto) adicionar las siguientes opciones en la aplicación que gestionan la tabla ASIGNADO, con las siguientes consideraciones:
+-Primera parte y opción separada para  el poblado de la tabla ASIGNADO, generando registros de acuerdo a su estructura definida a partir de la tabla CURSO  (cur_id) con las materias (mat_id) que le corresponde según el grado al que pertenece el curso, identificando en la tabla materia por el campo: gra_id.
+-Segunda parte y opción separada para complementar la tabla ASIGNADO con la asignación de profesor (pro_id) con el campo:id  de la tabla PROFESOR.
+-que este disponible sólo para el usuario 'administrador' 
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+
+
+Seguimos donde lo dejamos ayer. 🔥
+
+La sala del directo ya está disponible.
+
+Entrad, poneos cómodos y saludad en el chat, porque empezamos la segunda jornada del Curso de IA: de 0 a Agentes.
+
+Hoy toca crear. Y vais a ver cosas muy potentes.
+
+https://youtube.com/live/emYG-03K0lk?feature=share
+
+Nos vemos en nada.

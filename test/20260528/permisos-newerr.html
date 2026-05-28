@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import breadcrumb %}
+{% block page_title %}Permisos del Sistema{% endblock %}
+
+{% block content %}
+{{ breadcrumb([('Inicio', '/'), ('Administración', '#'), ('Permisos', '#')]) }}
+
+{# ── Encabezado ── #}
+<div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+  <p class="text-sm text-slate-500">
+    {{ permisos|length }} permiso(s) registrado(s) — estos son los bloques que se asignan a los roles.
+  </p>
+  <a href="{{ url_for('admin.roles') }}" class="btn-secondary">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+    </svg>
+    Gestionar Roles
+  </a>
+</div>
+
+{# ── Permisos agrupados por módulo ── #}
+{% if permisos %}
+  {# Construir grupos manualmente con Jinja #}
+  {% set modules = [] %}
+  {% for p in permisos %}
+    {% set mod = p.permiso.split('_')[0] %}
+    {% if mod not in modules %}{% set _ = modules.append(mod) %}{% endif %}
+  {% endfor %}
+
+  <div class="grid gap-5">
+    {% for mod in modules %}
+      {% set group = permisos | selectattr('permiso', 'match', '^' ~ mod ~ '_.*') | list %}
+      <div class="card p-0 overflow-hidden">
+        {# Cabecera del módulo #}
+        <div class="flex items-center gap-3 px-5 py-3.5 bg-slate-50 border-b border-slate-100">
+          <div class="w-7 h-7 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm text-slate-700 capitalize tracking-wide">{{ mod }}</h3>
+          <span class="ml-auto badge-blue">{{ group | length }}</span>
+        </div>
+
+        {# Tabla de permisos del módulo #}
+        <table class="w-full">
+          <thead class="sr-only">
+            <tr>
+              <th>Permiso</th><th>Descripción</th><th>Creado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in permisos %}
+              {% if p.permiso.startswith(mod ~ '_') %}
+              <tr class="table-row">
+                <td class="table-cell w-64">
+                  <span class="font-mono text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200">
+                    {{ p.permiso }}
+                  </span>
+                </td>
+                <td class="table-cell text-slate-500">
+                  {{ p.descripcion or '—' }}
+                </td>
+                <td class="table-cell text-xs text-slate-400 text-right whitespace-nowrap">
+                  {{ p.creado.strftime('%d/%m/%Y') if p.creado else '—' }}
+                </td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+
+{% else %}
+  <div class="card flex flex-col items-center justify-center py-16 text-slate-400">
+    <svg class="w-12 h-12 opacity-40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+    </svg>
+    <p class="text-sm">No hay permisos registrados en el sistema.</p>
+  </div>
+{% endif %}
+{% endblock %}

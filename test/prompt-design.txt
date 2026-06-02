@@ -27,6 +27,40 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----260528
+-En la aplicación (archivo adjunto) mejorar la presentación de la opción 'Usuarios y Roles' admin/permisos.html, admin/roles.html, rol_form.html, usuario_form.html, usuarios.html, para que se vea de forma más profesional y alineada.
+-que este disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+----260613
+-En la aplicación (archivo adjunto) adicionar la opción: 'Asignación de Costos' que permita la adición/edición de datos de costos con las siguientes características:
+-Para cada curso (tabla: curso) debe crear 10 registros en la tabla "costo" donde: 
+	--el campo: "id" llave de la tabla  debe ser generada automáticamente
+	--el campo: "cur_id" corresponde al curso para el cual se define el costo por cuotas durante una gestión que tendrá 10 cuotas
+	--el campo: "nro_cuota" es un número secuencial del 1 al 10 (debe ser generado automáticamente)
+	--el campo: "cuota" es introducido por el usuario, campo numeral
+	--el campo: "obs" es introducido por el usuario
+	--el campo: "creado" fecha de creación llenado automáticamente por el sistema
+	--el campo: "creado" fecha de actualización llenado automáticamente por el sistema
+	--el campo: "usu_id" id del usuario que introduce los datos
+-que este disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+----260613b
+-En la aplicación (archivo adjunto) adicionar la opción: 'Genera Plan de Pagos' que permita la creación/actualización automática de la tabla "pago".
+-Para cada alumno inscrito (en la tabla: 'inscrito') y que  el campo reserva ó inscrito esté en True  generar su plan de pagos en la tabla: 'pago' consideranto si tiene descuento (campo: descuento) 
+curso (tabla: curso) debe crear 10 registros en la tabla "costo" donde: 
+	--el campo: "id" llave de la tabla  debe ser generada automáticamente
+	--el campo: "cur_id" corresponde al curso para el cual se define el costo por cuotas durante una gestión que tendrá 10 cuotas
+	--el campo: "nro_cuota" es un número secuencial del 1 al 10 (debe ser generado automáticamente)
+	--el campo: "cuota" es introducido por el usuario, campo numeral
+	--el campo: "obs" es introducido por el usuario
+	--el campo: "creado" fecha de creación llenado automáticamente por el sistema
+	--el campo: "creado" fecha de actualización llenado automáticamente por el sistema
+	--el campo: "usu_id" id del usuario que introduce los datos
+-que este disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
 
 
 Seguimos donde lo dejamos ayer. 🔥

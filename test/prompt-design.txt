@@ -46,17 +46,21 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 -que este disponible sólo para el usuario 'administrador'.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
-----260613b
--En la aplicación (archivo adjunto) adicionar la opción: 'Genera Plan de Pagos' que permita la creación/actualización automática de la tabla "pago".
--Para cada alumno inscrito (en la tabla: 'inscrito') y que  el campo reserva ó inscrito esté en True  generar su plan de pagos en la tabla: 'pago' consideranto si tiene descuento (campo: descuento) 
-curso (tabla: curso) debe crear 10 registros en la tabla "costo" donde: 
+----260603
+-En la aplicación (archivo adjunto) adicionar la opción: 'Genera Plan de Pagos' que permita la generación automática de registros en la tabla "pago", con las siguientes consideraciones a partir de las tablas: 'inscrito' y 'costo'.
+-Para cada alumno inscrito (en la tabla: 'inscrito') y además que  el campo 'reserva' o el campo 'inscrito' esté en True  generar su plan de pagos en la tabla: 'pago' creando la misma cantidad de registros que tiene el curso del alumno en la tabla 'costo', donde, los campos de la tabla 'pago' a generar son:
 	--el campo: "id" llave de la tabla  debe ser generada automáticamente
-	--el campo: "cur_id" corresponde al curso para el cual se define el costo por cuotas durante una gestión que tendrá 10 cuotas
-	--el campo: "nro_cuota" es un número secuencial del 1 al 10 (debe ser generado automáticamente)
-	--el campo: "cuota" es introducido por el usuario, campo numeral
-	--el campo: "obs" es introducido por el usuario
+	--el campo: "ins_id" corresponde a la llave de la tabla 'inscrito' para cada alumno inscrito
+	--el campo: "nro_cuota" es el mismo número secuencial del 1 al 10 que figura en la tabla 'costo' para el curso en el que fue inscrito el alumno campo 'cur_id' de la tabla 'curso'
+	--el campo: "cuota" es el mismo monto que figura en la tabla 'costo' para el curso en el que fue inscrito el alumno, EXCEPTO en los casos en que el alumno inscrito (tabla 'inscrito' campo descuento mayor a 0) tiene descuento, se asignará el valor del campo cuota restando el el valor del porcentaje campo 'descuento', es decir será igual a la siguiente expresion:  
+									cuota = cuota - (descuento*100)/cuota
+	--el campo: "pagado" asignado en false inicialmente
+	--el campo: "metodo_pago" asignar vacio inicialmente
+	--el campo: "fecha_pago" asignar sin fecha inicialmente
+	--el campo: "referencia_pago" asignar vacio inicialmente
+	--el campo: "obs" asignar vacio inicialmente
 	--el campo: "creado" fecha de creación llenado automáticamente por el sistema
-	--el campo: "creado" fecha de actualización llenado automáticamente por el sistema
+	--el campo: "act" fecha de actualización llenado automáticamente por el sistema
 	--el campo: "usu_id" id del usuario que introduce los datos
 -que este disponible sólo para el usuario 'administrador'.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.

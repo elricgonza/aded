@@ -66,6 +66,15 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----260603b
+-En la aplicación (archivo adjunto) adicionar la opción: 'Anulación Plan de Pagos' que permita la eliminación automática de registros en la tabla "pago" con las siguientes opciones:
+-que permita anular el plan de pagos (eliminación de registros) correspondiente a un alumno específico, como entrada que solicite el alumno del cual se cancelará.
+-que permita anular el plan de pagos de todos los alumnos.
+-en ambas opciones descritas precedentemente la condición para que se efectúe la cancelación (eliminación de registros) del plan de pagos es que no se haya efectuado el pago, es decir el campo 'pagado' este en False
+-que este disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
 
 Seguimos donde lo dejamos ayer. 🔥
 

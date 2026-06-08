@@ -98,13 +98,21 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 ----260607
 -En la aplicación previamente adjuntada, en la opción de 'Inscripciones' mejorar la selección del alumno a inscribir, de forma que la selección sea más rápida.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
-
+...
 
 
 
 ---oootras correcciones
 -el acceso a profesores por el usuario profesor no sea visible
 -en el módulo inscripciones no debe mostrar la opción pagos para el usuario profesor
+-Pagos - formato fecha -> dd/mm/yyyy
+-formato datetime en todas las tablas
+#evitar la generación de 'plan de pagos' para descuento= 100
+#complementación de pagos en (opción pagos? por separado?)
+
+
+---bd
+-add datos materias
 -
 
 

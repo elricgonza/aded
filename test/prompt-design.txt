@@ -75,6 +75,38 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----260604
+-En la aplicación (archivo adjunto) adicionar la opción: 'Generar Calificaciones' que permita la generación automática de registros en la tabla "nota", a partir de las tablas: 'inscrito', 'curso', asignado y 'materia'.
+-Para cada alumno inscrito (en la tabla: 'inscrito') en un curso específico obtener a través de la tabla 'asignado' el dato de la 'materia' y el 'profesor' que se encuentra asignado en esa materia y curso, los registros con los campos a generar son:
+	--"id": llave de la tabla  debe ser generada automáticamente
+	--"ins_id": corresponde a la llave de la tabla 'inscrito' para cada alumno inscrito, que permite obtener el dato de alumno (inscrito.alu_id) y el dato de curso (inscrito.cur_id) y el profesor y la materia asignada respectivamente a través de las tablas 'asignado', 'profesor' y 'materia' a través de sus relaciones.
+	--"mat_id": corresponde al id de la materia asignada (tabla materia)
+	--"nota1", "nota2", "nota3", "nota_final":  seran asignados con 0
+	--"nota_aprob": almacenará el valor 51
+	--"aprobado" inicialmente almaceńará cero
+	--el campo: "obs" asignar vacio inicialmente
+	--el campo: "creado" fecha de creación llenado automáticamente por el sistema
+	--el campo: "act" fecha de actualización llenado automáticamente por el sistema
+	--el campo: "usu_id" id del usuario que introduce los datos
+-si el registro ya fué generado previamente (ins_id, mat_id  ya existe) la adicion del registro debe ser omitido
+-que este disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+----260606
+-En la aplicación previamente adjuntada, y en el rol de experto en backend y frontend, cual la forma más aconsejable para crear un log de transacciones, para una posterior revisión de que usuarios realizaron que acciones? 
+
+----260607
+-En la aplicación previamente adjuntada, en la opción de 'Inscripciones' mejorar la selección del alumno a inscribir, de forma que la selección sea más rápida.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+
+
+---oootras correcciones
+-el acceso a profesores por el usuario profesor no sea visible
+-en el módulo inscripciones no debe mostrar la opción pagos para el usuario profesor
+-
+
 
 Seguimos donde lo dejamos ayer. 🔥
 
@@ -87,3 +119,66 @@ Hoy toca crear. Y vais a ver cosas muy potentes.
 https://youtube.com/live/emYG-03K0lk?feature=share
 
 Nos vemos en nada.
+
+https://www.youtube.com/watch?v=-b46hEIbnS8&list=RDEkZvVWc7gFk&index=10
+	grande es jehova, ... fernel monrroy
+
+https://www.youtube.com/watch?v=6C9SK_1-Sdw&list=RDEkZvVWc7gFk&index=11
+	MIX JUSTICIA La promesa + Jehova Gibbor + Desierto en paraiso
+
+******
+https://www.youtube.com/watch?v=c6omLd9n3bY
+ '12:30 EL ES VIDA - en espiritu y verdad
+https://www.youtube.com/watch?v=DFAXPPYIhww&list=RDDFAXPPYIhww&start_radio=1
+	(video oficial)
+
+Se oye una voz que rompe tinieblas
+brotando en la tierra
+se escucha el sonar de nueva esperanza
+un eco del cielo
+se oye una voz que rompe tinieblas
+brotando en la tierra
+se escucha el sonar de nueva esperanza
+un eco del cielo
+
+es la voz de una generación
+que ha probado que NO HAY como EL
+
+EL es vida, el es libertad (NO HAY como EL)
+gozo y paz en la tempestad
+el venció todos cantaran
+
+he visto a Jesús, 
+cantare, no me callare, 
+he probado Él es fiel,
+danzare
+
+
+----
+-no puedo callar-
+sobre la roca estoy, mis ojos puestos SÓLO EN JESUS
+Ante la tempestad mi ancla firme esta en TI
+
+----------
+mi pecado era fuerte
+PERO Cristo es aún más fuerte
+mi verguenza era grande
+PERO Cristo es aún más grande ...
+----
+
+
+<
+
+Hooooola Enzo, en ritmo rockero un antiguo temita que de seguro la conocias...
+...
+y desvanecido en mi dolor 
+en algún momento EL me encontró 
+y he despertado en el redil no sé como 
+entre algodones y cuidados del pastor
+y antes de poder hablar de mi pasado
+me atraviesan sus palabras y su voz
+que se alegra tanto de que haya vuelto a casa 
+...
+
+
+gracias pa...

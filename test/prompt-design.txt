@@ -100,6 +100,9 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 ...
 
+----260608
+-En la aplicación previamente adjuntada, modificar la operación de la aplicación en todas las tablas que contengan los campos: creado y act (para que almacenen también la hora), además del campo: fecha_pago de la tabla pago. 
+
 
 
 ---oootras correcciones

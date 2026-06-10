@@ -104,6 +104,79 @@ En la aplicación (archivo adjunto) adicionar las siguientes opciones en la apli
 -En la aplicación previamente adjuntada, modificar la operación de la aplicación en todas las tablas que contengan los campos: creado y act (para que almacenen también la hora), además del campo: fecha_pago de la tabla pago. 
 
 
+----260609
+-En la aplicación (archivo adjunto) actualizar la opción 'Genera Plan de Pagos' por 'Actualiza Plan de Pagos' con las siguientes consideraciones:
+	--Si existe un registro en 'pago' cuyo campo 'pagado' es igual a True NO se ACTUALIZA
+	--Si en 'pago' el alumn no tiene la totalidad de registros de cuotas a pagar (definido en costo por curso y el número de cuotas asignado) se debe complementar y adicionar los registros y/o cuotas faltantes.
+-que este disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+----260609b
+-En la aplicación previamente adjuntada ajustar la opción 'Actualiza Plan de Pagos' con las siguientes consideraciones:
+	--En el caso de que un alumno tiene un registro en 'pago' cuyo campo 'pagado' es igual a True NO se ACTUALIZA el registro, 
+	--en el caso del mismo alumno que no tiene la totalidad de registros con nro_cuotas a pagar (definido en la tabla 'costo' por curso y el número de cuotas asignado), debe complementar los registros faltantes hasta completar la totalidad de cuotas predefinido según el curso en el que se encuentra el alumno
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+Ajustar la siguiente regla: 
+-Si el inscrito tiene AL MENOS UN pago con pagado=True -> se omite por completo
+por la regla:
+-Si el inscrito tiene ALGUN o ALGUNOS pagos realizados es decir el campo pagado=True el registro NO ES TOCADO, sin embargo si al alumno inscrito le falta completar la totalidad de registros que debe tener (definido en la tabla 'costo' por curso y el número de cuotas asignado), se debe adicionar los registros faltantes correspondientes para completar la totalidad de cuotas.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+
+----260610 ok
+-En la aplicación previamente adjuntada ajustar la opción 'Pagos' con las siguientes consideraciones:
+	--los pagos deben ser realizados de forma secuencial correlativamente en orden ascendente según el orden del campo nro_cuota de la tabla 'pago', no debe permitir el pago de una cuota si para 'nro_cuota' previamente no se ha cumplido los pagos precedentes según nro_cuota
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+----260610b control descuento=100 --doneI
+En el mismo archivo adjunto al momento de realizar una inscripción se adiciona un registro en pago (plan de pago) para el alumno inscrito, NO se debe realizar esta inscripción si el alumno tiene un descuento de 100 (tabla: inscrito campo: descuento=100)
+
+----260610c para I  (all_routes 922)
+-En la aplicación previamente adjuntada ajustar la opción 'Pagos' con las siguientes consideraciones:
+	--Si el alumno sólo tiene un descuento del 100% (es decir en la tabla: inscrito el campo: descuento =100)  NO SE DEBE generar plan de pagos en estos casos
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+----260610d ok done
+-En la aplicación previamente adjuntada, Adicionar ĺa opción 'Fechas Transcripción Notas' que definira en un archivo de texto (u otro tipo de archivo que sea más adecuado) que almacené rangos de fecha para la habilitación ó restricción de transcripción de datos en la tabla 'nota' (calificaciones) debe almacenar los siguientes parámetros almacenando fechas para la transcripción y si se restringe o habilita la transcripción.
+	-habilitar_nota1 (valor a almacenar True o False)
+	-transcripcion_nota1_inicio (almacenar una fecha)
+	-transcripcion_nota1_final	(almacenar una fecha)
+	-habilitar_nota2 (valor a almacenar True o False)
+	-transcripcion_nota2_inicio (almacenar una fecha)
+	-transcripcion_nota2_final  (almacenar una fecha)
+	-habilitar_nota3 (valor a almacenar True o False)
+	-transcripcion_nota3_inicio (almacenar una fecha)
+	-transcripcion_nota3_final	(almacenar una fecha)
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+----260610e
+-En la aplicación previamente adjuntada, ajustar ĺa opción 'Calificaciones' que administra el archivo 'pago' en función del 
+archivo almacenado en: app/config_notas.json que almacena las siguientes variables
+{
+  "habilitar_nota1": true,
+  "transcripcion_nota1_inicio": "2026-06-01",
+  "transcripcion_nota1_final": "2026-06-10",
+  "habilitar_nota2": true,
+  "transcripcion_nota2_inicio": "2026-07-01",
+  "transcripcion_nota2_final": "2026-07-30",
+  "habilitar_nota3": false,
+  "transcripcion_nota3_inicio": "",
+  "transcripcion_nota3_final": ""
+}
+-La opción 'Calificaciones' para el registro de notas: nota1, nota2, nota3, debe considerar:
+	-Solo habilitar la transcripción nota1 si habilitar_nota1 = True y la fecha se encuentra en el rango definido en las variables: transcripcion_nota1_inicio y transcripcion_nota1_final.
+	-Solo habilitar la transcripción nota2 si habilitar_nota2 = True y la fecha se encuentra en el rango definido en las variables: transcripcion_nota2_inicio y transcripcion_nota2_final.	
+	-Solo habilitar la transcripción nota2 si habilitar_nota3 = True y la fecha se encuentra en el rango definido en las variables: transcripcion_nota3_inicio y transcripcion_nota3_final.	
+-las restricciones son aplicadas al usuario 'profesor' no así al usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
 
 ---oootras correcciones
 -el acceso a profesores por el usuario profesor no sea visible
@@ -193,3 +266,7 @@ que se alegra tanto de que haya vuelto a casa
 
 
 gracias pa...
+
+
+anoche  le llevamos a Joel a pediatra de la caja y nos recetó un jarabe para eliminar sus "bichos" (metronidazol), que prefiere no darle tratamiento con antibiótico porque no tiene temperatura y se lo ve mejor😬, así q gracias a Dios.. (que también es Dios de las panzas y de toooooooodo)  ...  tonces no+ le daremos durante 7 dias y zaz ... 😉
+

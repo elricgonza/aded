@@ -178,6 +178,22 @@ archivo almacenado en: app/config_notas.json que almacena las siguientes variabl
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----260611repo
+-En la aplicación previamente adjuntada, Adicionar una opción 'Reportes' que proporcione la selección de los siguientes reportes considerando opciones para el orden de presentación por los diferentes tipos de campo en información que presenta, asimismo sugerir y aplicar la mejor forma de presentación y formatos diferentes para su exportación (formato excel, pdf, etc,):
+	--Reporte de alumnos por Curso
+	--Reporte de alumnos por Curso, incluyendo su calificación (nota1, nota2, nota3, nota)
+	--Reporte de alumnos por Curso, con el estado de pagos realizados
+	--Reporte del estado de cuentas (pagos) de un alumno en particular
+	--Reportes de los 3 primeros alumnos con mejores promedios de todos los cursos
+	--Reportes visuales de rendimiento (calificaciones) por curso y de todos los cursos
+	--Reportes promedios por materia y por curso
+	--Reportes promedios por profesor y por curso
+	--Sugerir otros reportes importantes
+
+Pre
+
+
+
 ---oootras correcciones
 -el acceso a profesores por el usuario profesor no sea visible
 -en el módulo inscripciones no debe mostrar la opción pagos para el usuario profesor
@@ -190,6 +206,15 @@ archivo almacenado en: app/config_notas.json que almacena las siguientes variabl
 ---bd
 -add datos materias
 -
+
+
+
+
+
+
+
+
+
 
 
 Seguimos donde lo dejamos ayer. 🔥
@@ -263,10 +288,4 @@ y antes de poder hablar de mi pasado
 me atraviesan sus palabras y su voz
 que se alegra tanto de que haya vuelto a casa 
 ...
-
-
-gracias pa...
-
-
-anoche  le llevamos a Joel a pediatra de la caja y nos recetó un jarabe para eliminar sus "bichos" (metronidazol), que prefiere no darle tratamiento con antibiótico porque no tiene temperatura y se lo ve mejor😬, así q gracias a Dios.. (que también es Dios de las panzas y de toooooooodo)  ...  tonces no+ le daremos durante 7 dias y zaz ... 😉
 

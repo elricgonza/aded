@@ -1,0 +1,1 @@
+pip install openpyxl reportlab --break-system-packages -q

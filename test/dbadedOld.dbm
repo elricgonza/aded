@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1.1" max-obj-count="19"
+	 default-schema="public" default-owner="postgres">
+<role name="uaded"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="dbaded" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
+	<role name="uaded"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="grado" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="200" y="20"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="grado" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="nivel" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="ges_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="gra_pkey" type="pk-constr" table="public.grado">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="gra_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="materia" layer="0" collapse-mode="1" max-obj-count="7">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="380" y="20"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="materia" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="gra_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="mat_pkey" type="pk-constr" table="public.materia">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="mat_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="alumno" layer="0" collapse-mode="1" max-obj-count="19">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="0" y="240"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="paterno">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="materno">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="nacimiento">
+		<type name="date" length="0"/>
+	</column>
+	<column name="masculino" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="ci">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="direccion">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="email">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="activo" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="obs">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="usr_id_login">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="foto_ruta">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="alu_pk" type="pk-constr" table="public.alumno">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="est_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="inscrito" layer="0" collapse-mode="1" max-obj-count="14">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<comment><![CDATA[Alumno inscrito]]></comment>
+	<position x="440" y="360"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="alu_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="cur_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="reserva">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="inscrito" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="descuento" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[% descuento]]></comment>
+	</column>
+	<column name="motivo_descuento">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="abandono" not-null="true" default-value="false">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="obs">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="ins_pk" type="pk-constr" table="public.inscrito">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="ins_uq" type="uq-constr" table="public.inscrito">
+		<columns names="alu_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="ins_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="curso" layer="0" collapse-mode="1" max-obj-count="12">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="280" y="220"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="curso">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="paralelo" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="gra_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="aula">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="capacidad">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="gestion" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="cur_pk" type="pk-constr" table="public.curso">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="cur_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="nota" layer="0" collapse-mode="1" max-obj-count="15">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<comment><![CDATA[SEGuimiento académico]]></comment>
+	<position x="640" y="400"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="ins_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="mat_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nota1" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="nota2" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="nota3" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="nota_final" not-null="true">
+		<type name="numeric" length="5" precision="1"/>
+	</column>
+	<column name="nota_aprob" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="aprobado">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="obs">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="cal_pk" type="pk-constr" table="public.nota">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="cal_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="profesor" layer="0" collapse-mode="1" max-obj-count="15">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="620" y="60"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="paterno">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="materno">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="masculino" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="ci">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="formacion">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="email">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="activo" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="usr_id_login">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="pro_pk" type="pk-constr" table="public.profesor">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="pro_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="asignado" layer="0" collapse-mode="1" max-obj-count="8">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<comment><![CDATA[prof asignado enseña a un curso y  materias asignadas]]></comment>
+	<position x="500" y="180"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="cur_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="mat_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="pro_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="asi_pk" type="pk-constr" table="public.asignado">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="asi_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="pago" layer="0" collapse-mode="1" max-obj-count="14">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="120" y="440"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="ins_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nro_cuota" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="cuota" not-null="true">
+		<type name="double precision" length="0"/>
+	</column>
+	<column name="pagado">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="metodo_pago">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="fecha_pago">
+		<type name="date" length="0"/>
+	</column>
+	<column name="referencia_pago">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="obs">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+</table>
+
+<sequence name="pag_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="costo" layer="0" collapse-mode="1" max-obj-count="9">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="120" y="200"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="cur_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="nro_cuota" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="cuota" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="obs" not-null="true">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="cos_pk" type="pk-constr" table="public.costo">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="cos_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="gestion" layer="0" collapse-mode="1" max-obj-count="10">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="20" y="20"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="gestion">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="plan" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="inicio" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="fin" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activo" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="creado" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="act" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="ges_pk" type="pk-constr" table="public.gestion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="ges_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<sequence name="usr_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="usuario" layer="0" collapse-mode="1" max-obj-count="9">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="0" y="660"/>
+	<column name="id" not-null="true" sequence="public.usr_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="usuario" not-null="true">
+		<type name="character varying" length="80"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="password" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="activo">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="last_login" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="creado">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="act">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="usr_pkey" type="pk-constr" table="public.usuario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="ix_usr_usuario" table="public.usuario"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="usuario"/>
+		</idxelement>
+</index>
+
+<sequence name="rol_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="rol" layer="0" collapse-mode="1" max-obj-count="6">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="320" y="720"/>
+	<column name="id" not-null="true" sequence="public.rol_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="rol" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="descripcion">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="creado">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="act">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="rol_pkey" type="pk-constr" table="public.rol">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="rol_rol_key" type="uq-constr" table="public.rol">
+		<columns names="rol" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="per_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="uaded"/>
+</sequence>
+
+<table name="permiso" layer="0" collapse-mode="1" max-obj-count="6">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="620" y="680"/>
+	<column name="id" not-null="true" sequence="public.per_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="permiso" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="descripcion">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="creado">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="act">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="per_pkey" type="pk-constr" table="public.permiso">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="per_permiso_key" type="uq-constr" table="public.permiso">
+		<columns names="permiso" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="usuario_rol" layer="0" collapse-mode="1" max-obj-count="3">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="180" y="700"/>
+	<column name="usu_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="rol_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="usr_rol_pkey" type="pk-constr" table="public.usuario_rol">
+		<columns names="usu_id,rol_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="rol_permiso" layer="0" collapse-mode="1" max-obj-count="3">
+	<schema name="public"/>
+	<role name="uaded"/>
+	<position x="480" y="680"/>
+	<column name="rol_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="per_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="rol_per_pkey" type="pk-constr" table="public.rol_permiso">
+		<columns names="rol_id,per_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="ges_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.gestion" table="public.grado">
+	<columns names="ges_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="mat_id_gra_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.grado" table="public.materia">
+	<columns names="gra_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="alu_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.alumno" table="public.inscrito">
+	<columns names="alu_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="cur_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.curso" table="public.inscrito">
+	<columns names="cur_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="gra_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.grado" table="public.curso">
+	<columns names="gra_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="ins_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.inscrito" table="public.nota">
+	<columns names="ins_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="pro_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.profesor" table="public.asignado">
+	<columns names="pro_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="cur_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.curso" table="public.asignado">
+	<columns names="cur_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="mat_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.materia" table="public.asignado">
+	<columns names="mat_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="insc_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.inscrito" table="public.pago">
+	<columns names="ins_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="cur_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.curso" table="public.costo">
+	<columns names="cur_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="usr_rol_usr_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.usuario_rol">
+	<columns names="usu_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="usr_rol_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.rol" table="public.usuario_rol">
+	<columns names="rol_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rol_per_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.rol" table="public.rol_permiso">
+	<columns names="rol_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rol_per_per_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.permiso" table="public.rol_permiso">
+	<columns names="per_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_gra_ges" type="relfk" layer="0"
+	 custom-color="#f3a3a5"
+	 src-table="public.grado"
+	 dst-table="public.gestion" reference-fk="ges_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_mat_gra" type="relfk" layer="0"
+	 custom-color="#52d70b"
+	 src-table="public.materia"
+	 dst-table="public.grado" reference-fk="mat_id_gra_fkey"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_ins_est" type="relfk" layer="0"
+	 custom-color="#f24cb6"
+	 src-table="public.inscrito"
+	 dst-table="public.alumno" reference-fk="alu_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_ins_cur" type="relfk" layer="0"
+	 custom-color="#17e59d"
+	 src-table="public.inscrito"
+	 dst-table="public.curso" reference-fk="cur_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_cur_gra" type="relfk" layer="0"
+	 custom-color="#9df0ae"
+	 src-table="public.curso"
+	 dst-table="public.grado" reference-fk="gra_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-7.10502" y="31.6393"/>
+	</label>
+</relationship>
+
+<relationship name="rel_cal_ins" type="relfk" layer="0"
+	 custom-color="#a9919e"
+	 src-table="public.nota"
+	 dst-table="public.inscrito" reference-fk="ins_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asi_pro" type="relfk" layer="0"
+	 custom-color="#9d9b78"
+	 src-table="public.asignado"
+	 dst-table="public.profesor" reference-fk="pro_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asi_cur" type="relfk" layer="0"
+	 custom-color="#17d821"
+	 src-table="public.asignado"
+	 dst-table="public.curso" reference-fk="cur_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_asi_mat" type="relfk" layer="0"
+	 custom-color="#316d1e"
+	 src-table="public.asignado"
+	 dst-table="public.materia" reference-fk="mat_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="21.6294" y="28.8042"/>
+	</label>
+</relationship>
+
+<relationship name="rel_pag_ins" type="relfk" layer="0"
+	 custom-color="#c27e8c"
+	 src-table="public.pago"
+	 dst-table="public.inscrito" reference-fk="insc_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_cos_cur" type="relfk" layer="0"
+	 custom-color="#26a89f"
+	 src-table="public.costo"
+	 dst-table="public.curso" reference-fk="cur_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_usr_rol_usr" type="relfk" layer="0"
+	 custom-color="#f64314"
+	 src-table="public.usuario_rol"
+	 dst-table="public.usuario" reference-fk="usr_rol_usr_id_fkey"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-53.956" y="-5.44456"/>
+	</label>
+</relationship>
+
+<relationship name="rel_usr_rol_rol" type="relfk" layer="0"
+	 custom-color="#f20f3e"
+	 src-table="public.usuario_rol"
+	 dst-table="public.rol" reference-fk="usr_rol_rol_id_fkey"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="44.0011" y="19.7143"/>
+	</label>
+</relationship>
+
+<relationship name="rel_rol_per_rol" type="relfk" layer="0"
+	 custom-color="#b31443"
+	 src-table="public.rol_permiso"
+	 dst-table="public.rol" reference-fk="rol_per_rol_id_fkey"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="29.2153" y="14.974"/>
+	</label>
+</relationship>
+
+<relationship name="rel_rol_per_per" type="relfk" layer="0"
+	 custom-color="#03851a"
+	 src-table="public.rol_permiso"
+	 dst-table="public.permiso" reference-fk="rol_per_per_id_fkey"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="97.5871" y="19.7143"/>
+	</label>
+</relationship>
+
+</dbmodel>

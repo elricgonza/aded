@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="20"
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="0.8" max-obj-count="20"
 	 default-schema="public" default-owner="postgres">
 <role name="appgeo"
       inherit="true"
@@ -42,7 +42,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alumno" layer="0" collapse-mode="2" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="80" y="500"/>
+	<position x="20" y="540"/>
 	<column name="id" not-null="true" sequence="public.alumno_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -104,7 +104,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="asignado" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="700" y="40"/>
+	<position x="440" y="280"/>
 	<column name="id" not-null="true" sequence="public.asignado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -139,7 +139,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="costo" layer="0" collapse-mode="2" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="0" y="260"/>
+	<position x="0" y="300"/>
 	<column name="id" not-null="true" sequence="public.costo_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -177,7 +177,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="curso" layer="0" collapse-mode="2" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="200" y="280"/>
+	<position x="200" y="300"/>
 	<column name="id" not-null="true" sequence="public.curso_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -221,7 +221,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="gestion" layer="0" collapse-mode="2" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="0" y="20"/>
+	<position x="0" y="40"/>
 	<column name="id" not-null="true" sequence="public.gestion_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -262,7 +262,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="grado" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="160" y="20"/>
+	<position x="240" y="20"/>
 	<column name="id" not-null="true" sequence="public.grado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -297,7 +297,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="inscrito" layer="0" collapse-mode="2" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="420" y="380"/>
+	<position x="680" y="660"/>
 	<column name="id" not-null="true" sequence="public.inscrito_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -350,7 +350,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="materia" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="360" y="20"/>
+	<position x="500" y="40"/>
 	<column name="id" not-null="true" sequence="public.materia_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -382,7 +382,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="nota" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="680" y="320"/>
+	<position x="820" y="200"/>
 	<column name="id" not-null="true" sequence="public.nota_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -435,7 +435,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pago" layer="0" collapse-mode="2" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="240" y="680"/>
+	<position x="200" y="760"/>
 	<column name="id" not-null="true" sequence="public.pago_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -485,7 +485,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="permiso" layer="0" collapse-mode="2" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="20" y="1080"/>
+	<position x="80" y="1280"/>
 	<column name="id" not-null="true" sequence="public.permiso_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -517,7 +517,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="profesor" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="880" y="280"/>
+	<position x="660" y="360"/>
 	<column name="id" not-null="true" sequence="public.profesor_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -570,7 +570,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="rol" layer="0" collapse-mode="2" max-obj-count="6">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="500" y="1080"/>
+	<position x="300" y="1280"/>
 	<column name="id" not-null="true" sequence="public.rol_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -597,7 +597,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="rol_permiso" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="260" y="1100"/>
+	<position x="200" y="1080"/>
 	<column name="rol_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -617,7 +617,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="usuario" layer="0" collapse-mode="2" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="860" y="900"/>
+	<position x="480" y="1300"/>
 	<column name="id" not-null="true" sequence="public.usuario_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -653,7 +653,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="usuario_rol" layer="0" collapse-mode="2" max-obj-count="3">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="640" y="1100"/>
+	<position x="420" y="1080"/>
 	<column name="usu_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -674,7 +674,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<comment><![CDATA[Registro de auditoría de acciones del sistema]]></comment>
-	<position x="840" y="1160"/>
+	<position x="740" y="1080"/>
 	<column name="id" not-null="true" sequence="public.audit_log_id_seq">
 		<type name="integer" length="0"/>
 	</column>

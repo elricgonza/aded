@@ -1,0 +1,19 @@
+1		permiso
+2		rol
+3		rol_permiso
+4		usuario
+5		usuario_rol
+
+6		audit_log
+
+1		gestion
+2		grado
+3		materia
+4		curso
+5   profesor
+6   asignado
+7   alumno
+8   costo
+9   inscrito
+10  pago
+11  nota

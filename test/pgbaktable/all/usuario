@@ -1,0 +1,44 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.22 (Ubuntu 12.22-0ubuntu0.20.04.4)
+-- Dumped by pg_dump version 12.22 (Ubuntu 12.22-0ubuntu0.20.04.4)
+
+-- Started on 2026-06-17 13:23:05 -04
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3042 (class 0 OID 77621)
+-- Dependencies: 231
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: uaded
+--
+
+INSERT INTO public.usuario (id, usuario, email, password, activo, last_login, creado, act) VALUES (1, 'admin', 'admin@uaded.edu', '$2b$12$KI0ovcM9XFAJmk.IOUeY5uUp8UWbBhaBalZam203PGvKmTx2hxDfW', true, '2026-06-15', '2026-05-06 14:25:18.072586', '2026-06-15 13:16:07.253999');
+
+
+--
+-- TOC entry 3050 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: uaded
+--
+
+SELECT pg_catalog.setval('public.usuario_id_seq', 6, true);
+
+
+-- Completed on 2026-06-17 13:23:05 -04
+
+--
+-- PostgreSQL database dump complete
+--
+

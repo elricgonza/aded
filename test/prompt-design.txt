@@ -190,7 +190,10 @@ archivo almacenado en: app/config_notas.json que almacena las siguientes variabl
 	--Reportes promedios por profesor y por curso
 	--Sugerir otros reportes importantes
 
-Pre
+
+----260706 leve correcc repo
+-En la aplicación previamente adjuntada, en el grupo de opción 'Reportes' mejorar la forma de la búsqueda de la opción: 'Estado de Cuenta -- Alumno' (Detalle de cada cuota de un alumno en particular) 
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
 

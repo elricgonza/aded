@@ -1,0 +1,74 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.22 (Ubuntu 12.22-0ubuntu0.20.04.4)
+-- Dumped by pg_dump version 12.22 (Ubuntu 12.22-0ubuntu0.20.04.4)
+
+-- Started on 2026-08-04 09:59:43 -04
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3041 (class 0 OID 77568)
+-- Dependencies: 210
+-- Data for Name: curso; Type: TABLE DATA; Schema: public; Owner: uaded
+--
+
+COPY public.curso (id, curso, paralelo, gra_id, aula, capacidad, gestion, creado, act, usu_id) FROM stdin;
+30	6to. Secundaria	C	14		\N	2026	2026-06-08 00:00:00	2026-06-08 00:00:00	1
+5	1ro. Primaria	A	3	201	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+6	1ro. Primaria	B	3	202	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+17	1ro. Secundaria	A	9	301	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+18	1ro. Secundaria	B	9	302	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+7	2do. Primaria	A	4	203	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+8	2do. Primaria	B	4	204	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+19	2do. Secundaria	A	10	303	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+20	2do. Secundaria	B	10	304	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+9	3ro. Primaria	A	5	205	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+10	3ro. Primaria	B	5	206	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+21	3ro. Secundaria	A	11	305	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+22	3ro. Secundaria	B	11	306	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+11	4to. Primaria	A	6	207	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+12	4to. Primaria	B	6	208	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+23	4to. Secundaria	A	12	305	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+24	4to. Secundaria	B	12	306	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+13	5to. Primaria	A	7	209	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+14	5to. Primaria	B	7	210	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+26	5to. Secundaria	B	13	306	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+25	5to. Secundaria	A	13	305	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+15	6to. Primaria	A	8	211	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+16	6to. Primaria	B	8	212	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+27	6to. Secundaria	A	14	307	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+28	6to. Secundaria	B	14	308	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+3	Kinder Inicial	A	2	103	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+4	Kinder Inicial	B	2	104	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+1	Prekinder Inicial	A	1	101	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+2	Prekinder Inicial	B	1	102	40	2026	2026-05-13 00:00:00	2026-06-08 00:00:00	1
+\.
+
+
+--
+-- TOC entry 3048 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: curso_id_seq; Type: SEQUENCE SET; Schema: public; Owner: uaded
+--
+
+SELECT pg_catalog.setval('public.curso_id_seq', 30, true);
+
+
+-- Completed on 2026-08-04 09:59:43 -04
+
+--
+-- PostgreSQL database dump complete
+--
+

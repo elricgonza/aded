@@ -1,0 +1,80 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.22 (Ubuntu 12.22-0ubuntu0.20.04.4)
+-- Dumped by pg_dump version 12.22 (Ubuntu 12.22-0ubuntu0.20.04.4)
+
+-- Started on 2026-08-04 10:08:08 -04
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3040 (class 0 OID 77608)
+-- Dependencies: 226
+-- Data for Name: profesor; Type: TABLE DATA; Schema: public; Owner: uaded
+--
+
+COPY public.profesor (id, nombre, paterno, materno, masculino, ci, formacion, email, activo, usr_id_login, creado, act, usu_id) FROM stdin;
+1	Juan	Perez	Gomez	t	12345678	Licenciatura en Ciencias Ocultas	jp@gmail.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+2	Maria	Lopez	Garcia	f	87654321	Maestria en Magia Avanzada	ml@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+3	Carlos	Sanchez	Diaz	t	56781234	Doctorado en Hechiceria	cs@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+4	Ana	Gomez	Lopez	f	43218765	Licenciatura en Alquimia	ag@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+5	Luis	Martinez	Rodriguez	t	34567812	Maestria en Encantamientos	lm@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+6	Sofia	Fernandez	Gomez	f	67812345	Doctorado en Magia Elemental	sf@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+7	Diego	Ramirez	Sanchez	t	78912345	Licenciatura en Magia Negra	dr@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+8	Laura	Gonzalez	Martinez	f	32187654	Maestria en Magia Blanca	lg@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+9	Andres	Vargas	Lopez	t	65432187	Doctorado en Magia de Invocacion	av@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+10	Isabel	Torres	Garcia	f	43218765	Licenciatura en Magia de Transformacion	it@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+11	Jorge	Mendez	Sanchez	t	56781234	Maestria en Magia de Ilusion	jm@.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+12	Carla	Rojas	Gomez	f	67812345	Doctorado en Magia de Control Mental	cr@gm.com	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+13	Felipe	Soto	Lopez	t	78912345	Licenciatura en Magia de Teletransportacion	fs@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+14	Valentina	Diaz	Garcia	f	32187654	Maestria en Magia de Necromancia	vd@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+16	Sofia	Gomez	Lopez	f	43218765	Licenciatura en Magia de Alquimia	sg@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+17	Diego	Martinez	Garcia	t	56781234	Maestria en Magia de Encantamientos	dm@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+18	Laura	Fernandez	Gomez	f	67812345	Doctorado en Magia Elemental	lf@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+19	Andres	Ramirez	Sanchez	t	78912345	Licenciatura en Magia Negra	ar@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+20	Isabel	Gonzalez	Martinez	f	32187654	Maestria en Magia Blanca	ig@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+21	Jorge	Vargas	Lopez	t	65432187	Doctorado en Magia de Invocacion	jv@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+22	Carla	Torres	Garcia	f	43218765	Licenciatura en Magia de Transformacion	ct@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+23	Felipe	Mendez	Sanchez	t	56781234	Maestria en Magia de Ilusion	fm@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+24	Valentina	Rojas	Gomez	f	67812345	Doctorado en Magia de Control Mental	vr@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+25	Ricardo	Soto	Lopez	t	78912345	Licenciatura en Magia de Teletransportacion	rs@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+26	Sofia	Castro	Sanchez	f	32187654	Maestria en Magia de Necromancia	sc@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+27	Diego	Gomez	Lopez	t	43218765	Doctorado en Magia de Conjuracion	dg@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+28	Laura	Martinez	Garcia	f	56781234	Licenciatura en Magia de Alquimia	lm@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+29	Andres	Fernandez	Gomez	t	67812345	Maestria en Magia de Encantamientos	af@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+30	Isabel	Ramirez	Sanchez	f	78912345	Doctorado en Magia Elemental	ir@gm	t	1	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+33	Pepe	Grillo		t	1234567	Religiologo	pepe@gmail.com	t	\N	2026-05-21 00:00:00	2026-05-21 00:00:00	1
+32	Jaimito	Cartero	Repartijas	t	1234567	Especialista en Despachos y Embalados	jaimito@gmail.com	t	\N	2026-05-21 00:00:00	2026-05-22 00:00:00	1
+34	Jaime	Escalante	Math	t	1234567	Lic.Math	jesc@gmail.com	t	\N	2026-05-25 00:00:00	2026-05-25 00:00:00	1
+31	Juancito	Pinto	Arenas	t	3334445	Lic. en Guerras	jp@gm.com	t	3	2026-05-13 00:00:00	2026-05-13 00:00:00	1
+15	Ricardo	Castro	Sanchez	t	65432187	Doctorado en Magia de Conjuracion	rc@gm	t	5	2026-05-13 00:00:00	2026-05-27 00:00:00	1
+35	Melisa	Zamora	test	f	1472583	test math		t	\N	2026-06-08 00:00:00	2026-06-08 00:00:00	1
+\.
+
+
+--
+-- TOC entry 3047 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: profesor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: uaded
+--
+
+SELECT pg_catalog.setval('public.profesor_id_seq', 35, true);
+
+
+-- Completed on 2026-08-04 10:08:08 -04
+
+--
+-- PostgreSQL database dump complete
+--
+

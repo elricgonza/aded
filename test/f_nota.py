@@ -1,8 +1,10 @@
 # 
 
-import psycopg2
+#import psycopg2
+import psycopg
 import random
-from datetime import date, timedelta
+from datetime import  date, timedelta
+import datetime
 
 # ── Configuración de conexión ──────────────────────────────────────────────────
 DB_CONFIG = {
@@ -14,7 +16,7 @@ DB_CONFIG = {
 }
 
 def poblar_notas():
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = psycopg.connect(**DB_CONFIG)
     cur  = conn.cursor()
 
     try:
@@ -45,8 +47,8 @@ def poblar_notas():
         nota_aprob = 51
         aprobado = False
         obs = ""
-        creado        = date.today()
-        act           = date.today()
+        creado        = datetime.datetime.now() # today()
+        act           = datetime.datetime.now() #today()
         usu_id        = 1  # usuario ficticio
 
         not_id        = 1
@@ -76,7 +78,7 @@ def poblar_notas():
         print(f"✔  Inscritos : {len(inscritos)}")
         print(f"✔  Total en tabla nota      : {total}")
         print(f"   Alumnos inscritos        : {len(inscritos)}")
-    except psycopg2.Error as e:
+    except psycopg.Error as e:
        conn.rollback()
        print(f"✘  Error PostgreSQL: {e}")
        raise

@@ -1,0 +1,66 @@
+Now let me look at the models for Nota, Inscrito, Asignado, Curso, Materia, and permission_required decorator.
+
+Viewing file
+Viewing file
+
+Now let's view the nota_bp routes fully and the decorators/permission structure, and 'administrador' role detection.
+
+View nota_bp routes fully
+View nota_bp routes fully
+
+Now let's check the templates for nota, and check how permission_required / nota_ver etc permissions are seeded (schema.sql / init_db.py) for adding a new permission if needed. Also check the base template / index for buttons layout.
+
+Diseñó integración de nueva funcionalidad administrativa para inicializar registros
+Diseñó integración de nueva funcionalidad administrativa para inicializar registros
+
+Now I'll build the feature. First, rename and rewrite the template with the requested label:
+
+Ran 2 commands
+Ran 2 commands
+
+Now let's view the final content to double check consistency and correct the "Nueva generación" link too:
+
+Viewing file
+Viewing file
+
+This is good as-is. Now let's write the backend route. First let me confirm the exact insertion point near the config_transcripcion block end.
+
+Viewed a file, edited a file
+Viewed a file, edited a file
+
+Now add the sidebar link in base.html, in the admin-only group, right after "Fechas Transcripción Notas":
+
+Add 'Inicializar Notas' sidebar link in admin-only nav group
+Add 'Inicializar Notas' sidebar link in admin-only nav group
+
+Now copy the renamed template into place and remove the old stray one, then sanity-check with a Python compile / basic static check.
+
+Ran 2 commands
+Ran 2 commands
+
+All consistent. Now let's copy final files to the outputs directory to present just the changed/added files.
+
+Ran a command, read a file
+Ran a command, read a file
+
+Cambios entregados:
+
+app/routes/all_routes.py — nueva ruta nota_bp.route('/inicializar') → inicializar_notas():
+Restringida solo al rol administrador (abort(403) si no lo tiene).
+Filtra Inscrito con inscrito=True y abandono=False (opcionalmente por curso).
+Por cada inscrito, obtiene las Asignado de su cur_id (materia + profesor) y crea un Nota por cada combinación ins_id/mat_id que no exista aún.
+Campos generados: nota1/2/3=0, nota_final=0, nota_aprob=51, aprobado=False, obs='', creado/act=ahora, usu_id=usuario actual.
+Omite silenciosamente los pares que ya existen y cuenta generados/omitidos/sin asignación; registra un log BULK vía log_accion.
+Muestra un mensaje flash con la cantidad generada y omitida, y un detalle fila por fila en pantalla.
+app/templates/nota/inicializar_notas.html (nuevo — reemplaza el borrador previo genera_calificaciones.html) — pantalla de confirmación (selección opcional de curso) y pantalla de resultados con el resumen y detalle.
+app/templates/base.html — se agregó el enlace "Inicializar Notas" en el grupo de sidebar Administración, visible solo para administrador.
+
+No hubo cambios en models.py (los campos requeridos ya existían en la tabla nota) ni en decorators.py. La restricción de acceso se hizo por rol (has_role('administrador')), igual que el patrón ya usado en config_transcripcion, en vez de por permiso, tal como pidió la especificación.
+
+All routes
+PY 
+Inicializar notas
+Code · HTML 
+Base
+Code · HTML 
+Want to be notified when Claude responds?

@@ -196,24 +196,6 @@ archivo almacenado en: app/config_notas.json que almacena las siguientes variabl
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
-----260810 poblar notas ----
--En la aplicación previamente adjuntada, adicionar la opción 'Inicializar Notas' que permita la generación automática de registros en la tabla "nota", a partir de las tablas: 'inscrito', 'curso', asignado y 'materia'.
--Para cada alumno inscrito (en la tabla: 'inscrito' y el campo inscrito esté en True y el campo abandono esté en False ) en un curso específico obtener a través de la tabla 'asignado' el dato de la 'materia' y el 'profesor' que se encuentra asignado en esa materia y curso, los registros con los campos a generar son:
-	--"id": llave de la tabla  debe ser generada automáticamente
-	--"ins_id": corresponde a la llave de la tabla 'inscrito' para cada alumno inscrito, que permite obtener el dato de alumno (inscrito.alu_id) y el dato de curso (inscrito.cur_id) y el profesor y la materia asignada respectivamente a través de las tablas 'asignado', 'profesor' y 'materia' a través de sus relaciones.
-	--"mat_id": corresponde al id de la materia asignada (tabla materia)
-	--"nota1", "nota2", "nota3", "nota_final":	seran asignados con 0 (inicialmente)
-	--"nota_aprob": almacenará el valor 51 (por defecto)
-	--"aprobado" inicialmente almaceńará False
-	--el campo: "obs" asignar vacio inicialmente
-	--el campo: "creado" fecha de creación llenado automáticamente con la fecha y hora actual
-	--el campo: "act" fecha de actualización llenado automáticamente con la fecha y hora actual
-	--el campo: "usu_id" id del usuario que introduce los datos
--que esté disponible sólo para el usuario 'administrador'.	
--La opción 'Inicializar Notas' debe omitir la adición de registros si el registro ya fué generado previamente (ins_id, mat_id  ya existe) y mostrar un mensaje indicando la cantidad de registros generados y la cantidad de registros omitidos por ya existir previamente.
--Retornar sólo los archivos necesarios a adicionar y/o modificar.
-
-
 
 ---oootras correcciones
 -el acceso a profesores por el usuario profesor no sea visible

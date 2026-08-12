@@ -214,6 +214,19 @@ archivo almacenado en: app/config_notas.json que almacena las siguientes variabl
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----260812 add repo
+En la aplicación previamente adjuntada, adicionar en la opción Reportes, la subopción  'Profesores asignados por curso' 
+-Debe ser generado a partir de las tablas: 'curso', 'asignado', 'profesor' y 'materia'.
+-La presentación de la información debe ser en forma de tabla, mostrando los cursos y las materias asignadas a cada profesor, con la opción de exportar a excel y pdf.
+-Debe presentar opciones de ordenamiento por curso, materia y profesor.
+-También debe permitir la búsqueda de un profesor específico y mostrar los cursos y materias asignadas a ese profesor.
+-También debe permitir la búsqueda de un curso específico y mostrar los profesores y materias asignadas a ese curso.
+-Debe estar disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+
+
 
 ---oootras correcciones
 -el acceso a profesores por el usuario profesor no sea visible

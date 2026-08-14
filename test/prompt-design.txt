@@ -226,6 +226,19 @@ En la aplicación previamente adjuntada, adicionar en la opción Reportes, la su
 
 
 
+----260814 add repo
+En la aplicación previamente adjuntada, adicionar en la opción Reportes, la subopción  'Información Alumno' 
+-La búsqueda debe ser realizada por alumno: ci (carnet), nombre, paterno ó materno, 
+-Debe ser generado a partir de las tablas: 'alumno', 'inscrito', 'curso', 'asignado', 'profesor', 'materia', 'nota', 'pago'
+-Debe presentar información académica y pagos realizados, mostrando los siguientes datos:
+	-Datos del alumno
+	-Curso
+	-Materia
+	-Calificaciones ó notas correspondiente a cada materia
+	-La información de pagos realizados
+-Debe estar disponible sólo para el usuario 'administrador'.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
 
 
 ---oootras correcciones

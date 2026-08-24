@@ -240,6 +240,19 @@ En la aplicación previamente adjuntada, adicionar en la opción Reportes, la su
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----260820 
+
+
+
+
+----***----render con elricgonza para: edu y shm
+shm / branch / 
+	edu  
+	main
+
+
+
+
 
 ---oootras correcciones
 -el acceso a profesores por el usuario profesor no sea visible
@@ -336,3 +349,148 @@ me atraviesan sus palabras y su voz
 que se alegra tanto de que haya vuelto a casa 
 ...
 
+
+***
+todos los pasos que se deben seguir para publicar con una url propia de una aplicación web (ubuntu 26 flask/postgres) en la web
+en cuanto a pagar una url, contratar una ip publica, etc,
+***
+
+-ip pública (todo serv VPS viene con IP pública) mejor ip estat
+-vps
+- inic  4-7 eur/mes   12*4 = 48 eur añ    (84 aprox)
+
+
+--
+Dominio .com en Porkbun o Namecheap
+DNS en Cloudflare
+VPS barato en Hetzner o Contabo
+Ubuntu 24.04 LTS
+Nginx + Gunicorn + PostgreSQL
+Backups externos con script
+--
+
+
+Cuales son las opciones más recomendables y económicas para comprar un dominio y contratar un VPS y/o ver opciones alternativas, para poner en explotación una aplicación web con linux python/flask y postgres?  
+
+
+deepseek:
+---------
+
+Resumen y Recomendación Final
+Si tu prioridad es...	Te recomiendo...
+Máximo ahorro y aprendizaje--	VPS de Hetzner (~$5.69/mes) + Dominio `.com` (~$10/año).
+Despliegue rápido y sin gestión--	Plan gratuito de Render (Web + PostgreSQL) + Dominio .com.
+Muchos recursos por poco dinero--	VPS de Contabo (~$4.90/mes) + Dominio .com.
+Simplicidad para principiantes--	PythonAnywhere (plan gratuito) + Dominio .com.
+Identidad y mercado local boliviano--	Webhosting.com.bo (paquete con dominio) o NIC Bolivia para el .bo + cualquiera de los VPS anteriores.
+
+En definitiva, para la gran mayoría de los proyectos Flask con PostgreSQL, la opción más equilibrada y profesional es un VPS de Hetzner o Contabo con un dominio .com. Si buscas la máxima simplicidad para empezar, Render en su plan gratuito es una puerta de entrada excelente y sin costo.
+
+
+
+qwen
+----------
+14. Mi recomendación práctica
+Para una aplicación Flask + PostgreSQL normal, si quieres equilibrar economía y calidad:
+text
+
+1234567
+Si estás en Bolivia y la latencia es importante:
+text
+
+12345
+Si no quieres administrar servidor:
+text
+
+1
+En resumen:
+La opción más económica y controlable suele ser Porkbun/Cloudflare para dominio + Hetzner para VPS + Cloudflare DNS.
+Para Bolivia con mejor latencia, suele convenir Vultr, Linode/Akamai, AWS Lightsail u Oracle Cloud en región cercana.
+Si quieres menos administración, usa Railway, Render, Fly.io o Koyeb, pero asume mayor costo o menos control.
+
+
+
+
+
+
+---
+https://www.webhosting.com.bo/vps-linux.html
+---------------------------------------------------------------------
+VPS ZEN
+Plan de suscripción de servicio
+
+Bs. 2,464.09 /año
+
+($201.15 USD al año)
+
+Comprar Ahora
+CPU: 3 vCPU Cores
+RAM: 8 GB
+Disco: 75 GB NVMe o 150 GB SSD
+Transferencia: 32 TB de salida / Entrada Ilimitada
+Snapshots: 1
+Soporte: Humano, vía WhatsApp, tickets y email
+Garantía: Reembolso dentro de 30 días (solo hosting)
+
+
+------------
+VPS Linux 1
+Plan de suscripción de servicio
+
+Bs. 490.00 /mes
+
+Bs. 4,410.00 al año ($360.00 USD)
+
+CPU: 6 núcleos vCPU – Alto rendimiento para aplicaciones exigentes
+RAM: 12 GB – Memoria optimizada para entornos en la nube
+Almacenamiento: 150 GB NVMe o 300 GB SSD (a elección)
+Backups: 2 snapshots incluidos – Recuperación rápida en cualquier momento
+Sistema Operativo: Ubuntu 22.04 LTS
+Ubicación: Estados Unidos (Este)
+Tráfico mensual: 32 TB de salida + Ilimitado en entrada
+Disco adicional: 400 GB SSD opcional
+Contrato: 1 mes – ¡Sin cargo inicial!
+Beneficios: Ahorra más con planes a largo plazo
+Soporte: Humano, vía WhatsApp, tickets y email
+Garantía: Reembolso dentro de 30 días (solo hosting)
+
+
+https://www.hetzner.com/cloud/cost-optimized/
+---------------------------------------------------------------------
+CX33
+not available
+4
+Intel®/AMD
+8 GB
+80 GB
+NVMe
+from € 8.99 /month
+€ 0.0144 /hour
+
+
+-------
+CAX11
+not available
+2
+Ampere®
+4 GB
+40 GB
+NVMe
+from € 6.49 /month
+€ 0.0104 /hour
+
+-------
+
+
+
+https://aws.amazon.com/lightsail/pricing/?pg=ln&sec=hs
+----------------------------------------------------------------------
+------------------
+https://signin.aws.amazon.com/signup?request_type=register
+aws
+ricgonzalesc@gmail.com
+
+aws account name:  ricgonzales
+root user pwd:  Bolivia2026-aws
+
+asshhhh no concretado...

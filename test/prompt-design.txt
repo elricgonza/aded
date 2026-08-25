@@ -267,6 +267,11 @@ shm / branch /
 -add datos materias
 -
 
+---------------------------------------------------------------------------------------ifa
+----260825 carita
+En la aplicación (comprimida) previamente adjuntada , modificar la presentación asignando el logo adjunto (ifalfalogo) y con los colores que se adjunta en (ifalfacolor) para la institución: Instituto de Formación Artística "Luis Felipe Arce"
+-los nuevos colores deben ser asignados en toda la aplicación (diferentes opciones alumnos, notas, etc...)
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
 

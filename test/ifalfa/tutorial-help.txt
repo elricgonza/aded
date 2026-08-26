@@ -1,0 +1,20 @@
+Funcionalidades:
+
+Gestiones
+Grados
+Materias
+Profesores
+Cursos (paralelos)
+
+Alumnos
+Inscripciones
+Asignaciones Curso-Materia
+Fechas Transcripción Notas
+Inicializar Notas (crea y complementa la tabla de notas)
+
+Usuarios y Roles
+Asignar Usuario-Profesor
+
+---
+si no se asigna curso-materia --err muestra todos los alum p edición de notas
+

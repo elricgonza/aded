@@ -240,7 +240,13 @@ En la aplicación previamente adjuntada, adicionar en la opción Reportes, la su
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
-----260820 
+----260831
+En la aplicación previamente adjuntada, corregir la opción Calificaciones, que presenta el siguiente error u omisión:
+-Para un usuario con perfil de 'profesor' que cuenta con: 
+	-curso(s) y materia(s) asignadas en la tabla 'asignado', además de contar con registros en la tabla 'inscrito' con alumnos inscritos en el curso asignado al profesor, MUESTRA CORRECTAMENTE la opción Calificaciones con datos de: CURSO, MATERIA Y ALUMNO con datos SÓLO asignados al profesor (Con la etiqueta: 'Mostrando calificaciones asignadas a <nombre-profesor>')
+-Sin embargo para otro usuario también con perfil de 'profesor' que cuenta con: 
+	-curso(s) y materia(s) asignadas en la tabla 'asignado', además de contar con registros en la tabla 'inscrito' con alumnos inscritos en el curso asignado al profesor, NO MUESTRA CORRECTAMENTE la opción Calificaciones asignados al profesor y muestra la totalidad de alumnos SIN FILTRAR la información asignada sólo al profesor. 
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
 

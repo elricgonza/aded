@@ -1,0 +1,24 @@
+(Centralizador de calificaciones)
+-4Reporte_PIANO_Segundo_Tecnico_Medio__A_.xlsx  
+	(listado de alumnos y calificaciones por materia)
+
+	8 materias - cuando reprueban?  (promedio)
+
+-hummm la materia "INSTRUM..ESPEC..- INE201" 
+ -la materia INE-201 con 8 alumnos se asigna a 3 docentes?
+ -
+
+
+DOCENTES IFALFA 2025_020240
+(se muestra las materias por:
+		-curso ó como nivel?
+		-instrumento
+		-docentes)
+
+hummm??
+
+
+-nro alumnos?
+-1 curso no esta asignado a un sólo docente?? asignación de
+ alumno para seleccionar docentes en: instrumentos, nivel, curso, materia
+

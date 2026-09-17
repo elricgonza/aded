@@ -7,3 +7,4 @@ select n.nivel, c.paralelo, g.grado, m.materia
 	where c.grado_id = g.id 
 		and g.nivel_id = n.id
 		and g.id = m.grado_id 
+

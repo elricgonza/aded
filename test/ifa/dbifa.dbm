@@ -262,7 +262,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="grado" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="240" y="20"/>
+	<position x="280" y="20"/>
 	<column name="id" not-null="true" sequence="public.grado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -294,10 +294,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="inscrito" layer="0" collapse-mode="2" max-obj-count="14">
+<table name="inscrito" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="680" y="660"/>
+	<position x="560" y="660"/>
 	<column name="id" not-null="true" sequence="public.inscrito_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -325,6 +325,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="obs">
 		<type name="character varying" length="200"/>
 	</column>
+	<column name="materias_otro_grado" not-null="true" default-value="False">
+		<type name="bool" length="0"/>
+	</column>
 	<column name="creado" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
@@ -350,7 +353,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="materia" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="500" y="40"/>
+	<position x="540" y="20"/>
 	<column name="id" not-null="true" sequence="public.materia_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -435,7 +438,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pago" layer="0" collapse-mode="2" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="200" y="760"/>
+	<position x="180" y="760"/>
 	<column name="id" not-null="true" sequence="public.pago_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -517,7 +520,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="profesor" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="660" y="360"/>
+	<position x="660" y="340"/>
 	<column name="id" not-null="true" sequence="public.profesor_id_seq">
 		<type name="integer" length="0"/>
 	</column>

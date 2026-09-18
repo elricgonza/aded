@@ -27,4 +27,13 @@ hummm??
 -hummmm o materias de 2 instrumentos diferentes?
 
 
+-add opc en dif depas?
+	-dif bd para c/depto - sólo varía la cnx a dif bd
+	(implica 9 dominios diferentes? )
+	-una sola app y leer PREVIO depto y conectar a bd dinámicamente
+	 sg depto (bdifa1, bdifa2, ...)
+
+	-simple add un campo a c/tabla ?
+
+
 

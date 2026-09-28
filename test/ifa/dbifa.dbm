@@ -42,7 +42,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alumno" layer="0" collapse-mode="2" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="40" y="540"/>
+	<position x="800" y="640"/>
 	<column name="id" not-null="true" sequence="public.alumno_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -101,10 +101,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asignado" layer="0" collapse-mode="2" max-obj-count="8">
+<table name="asignado" layer="0" collapse-mode="2" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="440" y="280"/>
+	<position x="540" y="300"/>
 	<column name="id" not-null="true" sequence="public.asignado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -129,6 +129,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="asignado_pkey" type="pk-constr" table="public.asignado">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_alumno" index="4"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="alumno_fk" index="4"/>
+	</customidxs>
 </table>
 
 <sequence name="costo_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
@@ -221,7 +229,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="gestion" layer="0" collapse-mode="2" max-obj-count="10">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="780" y="720"/>
+	<position x="600" y="840"/>
 	<column name="id" not-null="true" sequence="public.gestion_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -305,7 +313,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="inscrito" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="560" y="660"/>
+	<position x="380" y="620"/>
 	<column name="id" not-null="true" sequence="public.inscrito_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -361,7 +369,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="materia" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="600" y="20"/>
+	<position x="580" y="20"/>
 	<column name="id" not-null="true" sequence="public.materia_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -396,7 +404,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="nota" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="820" y="200"/>
+	<position x="960" y="80"/>
 	<column name="id" not-null="true" sequence="public.nota_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -449,7 +457,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="pago" layer="0" collapse-mode="2" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="180" y="760"/>
+	<position x="80" y="760"/>
 	<column name="id" not-null="true" sequence="public.pago_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -531,7 +539,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="profesor" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="660" y="340"/>
+	<position x="960" y="420"/>
 	<column name="id" not-null="true" sequence="public.profesor_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -810,25 +818,56 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="requisito" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="800" y="40"/>
-	<column name="sigla" not-null="true">
-		<type name="varchar" length="20"/>
+	<position x="820" y="40"/>
+	<column name="mat_id_req" not-null="true">
+		<type name="integer" length="0"/>
 	</column>
-	<column name="sigla_req" not-null="true">
-		<type name="varchar" length="20"/>
-	</column>
+
+	<customidxs object-type="column">
+		<object name="id_materia" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="materia_fk" index="0"/>
+	</customidxs>
 </table>
 
-<index name="idx_uniq" table="public.requisito"
+<relationship name="materia_has_many_requisito" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#231c7f"
+	 src-table="public.materia"
+	 dst-table="public.requisito"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<index name="idx_uniq_req" table="public.requisito"
 	 concurrent="false" unique="true" fast-update="false" buffering="false"
 	 index-type="btree" factor="0">
 		<idxelement use-sorting="false">
-			<column name="sigla"/>
+			<column name="id_materia"/>
 		</idxelement>
 		<idxelement use-sorting="false">
-			<column name="sigla_req"/>
+			<column name="mat_id_req"/>
 		</idxelement>
 </index>
+
+<relationship name="alumno_has_many_asignado" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#8fc916"
+	 src-table="public.alumno"
+	 dst-table="public.asignado"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="50.8496" y="-9.25635"/>
+	</label>
+</relationship>
 
 <constraint name="asignado_cur_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.curso" table="public.asignado">
@@ -942,7 +981,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#67f55e"
 	 src-table="public.asignado"
 	 dst-table="public.profesor" reference-fk="asignado_pro_id_fkey"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="87.2009" y="-13.4539"/>
+	</label>
+</relationship>
 
 <relationship name="rel_costo_curso" type="relfk" layer="0"
 	 custom-color="#822cfd"
@@ -954,7 +997,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#cae670"
 	 src-table="public.curso"
 	 dst-table="public.grado" reference-fk="curso_gra_id_fkey"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-57.51" y="4.81434"/>
+	</label>
+</relationship>
 
 <relationship name="rel_inscrito_alumno" type="relfk" layer="0"
 	 custom-color="#27d114"

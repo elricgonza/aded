@@ -42,7 +42,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alumno" layer="0" collapse-mode="2" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="560" y="640"/>
+	<position x="500" y="620"/>
 	<column name="id" not-null="true" sequence="public.alumno_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -101,20 +101,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asignado" layer="0" collapse-mode="2" max-obj-count="8">
+<table name="asignado" layer="0" collapse-mode="2" max-obj-count="4">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="500" y="300"/>
 	<column name="id" not-null="true" sequence="public.asignado_id_seq">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="cur_id" not-null="true">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="mat_id" not-null="true">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="pro_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="creado" not-null="true">
@@ -123,7 +114,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="asignado_pkey" type="pk-constr" table="public.asignado">
@@ -139,7 +130,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="costo" layer="0" collapse-mode="2" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="20" y="440"/>
+	<position x="40" y="420"/>
 	<column name="id" not-null="true" sequence="public.costo_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -161,7 +152,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="costo_pkey" type="pk-constr" table="public.costo">
@@ -174,7 +165,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="curso" layer="0" collapse-mode="2" max-obj-count="12">
+<table name="curso" layer="0" collapse-mode="2" max-obj-count="13">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="300" y="280"/>
@@ -199,7 +190,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="curso_pkey" type="pk-constr" table="public.curso">
@@ -207,13 +198,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_gestion" index="3"/>
-		<object name="id_grado" index="4"/>
+		<object name="id_gestion" index="9"/>
+		<object name="id_grado" index="10"/>
+		<object name="id_inscrito" index="8"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="gestion_fk" index="1"/>
-		<object name="grado_fk" index="2"/>
+		<object name="gestion_fk" index="2"/>
+		<object name="grado_fk" index="3"/>
+		<object name="inscrito_fk" index="1"/>
 	</customidxs>
 </table>
 
@@ -250,7 +243,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="gestion_pkey" type="pk-constr" table="public.gestion">
@@ -266,7 +259,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="grado" layer="0" collapse-mode="2" max-obj-count="8">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="360" y="20"/>
+	<position x="340" y="20"/>
 	<column name="id" not-null="true" sequence="public.grado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -282,7 +275,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="grado_pkey" type="pk-constr" table="public.grado">
@@ -290,7 +283,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_instrumento" index="3"/>
+		<object name="id_instrumento" index="6"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -303,10 +296,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="inscrito" layer="0" collapse-mode="2" max-obj-count="13">
+<table name="inscrito" layer="0" collapse-mode="2" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="280" y="620"/>
+	<position x="300" y="640"/>
 	<column name="id" not-null="true" sequence="public.inscrito_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -369,7 +362,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="materia_pkey" type="pk-constr" table="public.materia">
@@ -377,7 +370,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_grado" index="3"/>
+		<object name="id_grado" index="6"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -390,17 +383,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="nota" layer="0" collapse-mode="2" max-obj-count="15">
+<table name="nota" layer="0" collapse-mode="2" max-obj-count="13">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="820" y="200"/>
+	<position x="780" y="200"/>
 	<column name="id" not-null="true" sequence="public.nota_id_seq">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="ins_id" not-null="true">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="mat_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="nota1" not-null="true">
@@ -430,7 +417,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="nota_pkey" type="pk-constr" table="public.nota">
@@ -565,7 +552,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="profesor_pkey" type="pk-constr" table="public.profesor">
@@ -768,7 +755,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="instrumento" layer="0" collapse-mode="2" max-obj-count="7">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="180" y="20"/>
+	<position x="160" y="20"/>
 	<column name="id" not-null="true" sequence="public.grado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -784,7 +771,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="grado_pkey" type="pk-constr" table="public.instrumento">
@@ -795,7 +782,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="requisito" layer="0" collapse-mode="2" max-obj-count="2">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="780" y="40"/>
+	<position x="740" y="40"/>
 	<column name="id_materia_req" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -831,14 +818,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		</idxelement>
 </index>
 
-<relationship name="gestion_has_many_curso" type="rel1n" layer="0"
+<relationship name="alumno_has_many_inscrito" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#77e78f"
-	 src-table="public.gestion"
-	 dst-table="public.curso"
+	 custom-color="#7cc821"
+	 src-table="public.alumno"
+	 dst-table="public.inscrito"
 	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="inscrito_has_many_curso" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#04ac85"
+	 src-table="public.inscrito"
+	 dst-table="public.curso"
+	 src-required="false" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
 
@@ -846,7 +844,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#84aa6f"
+	 custom-color="#5ff7dd"
 	 src-table="public.instrumento"
 	 dst-table="public.grado"
 	 src-required="true" dst-required="false"
@@ -857,9 +855,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#9d0e26"
+	 custom-color="#625dae"
 	 src-table="public.grado"
 	 dst-table="public.materia"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="gestion_has_many_curso" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#a2da37"
+	 src-table="public.gestion"
+	 dst-table="public.curso"
 	 src-required="true" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
@@ -868,7 +877,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#b204a5"
+	 custom-color="#9f7995"
 	 src-table="public.grado"
 	 dst-table="public.curso"
 	 src-required="true" dst-required="false"

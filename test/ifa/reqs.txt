@@ -1,0 +1,25 @@
+
+asignado:
+-si el nivel del grado: inicial, básico ó intermedio debe crear materias automáticamente en la tabla <asignado> según las materias que corresponde al grado (materias relacionadas con <grado>)
+-si el nivel del grado es 'Técnico Medio' debe:
+ -verificar si: tiene alguna materia aprobada que corresponde al grado seleccionado?
+   -si 
+	  -- asignar automáticamente todas las materias no aprobadas en el grado seleccionado.
+		-- permitir seleccionar manualmente (ve)
+
+pantalla aprox:
+
+nivel - grado - materias aprobadas
+
+
+nivel - grado - materias disponibles - nivel grado - materias asignadas
+
+
+acciones a tiempo de la inscripción:
+-adiciona registro en <inscrito>
+
+
+proceso de inscripción:
+1. Seleccionar alumno.
+2. Seleccionar curso
+3. 

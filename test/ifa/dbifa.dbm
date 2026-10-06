@@ -42,7 +42,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alumno" layer="0" collapse-mode="2" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="500" y="620"/>
+	<position x="580" y="620"/>
 	<column name="id" not-null="true" sequence="public.alumno_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -101,10 +101,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asignado" layer="0" collapse-mode="2" max-obj-count="4">
+<table name="asignado" layer="0" collapse-mode="2" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="500" y="300"/>
+	<position x="520" y="320"/>
 	<column name="id" not-null="true" sequence="public.asignado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -120,6 +120,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="asignado_pkey" type="pk-constr" table="public.asignado">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_curso" index="5"/>
+		<object name="id_inscrito" index="4"/>
+		<object name="id_materia" index="6"/>
+		<object name="id_profesor" index="7"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="curso_fk" index="2"/>
+		<object name="inscrito_fk" index="1"/>
+		<object name="materia_fk" index="3"/>
+		<object name="profesor_fk" index="4"/>
+	</customidxs>
 </table>
 
 <sequence name="costo_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
@@ -165,7 +179,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="curso" layer="0" collapse-mode="2" max-obj-count="13">
+<table name="curso" layer="0" collapse-mode="2" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="300" y="280"/>
@@ -198,15 +212,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_gestion" index="9"/>
-		<object name="id_grado" index="10"/>
-		<object name="id_inscrito" index="8"/>
+		<object name="id_gestion" index="8"/>
+		<object name="id_grado" index="9"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="gestion_fk" index="2"/>
-		<object name="grado_fk" index="3"/>
-		<object name="inscrito_fk" index="1"/>
+		<object name="gestion_fk" index="1"/>
+		<object name="grado_fk" index="2"/>
 	</customidxs>
 </table>
 
@@ -299,7 +311,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="inscrito" layer="0" collapse-mode="2" max-obj-count="14">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="300" y="640"/>
+	<position x="300" y="660"/>
 	<column name="id" not-null="true" sequence="public.inscrito_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -829,17 +841,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
 
-<relationship name="inscrito_has_many_curso" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#04ac85"
-	 src-table="public.inscrito"
-	 dst-table="public.curso"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
-
 <relationship name="instrumento_has_many_grado" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
@@ -881,6 +882,54 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="public.grado"
 	 dst-table="public.curso"
 	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="inscrito_has_many_asignado" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#c658b6"
+	 src-table="public.inscrito"
+	 dst-table="public.asignado"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="68.0356" y="-11.9743"/>
+	</label>
+</relationship>
+
+<relationship name="curso_has_many_asignado" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#0b2817"
+	 src-table="public.curso"
+	 dst-table="public.asignado"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="materia_has_many_asignado" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#8f5902"
+	 src-table="public.materia"
+	 dst-table="public.asignado"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="profesor_has_many_asignado" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#204a87"
+	 src-table="public.profesor"
+	 dst-table="public.asignado"
+	 src-required="false" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
 

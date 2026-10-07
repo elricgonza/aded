@@ -7,19 +7,42 @@ asignado:
 	  -- asignar automáticamente todas las materias no aprobadas en el grado seleccionado.
 		-- permitir seleccionar manualmente (ve)
 
-pantalla aprox:
 
-nivel - grado - materias aprobadas
-
-
-nivel - grado - materias disponibles - nivel grado - materias asignadas
-
-
+=================================
+proceso de inscripción:
+=================================
 acciones a tiempo de la inscripción:
 -adiciona registro en <inscrito>
+-adiciona registros en <asignado>
 
-
-proceso de inscripción:
 1. Seleccionar alumno.
 2. Seleccionar curso
-3. 
+3. con curso.id_grado:
+    - verificar nivel del grado:
+      - si es inicial, básico o intermedio:
+        - crear automáticamente materias en la tabla <asignado> según las materias correspondientes al grado.
+      - si es Técnico Medio:
+        - verificar si el alumno tiene alguna materia aprobada correspondiente al grado seleccionado.
+          - si tiene materias aprobadas:
+            - asignar automáticamente todas las materias no aprobadas del grado seleccionado.
+            - permitir al usuario seleccionar manualmente las materias que desea asignar (opción de selección manual).
+            
+
+pantalla aprox:
+
+nivel-grado-materias aprobadas
+
+curso-nivel-grado-materias disponibles | curso-nivel-grado-materias asignadas
+"arrastres" + otras materias disponibles en otros cursos de mayor grado
+
+si: nivel Técnico Medio: (y marca check: otras materias)
+  - seleccionar grado de la materia que desea asignar ... hummmm
+  - mostrar materias disponibles en otros cursos de mayor grado
+  - permitir seleccionar manualmente las materias que desea asignar (opción de selección manual).
+
+  
+
+[Aceptar]
+  -obtener el id de <inscrito>
+
+

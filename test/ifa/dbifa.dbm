@@ -308,7 +308,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="inscrito" layer="0" collapse-mode="2" max-obj-count="14">
+<table name="inscrito" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="300" y="660"/>
@@ -348,6 +348,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="inscrito_pk" type="pk-constr" table="public.inscrito">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_alumno" index="11"/>
+		<object name="id_curso" index="12"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="alumno_fk" index="1"/>
+		<object name="curso_fk" index="2"/>
+	</customidxs>
 </table>
 
 <sequence name="materia_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
@@ -930,6 +940,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="public.profesor"
 	 dst-table="public.asignado"
 	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="curso_has_many_inscrito" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f57900"
+	 src-table="public.curso"
+	 dst-table="public.inscrito"
+	 src-required="true" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
 

@@ -37,12 +37,34 @@ curso-nivel-grado-materias disponibles | curso-nivel-grado-materias asignadas
 
 si: nivel Técnico Medio: (y marca check: otras materias)
   - seleccionar grado de la materia que desea asignar ... hummmm
-  - mostrar materias disponibles en otros cursos de mayor grado
+  - mostrar cursos/materias disponibles en otros cursos de mayor grado
   - permitir seleccionar manualmente las materias que desea asignar (opción de selección manual).
-
-  
+    validar que cumpla con materias pre-requisito aprobadas.
 
 [Aceptar]
-  -obtener el id de <inscrito>
+  -obtener el id de <inscrito> (automáticamente generado)
+  -obtener el id de <curso> (seleccionado)
+  -obtener el id de <alumno> (seleccionado)
+  -
+en <inscrito>:
+  - adicionar 1 registro con id, id_alumno, id_curso, ...
+en <asignado>:
+  - adicionar registros en <asignado> corresponde 1 registro por materia asignada (automáticamente o manualmente seleccionadas).
+    -con los campos: 
+        -id_inscrito, 
+        -id_curso
+        -id_materia
+        -id_profesor (null por defecto)
+
+
+=========================================================================================
+sql's
+=========================================================================================
+-inscritos en una gestión:
+
+  SELECT * FROM 
+  inscrito a, curso b,
+  WHERE b. gestion = 2026
+    and a.id_gestion = b.id
 
 

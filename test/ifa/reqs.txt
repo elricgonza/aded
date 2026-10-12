@@ -63,8 +63,20 @@ sql's
 -inscritos en una gestión:
 
   SELECT * FROM 
-  inscrito a, curso b,
-  WHERE b. gestion = 2026
-    and a.id_gestion = b.id
+  inscrito a, curso b, gestion c
+  WHERE 
+    a.id_curso = b.id
+    and b.id_gestion = c.id
+    and c.gestion = 2024
 
+
+  si gestion tb en inscrito:
+
+  SELECT * FROM 
+  inscrito a, curso b
+  WHERE 
+    a.id_curso = b.id
+    and a.gestion = 2024
+
+-notas de un alumno:
 

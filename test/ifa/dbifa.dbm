@@ -42,7 +42,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="alumno" layer="0" collapse-mode="2" max-obj-count="19">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="560" y="680"/>
+	<position x="520" y="640"/>
 	<column name="id" not-null="true" sequence="public.alumno_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -101,10 +101,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="asignado" layer="0" collapse-mode="2" max-obj-count="10">
+<table name="asignado" layer="0" collapse-mode="2" max-obj-count="9">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="520" y="280"/>
+	<position x="500" y="280"/>
 	<column name="id" not-null="true" sequence="public.asignado_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -122,15 +122,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_alumno" index="4"/>
-		<object name="id_curso" index="6"/>
-		<object name="id_inscrito" index="5"/>
-		<object name="id_materia" index="7"/>
-		<object name="id_profesor" index="8"/>
+		<object name="id_curso" index="5"/>
+		<object name="id_inscrito" index="4"/>
+		<object name="id_materia" index="6"/>
+		<object name="id_profesor" index="7"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="alumno_fk" index="5"/>
 		<object name="curso_fk" index="2"/>
 		<object name="inscrito_fk" index="1"/>
 		<object name="materia_fk" index="3"/>
@@ -184,7 +182,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="curso" layer="0" collapse-mode="2" max-obj-count="12">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="300" y="280"/>
+	<position x="260" y="280"/>
 	<column name="id" not-null="true" sequence="public.curso_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -313,7 +311,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="inscrito" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="300" y="660"/>
+	<position x="280" y="620"/>
 	<column name="id" not-null="true" sequence="public.inscrito_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -407,26 +405,32 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="uaded"/>
 </sequence>
 
-<table name="nota" layer="0" collapse-mode="2" max-obj-count="14">
+<table name="nota" layer="0" collapse-mode="2" max-obj-count="16">
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="740" y="220"/>
 	<column name="id" not-null="true" sequence="public.nota_id_seq">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="nota1" not-null="true">
+	<column name="nota1">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="nota2" not-null="true">
+	<column name="nota2">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="nota3" not-null="true">
+	<column name="nota3">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="nota_final" not-null="true">
+	<column name="nota4">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="nota_final">
 		<type name="numeric" length="5" precision="1"/>
 	</column>
-	<column name="nota_aprob" not-null="true">
+	<column name="2t">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="nota_aprob">
 		<type name="smallint" length="0"/>
 	</column>
 	<column name="aprobado">
@@ -447,6 +451,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="nota_pkey" type="pk-constr" table="public.nota">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_asignado" index="13"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="asignado_fk" index="1"/>
+	</customidxs>
 </table>
 
 <sequence name="pago_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
@@ -539,7 +551,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="profesor" layer="0" collapse-mode="2" max-obj-count="15">
 	<schema name="public"/>
 	<role name="uaded"/>
-	<position x="740" y="520"/>
+	<position x="720" y="580"/>
 	<column name="id" not-null="true" sequence="public.profesor_id_seq">
 		<type name="integer" length="0"/>
 	</column>
@@ -952,17 +964,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#f57900"
 	 src-table="public.curso"
 	 dst-table="public.inscrito"
-	 src-required="true" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
-
-<relationship name="alumno_has_many_asignado" type="rel1n" layer="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#ab818d"
-	 src-table="public.alumno"
-	 dst-table="public.asignado"
 	 src-required="true" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>

@@ -80,3 +80,22 @@ sql's
 
 -notas de un alumno:
 
+  SELECT * FROM 
+  nota a, asignado b, inscrito c, curso d
+  WHERE 
+    a.id_asignado = b.id
+    and b.id_inscrito = c.id
+    and c.id_curso = d.id
+    and c.id_alumno = 12345
+
+    
+  select * 
+  from
+  alumno a, inscrito b, asignado c, nota d, materia e
+  where 
+    a.id = b.id_alumno
+    and b.id = c.id_inscrito
+    and c.id = d.id_asignado
+    and a.id = 12345
+    and c.id 
+

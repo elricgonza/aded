@@ -88,7 +88,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="alumno_pkey" type="pk-constr" table="public.alumno">
@@ -342,7 +342,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="inscrito_pk" type="pk-constr" table="public.inscrito">
@@ -352,11 +352,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<customidxs object-type="column">
 		<object name="id_alumno" index="11"/>
 		<object name="id_curso" index="12"/>
+		<object name="id_instrumento" index="13"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
 		<object name="alumno_fk" index="1"/>
 		<object name="curso_fk" index="2"/>
+		<object name="instrumento_fk" index="3"/>
 	</customidxs>
 </table>
 
@@ -503,7 +505,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="act" not-null="true">
 		<type name="timestamp" length="0"/>
 	</column>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="pago_pkey" type="pk-constr" table="public.pago">
@@ -632,14 +634,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="100" y="1020"/>
-	<column name="rol_id" not-null="true">
+	<column name="id_rol" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="per_id" not-null="true">
+	<column name="id_permiso" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="rol_permiso_pkey" type="pk-constr" table="public.rol_permiso">
-		<columns names="rol_id,per_id" ref-type="src-columns"/>
+		<columns names="id_rol,id_permiso" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -688,14 +690,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="uaded"/>
 	<position x="320" y="1020"/>
-	<column name="usu_id" not-null="true">
+	<column name="id_usuario" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="rol_id" not-null="true">
+	<column name="id_rol" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
 	<constraint name="usuario_rol_pkey" type="pk-constr" table="public.usuario_rol">
-		<columns names="usu_id,rol_id" ref-type="src-columns"/>
+		<columns names="id_usuario,id_rol" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -710,9 +712,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<comment><![CDATA[Registro de auditoría de acciones del sistema]]></comment>
 	<position x="640" y="1020"/>
 	<column name="id" not-null="true" sequence="public.audit_log_id_seq">
-		<type name="integer" length="0"/>
-	</column>
-	<column name="usu_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="usuario" not-null="true" default-value="'anónimo'">
@@ -754,6 +753,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="audit_log_pkey" type="pk-constr" table="public.audit_log">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_usuario" index="11"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="usuario_fk" index="2"/>
+	</customidxs>
 </table>
 
 <index name="idx_audit_log_usu_id" table="public.audit_log"
@@ -891,7 +898,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#a2da37"
+	 custom-color="#a40000"
 	 src-table="public.gestion"
 	 dst-table="public.curso"
 	 src-required="true" dst-required="false"
@@ -990,33 +997,38 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
 
+<relationship name="usuario_has_many_audit_log" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#da73ba"
+	 src-table="public.usuario"
+	 dst-table="public.audit_log"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
 <constraint name="rol_permiso_per_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.permiso" table="public.rol_permiso">
-	<columns names="per_id" ref-type="src-columns"/>
+	<columns names="id_permiso" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="rol_permiso_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.rol" table="public.rol_permiso">
-	<columns names="rol_id" ref-type="src-columns"/>
+	<columns names="id_rol" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="usuario_rol_rol_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.rol" table="public.usuario_rol">
-	<columns names="rol_id" ref-type="src-columns"/>
+	<columns names="id_rol" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="usuario_rol_usu_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.usuario_rol">
-	<columns names="usu_id" ref-type="src-columns"/>
-	<columns names="id" ref-type="dst-columns"/>
-</constraint>
-
-<constraint name="audit_log_usu_id_fkey" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.usuario" table="public.audit_log">
-	<columns names="usu_id" ref-type="src-columns"/>
+	<columns names="id_usuario" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
@@ -1047,11 +1059,5 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="88.35" y="1.24678"/>
 	</label>
 </relationship>
-
-<relationship name="rel_audit_log_usuario" type="relfk" layer="0"
-	 custom-color="#d24563"
-	 src-table="public.audit_log"
-	 dst-table="public.usuario" reference-fk="audit_log_usu_id_fkey"
-	 src-required="false" dst-required="false"/>
 
 </dbmodel>

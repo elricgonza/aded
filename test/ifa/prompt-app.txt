@@ -1,0 +1,802 @@
+Escribir todo el código necesario para ejecutar el software de gestión para un Instituto de Educación Musical (IFALFA), especificando las instrucciones para la instalación, configuración y ejecución del software, 
+
+Proyecto: Software de gestión para un Instituto
+
+Software a utilizar:
+===================
+-Base de datos: Postgres
+-Backend: Python, Flask
+-Frontend: HTMX, Alpine.js, Tailwind CSS
+(complementar y utilizar otro software si es necesario y justificado)
+
+Características:
+===============
+-Debe ser responsivo
+-Debe contar con la autenticación y autorización de usuarios
+
+Requerimientos funcionales:
+==========================
+-Existirán los siguientes roles: Administrador, Profesor, Estudiante, Consulta, transcriptor
+-Los permisos serán asignados según el rol asignado a cada usuario
+
+
+Resumen descripción de tablas:
+=============================
+-gestion: (gestión académica): para cada gestión se registra el año
+-instrumento: se registra el nombre de los instrumentos que se imparten en el instituto
+-grado: (grado educativo) se registra el nivel y el grado correspondiente a una gestión (referencia a tabla gestion)
+-materia:  se registra el nombre de las materias que corresponde a un determinado grado (referencia a tabla grado)
+-requisito: se registra la materia y las materias que son requisito para cursarla (referencia a tabla materia)
+-profesor: se registra el nombre del profesor que imparte una o varias materias (referencia a tabla asignado)
+-curso: se registra el nombre del curso que corresponde a un determinado grado (referencia a tabla grado)
+-asignado:  se registra la asignación de un profesor a una materia, un alumno y un curso (referencia a tabla profesor, materia, inscrito  y curso)
+ --se considerán las materias que corresponden a un determinado grado por defecto
+ --también es posible asignar materias de otros grados (cuando en inscrito el campo "otras_materias" es verdadero)
+-alumno:  que deben inscribirse en un curso (referencia a tabla curso)
+-inscrito: se registra la inscripción de un estudiante a un curso (referencia a tabla alumno y curso) 
+-nota: se registra la nota obtenida por un estudiante en una materia (referencia a tabla inscrito a través de la cual se obtiene el curso, la asignación de profesor y materia)
+-pago:  se registra pagos 
+ --esta tabla es generada a partir de la inscripción generando un registro de pago, aplicando el descuento (especificado en el campo descuento que corresponde al porcentaje de descuento si corresponde)
+ --esta tabla se actualiza cuando el estudiante realiza un pago, registrando la fecha del pago, el monto pagado
+
+Tablas de administración de usuarios, roles y permisos:
+======================================================
+-usuario: (Usuarios) Administración de usuarios
+-rol:  administra los roles asignados a usuario
+-permiso: administra los permisos 
+-usuario_rol:  (usuario_rol) roles asignados a un determinado usuario
+-rol_permiso:  permisos asignados a un determinado rol
+
+
+Estructura de la Base de datos, llaves primarias, foráneas, índices y restricciones en PostgreSQL version 12.0:
+==============================================================================================================
+
+-- Database generated with pgModeler (PostgreSQL Database Modeler).
+-- pgModeler  version: 0.9.2
+-- PostgreSQL version: 12.0
+
+CREATE ROLE uaded WITH 
+	INHERIT
+	LOGIN
+	ENCRYPTED PASSWORD '********';
+-- ddl-end --
+
+
+-- Database creation must be done outside a multicommand file.
+-- These commands were put in this file only as a convenience.
+-- -- object: dbaded | type: DATABASE --
+-- -- DROP DATABASE IF EXISTS dbaded;
+-- CREATE DATABASE dbaded
+-- 	ENCODING = 'UTF8'
+-- 	LC_COLLATE = 'en_US.UTF-8'
+-- 	LC_CTYPE = 'en_US.UTF-8'
+-- 	TABLESPACE = pg_default
+-- 	OWNER = uaded;
+-- -- ddl-end --
+-- 
+
+-- object: public.alumno_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.alumno_id_seq CASCADE;
+CREATE SEQUENCE public.alumno_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.alumno_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.alumno | type: TABLE --
+-- DROP TABLE IF EXISTS public.alumno CASCADE;
+CREATE TABLE public.alumno (
+	id integer NOT NULL DEFAULT nextval('public.alumno_id_seq'::regclass),
+	nombre character varying(100) NOT NULL,
+	paterno character varying(100),
+	materno character varying(100),
+	nacimiento date,
+	masculino boolean NOT NULL,
+	ci integer,
+	direccion character varying(150),
+	email character varying(100),
+	activo boolean NOT NULL,
+	obs character varying(100),
+	usr_id_login integer,
+	foto_ruta character varying(150),
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	CONSTRAINT alumno_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.alumno OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.asignado_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.asignado_id_seq CASCADE;
+CREATE SEQUENCE public.asignado_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.asignado_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.asignado | type: TABLE --
+-- DROP TABLE IF EXISTS public.asignado CASCADE;
+CREATE TABLE public.asignado (
+	id integer NOT NULL DEFAULT nextval('public.asignado_id_seq'::regclass),
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_inscrito integer NOT NULL,
+	id_curso integer NOT NULL,
+	id_materia integer NOT NULL,
+	id_profesor integer,
+	CONSTRAINT asignado_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.asignado OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.costo_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.costo_id_seq CASCADE;
+CREATE SEQUENCE public.costo_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.costo_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.curso_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.curso_id_seq CASCADE;
+CREATE SEQUENCE public.curso_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.curso_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.curso | type: TABLE --
+-- DROP TABLE IF EXISTS public.curso CASCADE;
+CREATE TABLE public.curso (
+	id integer NOT NULL DEFAULT nextval('public.curso_id_seq'::regclass),
+	curso character varying(150),
+	paralelo character varying(50) NOT NULL,
+	aula character varying(50),
+	capacidad smallint,
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_gestion integer NOT NULL,
+	id_grado integer NOT NULL,
+	CONSTRAINT curso_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.curso OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.gestion_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.gestion_id_seq CASCADE;
+CREATE SEQUENCE public.gestion_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.gestion_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.gestion | type: TABLE --
+-- DROP TABLE IF EXISTS public.gestion CASCADE;
+CREATE TABLE public.gestion (
+	id integer NOT NULL DEFAULT nextval('public.gestion_id_seq'::regclass),
+	gestion smallint,
+	plan character varying(150) NOT NULL,
+	inicio date NOT NULL,
+	fin date NOT NULL,
+	activo boolean NOT NULL,
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	CONSTRAINT gestion_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.gestion OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.grado_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.grado_id_seq CASCADE;
+CREATE SEQUENCE public.grado_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.grado_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.grado | type: TABLE --
+-- DROP TABLE IF EXISTS public.grado CASCADE;
+CREATE TABLE public.grado (
+	id integer NOT NULL DEFAULT nextval('public.grado_id_seq'::regclass),
+	grado character varying(255) NOT NULL,
+	nivel character varying(150) NOT NULL,
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_instrumento integer NOT NULL,
+	CONSTRAINT grado_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.grado OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.inscrito_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.inscrito_id_seq CASCADE;
+CREATE SEQUENCE public.inscrito_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.inscrito_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.inscrito | type: TABLE --
+-- DROP TABLE IF EXISTS public.inscrito CASCADE;
+CREATE TABLE public.inscrito (
+	id integer NOT NULL DEFAULT nextval('public.inscrito_id_seq'::regclass),
+	reserva boolean,
+	inscrito boolean NOT NULL,
+	descuento smallint NOT NULL,
+	motivo_descuento character varying(100),
+	abandono boolean NOT NULL,
+	obs character varying(200),
+	otras_materias bool NOT NULL DEFAULT False,
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_alumno integer NOT NULL,
+	id_curso integer NOT NULL,
+	id_instrumento integer NOT NULL,
+	CONSTRAINT inscrito_pk PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.inscrito OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.materia_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.materia_id_seq CASCADE;
+CREATE SEQUENCE public.materia_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.materia_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.materia | type: TABLE --
+-- DROP TABLE IF EXISTS public.materia CASCADE;
+CREATE TABLE public.materia (
+	id integer NOT NULL DEFAULT nextval('public.materia_id_seq'::regclass),
+	materia character varying(150) NOT NULL,
+	sigla varchar(20),
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_grado integer NOT NULL,
+	CONSTRAINT materia_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.materia OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.nota_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.nota_id_seq CASCADE;
+CREATE SEQUENCE public.nota_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.nota_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.nota | type: TABLE --
+-- DROP TABLE IF EXISTS public.nota CASCADE;
+CREATE TABLE public.nota (
+	id integer NOT NULL DEFAULT nextval('public.nota_id_seq'::regclass),
+	nota1 smallint,
+	nota2 smallint,
+	nota3 smallint,
+	nota4 smallint,
+	nota_final numeric(5,1),
+	"2t" smallint,
+	nota_aprob smallint,
+	aprobado boolean,
+	obs character varying(150),
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_asignado integer NOT NULL,
+	CONSTRAINT nota_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.nota OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.pago_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.pago_id_seq CASCADE;
+CREATE SEQUENCE public.pago_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.pago_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.pago | type: TABLE --
+-- DROP TABLE IF EXISTS public.pago CASCADE;
+CREATE TABLE public.pago (
+	id integer NOT NULL DEFAULT nextval('public.pago_id_seq'::regclass),
+	cuota double precision NOT NULL,
+	pagado boolean,
+	metodo_pago character varying(50),
+	fecha_pago timestamp,
+	referencia_pago character varying(100),
+	obs character varying(100),
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	id_inscrito integer NOT NULL,
+	CONSTRAINT pago_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.pago OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.permiso_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.permiso_id_seq CASCADE;
+CREATE SEQUENCE public.permiso_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.permiso_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.permiso | type: TABLE --
+-- DROP TABLE IF EXISTS public.permiso CASCADE;
+CREATE TABLE public.permiso (
+	id integer NOT NULL DEFAULT nextval('public.permiso_id_seq'::regclass),
+	permiso character varying(50) NOT NULL,
+	descripcion character varying(255),
+	creado timestamp,
+	act timestamp,
+	CONSTRAINT permiso_permiso_key UNIQUE (permiso),
+	CONSTRAINT permiso_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.permiso OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.profesor_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.profesor_id_seq CASCADE;
+CREATE SEQUENCE public.profesor_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.profesor_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.profesor | type: TABLE --
+-- DROP TABLE IF EXISTS public.profesor CASCADE;
+CREATE TABLE public.profesor (
+	id integer NOT NULL DEFAULT nextval('public.profesor_id_seq'::regclass),
+	nombre character varying(100) NOT NULL,
+	paterno character varying(50),
+	materno character varying(50),
+	masculino boolean NOT NULL,
+	ci integer,
+	formacion character varying(100),
+	email character varying(100),
+	activo boolean NOT NULL,
+	usr_id_login integer,
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	CONSTRAINT profesor_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.profesor OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.rol_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.rol_id_seq CASCADE;
+CREATE SEQUENCE public.rol_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.rol_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.rol | type: TABLE --
+-- DROP TABLE IF EXISTS public.rol CASCADE;
+CREATE TABLE public.rol (
+	id integer NOT NULL DEFAULT nextval('public.rol_id_seq'::regclass),
+	rol character varying(50) NOT NULL,
+	descripcion character varying(255),
+	creado timestamp,
+	act timestamp,
+	CONSTRAINT rol_pkey PRIMARY KEY (id),
+	CONSTRAINT rol_rol_key UNIQUE (rol)
+
+);
+-- ddl-end --
+ALTER TABLE public.rol OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.rol_permiso | type: TABLE --
+-- DROP TABLE IF EXISTS public.rol_permiso CASCADE;
+CREATE TABLE public.rol_permiso (
+	id_rol integer NOT NULL,
+	id_permiso integer NOT NULL,
+	CONSTRAINT rol_permiso_pkey PRIMARY KEY (id_rol,id_permiso)
+
+);
+-- ddl-end --
+ALTER TABLE public.rol_permiso OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.usuario_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.usuario_id_seq CASCADE;
+CREATE SEQUENCE public.usuario_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.usuario_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.usuario | type: TABLE --
+-- DROP TABLE IF EXISTS public.usuario CASCADE;
+CREATE TABLE public.usuario (
+	id integer NOT NULL DEFAULT nextval('public.usuario_id_seq'::regclass),
+	usuario character varying(80) NOT NULL,
+	email character varying(100) NOT NULL,
+	password character varying(255) NOT NULL,
+	activo boolean,
+	last_login date NOT NULL,
+	creado timestamp,
+	act timestamp,
+	CONSTRAINT usuario_pkey PRIMARY KEY (id),
+	CONSTRAINT usuario_usuario_key UNIQUE (usuario)
+
+);
+-- ddl-end --
+ALTER TABLE public.usuario OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.usuario_rol | type: TABLE --
+-- DROP TABLE IF EXISTS public.usuario_rol CASCADE;
+CREATE TABLE public.usuario_rol (
+	id_usuario integer NOT NULL,
+	id_rol integer NOT NULL,
+	CONSTRAINT usuario_rol_pkey PRIMARY KEY (id_usuario,id_rol)
+
+);
+-- ddl-end --
+ALTER TABLE public.usuario_rol OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.audit_log_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.audit_log_id_seq CASCADE;
+CREATE SEQUENCE public.audit_log_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+-- ddl-end --
+ALTER SEQUENCE public.audit_log_id_seq OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.audit_log | type: TABLE --
+-- DROP TABLE IF EXISTS public.audit_log CASCADE;
+CREATE TABLE public.audit_log (
+	id integer NOT NULL DEFAULT nextval('public.audit_log_id_seq'::regclass),
+	usuario character varying(80) NOT NULL DEFAULT 'anónimo',
+	accion character varying(20) NOT NULL,
+	modulo character varying(50) NOT NULL,
+	entidad_id integer,
+	detalle text,
+	ip character varying(45),
+	endpoint character varying(150),
+	metodo character varying(10),
+	status smallint DEFAULT 200,
+	creado timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	id_usuario integer,
+	CONSTRAINT audit_log_accion_check CHECK (((accion)::text = ANY ((ARRAY['CREATE'::character varying, 'UPDATE'::character varying, 'DELETE'::character varying, 'LOGIN'::character varying, 'LOGOUT'::character varying, 'BULK'::character varying, 'ERROR'::character varying])::text[]))),
+	CONSTRAINT audit_log_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+COMMENT ON TABLE public.audit_log IS E'Registro de auditoría de acciones del sistema';
+-- ddl-end --
+COMMENT ON COLUMN public.audit_log.accion IS E'Tipo de acción: CREATE, UPDATE, DELETE, LOGIN, LOGOUT, BULK, ERROR';
+-- ddl-end --
+COMMENT ON COLUMN public.audit_log.modulo IS E'Módulo del sistema: grado, materia, alumno, pago, etc.';
+-- ddl-end --
+COMMENT ON COLUMN public.audit_log.detalle IS E'JSON con detalles relevantes de la acción';
+-- ddl-end --
+ALTER TABLE public.audit_log OWNER TO uaded;
+-- ddl-end --
+
+-- object: idx_audit_log_creado | type: INDEX --
+-- DROP INDEX IF EXISTS public.idx_audit_log_creado CASCADE;
+CREATE INDEX idx_audit_log_creado ON public.audit_log
+	USING btree
+	(
+	  creado
+	)
+	WITH (FILLFACTOR = 90);
+-- ddl-end --
+
+-- object: idx_audit_log_accion | type: INDEX --
+-- DROP INDEX IF EXISTS public.idx_audit_log_accion CASCADE;
+CREATE INDEX idx_audit_log_accion ON public.audit_log
+	USING btree
+	(
+	  accion
+	)
+	WITH (FILLFACTOR = 90);
+-- ddl-end --
+
+-- object: idx_audit_log_modulo | type: INDEX --
+-- DROP INDEX IF EXISTS public.idx_audit_log_modulo CASCADE;
+CREATE INDEX idx_audit_log_modulo ON public.audit_log
+	USING btree
+	(
+	  modulo
+	)
+	WITH (FILLFACTOR = 90);
+-- ddl-end --
+
+-- object: public.instrumento | type: TABLE --
+-- DROP TABLE IF EXISTS public.instrumento CASCADE;
+CREATE TABLE public.instrumento (
+	id integer NOT NULL DEFAULT nextval('public.grado_id_seq'::regclass),
+	instrumento varchar(150) NOT NULL,
+	area varchar(50),
+	creado timestamp NOT NULL,
+	act timestamp NOT NULL,
+	id_usuario integer NOT NULL,
+	CONSTRAINT grado_pkey PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public.instrumento OWNER TO uaded;
+-- ddl-end --
+
+-- object: public.requisito | type: TABLE --
+-- DROP TABLE IF EXISTS public.requisito CASCADE;
+CREATE TABLE public.requisito (
+	id_materia integer,
+	id_materia_req integer NOT NULL
+);
+-- ddl-end --
+-- ALTER TABLE public.requisito OWNER TO postgres;
+-- ddl-end --
+
+-- object: materia_fk | type: CONSTRAINT --
+-- ALTER TABLE public.requisito DROP CONSTRAINT IF EXISTS materia_fk CASCADE;
+ALTER TABLE public.requisito ADD CONSTRAINT materia_fk FOREIGN KEY (id_materia)
+REFERENCES public.materia (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: idx_uniq_req | type: INDEX --
+-- DROP INDEX IF EXISTS public.idx_uniq_req CASCADE;
+CREATE UNIQUE INDEX idx_uniq_req ON public.requisito
+	USING btree
+	(
+	  id_materia,
+	  id_materia_req
+	);
+-- ddl-end --
+
+-- object: alumno_fk | type: CONSTRAINT --
+-- ALTER TABLE public.inscrito DROP CONSTRAINT IF EXISTS alumno_fk CASCADE;
+ALTER TABLE public.inscrito ADD CONSTRAINT alumno_fk FOREIGN KEY (id_alumno)
+REFERENCES public.alumno (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: instrumento_fk | type: CONSTRAINT --
+-- ALTER TABLE public.grado DROP CONSTRAINT IF EXISTS instrumento_fk CASCADE;
+ALTER TABLE public.grado ADD CONSTRAINT instrumento_fk FOREIGN KEY (id_instrumento)
+REFERENCES public.instrumento (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: grado_fk | type: CONSTRAINT --
+-- ALTER TABLE public.materia DROP CONSTRAINT IF EXISTS grado_fk CASCADE;
+ALTER TABLE public.materia ADD CONSTRAINT grado_fk FOREIGN KEY (id_grado)
+REFERENCES public.grado (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: gestion_fk | type: CONSTRAINT --
+-- ALTER TABLE public.curso DROP CONSTRAINT IF EXISTS gestion_fk CASCADE;
+ALTER TABLE public.curso ADD CONSTRAINT gestion_fk FOREIGN KEY (id_gestion)
+REFERENCES public.gestion (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: grado_fk | type: CONSTRAINT --
+-- ALTER TABLE public.curso DROP CONSTRAINT IF EXISTS grado_fk CASCADE;
+ALTER TABLE public.curso ADD CONSTRAINT grado_fk FOREIGN KEY (id_grado)
+REFERENCES public.grado (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: inscrito_fk | type: CONSTRAINT --
+-- ALTER TABLE public.asignado DROP CONSTRAINT IF EXISTS inscrito_fk CASCADE;
+ALTER TABLE public.asignado ADD CONSTRAINT inscrito_fk FOREIGN KEY (id_inscrito)
+REFERENCES public.inscrito (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: curso_fk | type: CONSTRAINT --
+-- ALTER TABLE public.asignado DROP CONSTRAINT IF EXISTS curso_fk CASCADE;
+ALTER TABLE public.asignado ADD CONSTRAINT curso_fk FOREIGN KEY (id_curso)
+REFERENCES public.curso (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: materia_fk | type: CONSTRAINT --
+-- ALTER TABLE public.asignado DROP CONSTRAINT IF EXISTS materia_fk CASCADE;
+ALTER TABLE public.asignado ADD CONSTRAINT materia_fk FOREIGN KEY (id_materia)
+REFERENCES public.materia (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: profesor_fk | type: CONSTRAINT --
+-- ALTER TABLE public.asignado DROP CONSTRAINT IF EXISTS profesor_fk CASCADE;
+ALTER TABLE public.asignado ADD CONSTRAINT profesor_fk FOREIGN KEY (id_profesor)
+REFERENCES public.profesor (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: curso_fk | type: CONSTRAINT --
+-- ALTER TABLE public.inscrito DROP CONSTRAINT IF EXISTS curso_fk CASCADE;
+ALTER TABLE public.inscrito ADD CONSTRAINT curso_fk FOREIGN KEY (id_curso)
+REFERENCES public.curso (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: asignado_fk | type: CONSTRAINT --
+-- ALTER TABLE public.nota DROP CONSTRAINT IF EXISTS asignado_fk CASCADE;
+ALTER TABLE public.nota ADD CONSTRAINT asignado_fk FOREIGN KEY (id_asignado)
+REFERENCES public.asignado (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: instrumento_fk | type: CONSTRAINT --
+-- ALTER TABLE public.inscrito DROP CONSTRAINT IF EXISTS instrumento_fk CASCADE;
+ALTER TABLE public.inscrito ADD CONSTRAINT instrumento_fk FOREIGN KEY (id_instrumento)
+REFERENCES public.instrumento (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: usuario_fk | type: CONSTRAINT --
+-- ALTER TABLE public.audit_log DROP CONSTRAINT IF EXISTS usuario_fk CASCADE;
+ALTER TABLE public.audit_log ADD CONSTRAINT usuario_fk FOREIGN KEY (id_usuario)
+REFERENCES public.usuario (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: inscrito_fk | type: CONSTRAINT --
+-- ALTER TABLE public.pago DROP CONSTRAINT IF EXISTS inscrito_fk CASCADE;
+ALTER TABLE public.pago ADD CONSTRAINT inscrito_fk FOREIGN KEY (id_inscrito)
+REFERENCES public.inscrito (id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: rol_permiso_per_id_fkey | type: CONSTRAINT --
+-- ALTER TABLE public.rol_permiso DROP CONSTRAINT IF EXISTS rol_permiso_per_id_fkey CASCADE;
+ALTER TABLE public.rol_permiso ADD CONSTRAINT rol_permiso_per_id_fkey FOREIGN KEY (id_permiso)
+REFERENCES public.permiso (id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: rol_permiso_rol_id_fkey | type: CONSTRAINT --
+-- ALTER TABLE public.rol_permiso DROP CONSTRAINT IF EXISTS rol_permiso_rol_id_fkey CASCADE;
+ALTER TABLE public.rol_permiso ADD CONSTRAINT rol_permiso_rol_id_fkey FOREIGN KEY (id_rol)
+REFERENCES public.rol (id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: usuario_rol_rol_id_fkey | type: CONSTRAINT --
+-- ALTER TABLE public.usuario_rol DROP CONSTRAINT IF EXISTS usuario_rol_rol_id_fkey CASCADE;
+ALTER TABLE public.usuario_rol ADD CONSTRAINT usuario_rol_rol_id_fkey FOREIGN KEY (id_rol)
+REFERENCES public.rol (id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: usuario_rol_usu_id_fkey | type: CONSTRAINT --
+-- ALTER TABLE public.usuario_rol DROP CONSTRAINT IF EXISTS usuario_rol_usu_id_fkey CASCADE;
+ALTER TABLE public.usuario_rol ADD CONSTRAINT usuario_rol_usu_id_fkey FOREIGN KEY (id_usuario)
+REFERENCES public.usuario (id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+

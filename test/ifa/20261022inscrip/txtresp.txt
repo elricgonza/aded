@@ -1,0 +1,33 @@
+El parámetro inválido se ignoraba por completo (mostraba todas las gestiones). Es más seguro que vuelva al valor por defecto (gestión activa); lo ajusto.
+
+Las correcciones de Inscripciones están listas en `iffaapp_inscripciones.tar.gz`, con solo los 7 archivos que cambian. Probé todo contra PostgreSQL 16: pasan las pruebas nuevas y las de antes.
+
+**1. Gestión activa por defecto**
+- El listado de Inscripciones muestra solo las inscripciones de cursos cuya gestión tiene `activo = True`.
+- El filtro **Gestión** aparece preseleccionado en «Gestión activa». También se puede elegir una gestión anterior o «Todas las gestiones».
+- Si alguien manipula ese parámetro en la URL, el sistema vuelve a la gestión activa en vez de fallar.
+- Las inscripciones de gestiones anteriores se siguen pudiendo abrir y editar.
+- Agregué un filtro por **Instrumento**.
+- El número de Inscripciones del panel de inicio cuenta ahora solo la gestión activa.
+
+**2. Curso según el instrumento**
+- El formulario pide primero el **Instrumento** y después el **Curso**.
+- Al elegir el instrumento, el selector de curso se actualiza solo y muestra únicamente los cursos de ese instrumento (a través del grado) en la gestión activa.
+- Si no hay cursos disponibles, el selector lo avisa.
+- El servidor también valida esto: un curso de otro instrumento o de una gestión no activa se rechaza aunque se manipule el formulario.
+- Quité la posibilidad de cambiar el instrumento al editar una inscripción, porque dejaría el curso y el instrumento inconsistentes.
+
+**3. Búsqueda de alumno**
+- El selector de alumno es ahora un buscador en vivo: se escribe nombre, apellido o C.I. y aparecen coincidencias con su C.I., de las que se elige una.
+- Acepta varias palabras (por ejemplo «carla roj»), no distingue mayúsculas ni tildes («jose munoz» encuentra «José Muñoz») y necesita al menos 2 caracteres.
+- Solo lista alumnos activos, y no deja inscribir a uno inactivo.
+- La misma búsqueda mejorada funciona en las cajas de búsqueda de todos los listados (alumnos, profesores, notas y demás).
+- Agregué la columna C.I. al listado de Inscripciones.
+
+**Archivos**
+- `app/crud.py` y `app/resources.py` — lógica de filtros, selects dependientes y búsqueda.
+- `app/templates/base.html`, `crud/list.html` y `crud/_form.html` — interfaz.
+- `app/templates/crud/_search_results.html` — nuevo, lista los resultados del buscador.
+- `tests/smoke_test.py` — pruebas ampliadas con estos casos.
+
+Las rutas de Flask no cambian ni se agrega nada a la base de datos. Basta con reemplazar los archivos y reiniciar Gunicorn: `sudo systemctl restart ifalfa`.

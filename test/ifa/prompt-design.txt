@@ -1,0 +1,11 @@
+----261022 
+En la aplicación previamente adjuntada, realizar las siguientes correcciones: 
+-visualizar por defecto las inscripciones a la gestión que se encuentra activa de acuerdo a la tabla 'gestion' y el campo 'activo' en True relacionado con la tabla 'curso'
+-en la opción 'Inscripciones':
+	--La selección del Curso debe ser realizada en función al 'instrumento' seleccionado, mostrando sólo los cursos que correspondan a ese instrumento y la gestión activa.
+	--Mejorar la búsqueda de alumno (mostrando y/o filtrando por alguna ocurrencia en nombre, apellido o DNI).
+
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+

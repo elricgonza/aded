@@ -1,0 +1,9 @@
+
+-se crea una inscripción -> se add reg en asignado
+-su supr una inscripción -> se remueve reg en asignado (c/materias)
+
+
+
+-----to add
+-q un alumno tenga solo una inscripción en una gestión
+

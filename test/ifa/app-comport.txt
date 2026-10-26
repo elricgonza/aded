@@ -2,6 +2,10 @@
 -se crea una inscripción -> se add reg en asignado
 -su supr una inscripción -> se remueve reg en asignado (c/materias)
 
+-luego de add una inscr (htito)
+	-asignac de profes
+	-se adiciona 3 alumnos más y se inscriben al mismo curso
+	-a los 3 alumnos se asigna automáticamente profesores del primer alumno (htito)
 
 
 -----to add

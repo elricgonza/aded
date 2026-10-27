@@ -28,25 +28,13 @@ En la aplicación previamente adjuntada, realizar las siguientes correcciones:
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 -Estará habilitado sólo para el usuario: Administrador 
 
-----
--En la aplicación previamente adjuntada, ajustar ĺa opción 'Calificaciones' que administra el archivo 'pago' en función del 
-archivo almacenado en: app/config_notas.json que almacena las siguientes variables
-{
-  "habilitar_nota1": true,
-  "transcripcion_nota1_inicio": "2026-06-01",
-  "transcripcion_nota1_final": "2026-06-10",
-  "habilitar_nota2": true,
-  "transcripcion_nota2_inicio": "2026-07-01",
-  "transcripcion_nota2_final": "2026-07-30",
-  "habilitar_nota3": false,
-  "transcripcion_nota3_inicio": "",
-  "transcripcion_nota3_final": ""
-}
--La opción 'Calificaciones' para el registro de notas: nota1, nota2, nota3, debe considerar:
-	-Solo habilitar la transcripción nota1 si habilitar_nota1 = True y la fecha se encuentra en el rango definido en las variables: transcripcion_nota1_inicio y transcripcion_nota1_final.
-	-Solo habilitar la transcripción nota2 si habilitar_nota2 = True y la fecha se encuentra en el rango definido en las variables: transcripcion_nota2_inicio y transcripcion_nota2_final.	
-	-Solo habilitar la transcripción nota2 si habilitar_nota3 = True y la fecha se encuentra en el rango definido en las variables: transcripcion_nota3_inicio y transcripcion_nota3_final.	
--las restricciones son aplicadas al usuario 'profesor' no así al usuario 'administrador'.
+----261027
+-En la aplicación previamente adjuntada, ajustar la opción de Inscripciones, debe tener el siguiente comportamiento:
+-Cuando el grado al que se inscribe es: "1ro. Técnico Medio" (tabla grado)
+	-En la tabla 'asignado', adicionar sólo las materias que corresponden al grado "1ro. Técnico Medio" que no fueron aprobadas por el alumno. (verificar en la tabla 'nota')
+	-Debe permitir la asignación de materias del grado "2do. Técnico Medio", previa verificación de que exista un curso habilitado del mencionado grado en la gestión vigente y validando que la(s) materia(s) requisito(s) de la materia a asignar (tabla requisito) hayan sido aprobadas.
+-Cuando el grado al que se inscribe es: "2do. Técnico Medio" (tabla grado)
+	-Si tiene todas las materias aprobadas del grado "1ro. Técnico Medio" (tabla grado), asignar automáticamente todas las materias que corresponde al grado "2do. Técnico Medio", siempre y cuando aún no hayan sido aprobadas.
+	-Si NO tiene todas las materias aprobadas del grado "1ro. Técnico Medio" (tabla grado), debe permitir asignar sólo las materias que le faltan del grado "1ro. Técnico Medio" (considerados como arrastres), y también debe permitir adicionar materias del grado "2do. Técnico Medio" pero sólo aquellas cuyas materias requisito (del grado "1ro. Técnico Medio") fueron aprobadas.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
-
-
+-Estará habilitado sólo para el usuario: Administrador

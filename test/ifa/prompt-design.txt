@@ -38,3 +38,11 @@ En la aplicación previamente adjuntada, realizar las siguientes correcciones:
 	-Si NO tiene todas las materias aprobadas del grado "1ro. Técnico Medio" (tabla grado), debe permitir asignar sólo las materias que le faltan del grado "1ro. Técnico Medio" (considerados como arrastres), y también debe permitir adicionar materias del grado "2do. Técnico Medio" pero sólo aquellas cuyas materias requisito (del grado "1ro. Técnico Medio") fueron aprobadas.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 -Estará habilitado sólo para el usuario: Administrador
+
+----261028
+-En la aplicación previamente adjuntada, ajustar la opción de "Asignaciones", debe tener el siguiente comportamiento:
+	-Al seleccionar la opción "+ Nuevo" 
+	-Deben visualizarse en combo de selección 'inscrito', sólo los alumnos inscritos en la gestión académica activa
+	-Cuando ocurre el caso de asignar una materia (de arrastre) de un grado menor (ejemplo: fué inscrito en el grado "2do. Técnico Medio" y se asigna una materia del grado "1ro. Técnico Medio", asigna directamente al curso "PRIMERO TECNICO MEDIO A") sin embargo si existe más de un curso en el grado "1ro. Técnico Medio" es decir podrían existir los cursos:  "PRIMERO TECNICO MEDIO A", "PRIMERO TECNICO MEDIO B", etc, debe permitir seleccionar el curso y luego la materia correspondiente pendiente (de arrastre).
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+-Estará habilitado sólo para el usuario: Administrador

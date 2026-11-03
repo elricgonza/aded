@@ -64,13 +64,27 @@ En la aplicación previamente adjuntada, realizar las siguientes correcciones:
 
 
 ----261030
--En la aplicación previamente adjuntada, efectuar los siguientes ajustes en la opción "Calificaciones":
-	-permitir la edición de calificaciones sólo de alumnos inscritos que están en la gestión vigente
-
-
+-En la aplicación previamente adjuntada, efectuar los siguientes ajustes:
+En la opción "Cursos":
+	-permitir la edición de Cursos sólo a registros que se encuentren en la gestión vigente (es decir que correspondan al curso en la gestión vigente)
+En la opción "Inscripciones":
+	-permitir la edición de inscripciones sólo a registros que se encuentren en la gestión vigente (es decir que correspondan al curso en la gestión vigente), asimismo la adición de "+Nuevo" deber ser sólo en la gestión vigente
+En la opción "Asignaciones (profesor - materia - alumno - curso)":
+	-permitir la edición, opciones: "Asignar profesor por curso/materia", "+ Nuevo" (asignación, creación de una nueva asignación) sólo a registros que se encuentren en la gestión vigente (es decir que correspondan al curso en la gestión vigente)
+En la opción "Calificaciones":
+	-permitir la edición de calificaciones sólo a registros que se encuentren en la gestión vigente (es decir que correspondan al curso en la gestión vigente)
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
--Estará habilitado sólo para el usuario: Administrador
 
+
+----261103
+-En la aplicación previamente adjuntada, complementar la opción de 'Cambio de Password' y que este disponible para todos los usuarios.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+
+
+-Estará habilitado sólo para el usuario: Administrador
+-Las correcciones Para los usuarios que tienen habilitadas estas opciones
 
 ----261031
 -opción "Cursos"

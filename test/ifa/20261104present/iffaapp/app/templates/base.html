@@ -1,0 +1,175 @@
+{% from '_icons.html' import icono %}
+<!doctype html>
+<html lang="es" class="h-full">
+<head>
+  <title>{% block title %}Inicio{% endblock %} · {{ SIGLA }}</title>
+  {% include '_head.html' %}
+  <script>
+    // Buscador en vivo de un registro (p. ej. alumno): guarda id y etiqueta elegidos
+    function searchSelect(id, label) {
+      return {
+        id: id, label: label,
+        pick(el) { this.id = el.dataset.id; this.label = el.dataset.label; this.$refs.res.innerHTML = ''; this.$refs.q.value = ''; },
+        clear() { this.id = ''; this.label = ''; }
+      };
+    }
+    function app() {
+      return {
+        sidebar: false, modal: false, toasts: [],
+        push(d) {
+          const t = { id: Math.random(), msg: d.msg, type: d.type || 'ok' };
+          this.toasts.push(t);
+          setTimeout(() => { this.toasts = this.toasts.filter(x => x.id !== t.id); }, 4500);
+        }
+      };
+    }
+    document.addEventListener('htmx:responseError', e => {
+      const s = e.detail.xhr.status;
+      const m = {400: 'Solicitud no válida (¿sesión expirada? recargue la página)',
+                 403: 'No tiene permiso para esta acción', 404: 'Registro no encontrado'}[s]
+                || ('Error del servidor (' + s + ')');
+      window.dispatchEvent(new CustomEvent('toast', { detail: { msg: m, type: 'error' } }));
+    });
+  </script>
+</head>
+<body class="h-full" x-data="app()" @toast.window="push($event.detail)"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'>
+
+  <div x-show="sidebar" x-cloak class="no-print fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm lg:hidden" @click="sidebar = false"></div>
+
+  <!-- ============ Menú lateral ============ -->
+  <aside class="fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-gradient-to-b from-brand-800 to-brand-900 text-slate-300 shadow-xl
+                transform transition-transform lg:translate-x-0"
+         :class="sidebar ? 'translate-x-0' : '-translate-x-full'">
+    <a href="{{ url_for('main.inicio') }}" class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <img src="{{ url_for('static', filename='img/logo-blanco.png') }}" alt="Logo {{ SIGLA }}" class="h-11 w-auto">
+      <span class="leading-tight min-w-0">
+        <span class="block text-[11px] font-medium text-brand-200 truncate">{{ INSTITUCION }}</span>
+        <span class="block text-base font-semibold text-white truncate">{{ NOMBRE_INST }}</span>
+      </span>
+    </a>
+
+    <nav class="flex-1 overflow-y-auto px-3 py-4 text-sm" aria-label="Menú principal">
+      {% set activo = 'bg-white/10 text-white font-semibold shadow-inner' %}
+      <a href="{{ url_for('main.inicio') }}"
+         class="group flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-white/10 hover:text-white {{ activo if request.endpoint == 'main.inicio' else '' }}">
+        {{ icono('inicio') }}<span>Inicio</span>
+      </a>
+      {% for titulo, items in menu %}
+        <p class="mt-5 mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-brand-300/80">{{ titulo }}</p>
+        {% for label, url, key in items %}
+          {% set es_activo = (request.view_args and request.view_args.get('key') == key) or (key == 'cfg_notas' and request.endpoint == 'cfgnotas.notas') %}
+          <a href="{{ url }}" @click="sidebar = false"
+             class="group relative flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-white/10 hover:text-white {{ activo if es_activo else '' }}">
+            {% if es_activo %}<span class="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r bg-brand-500"></span>{% endif %}
+            {{ icono(key) }}<span class="truncate">{{ label }}</span>
+          </a>
+        {% endfor %}
+      {% endfor %}
+    </nav>
+
+    <div class="border-t border-white/10 px-5 py-3 text-[11px] text-brand-300/70">{{ SISTEMA }}</div>
+  </aside>
+
+  <!-- ============ Contenido ============ -->
+  <div class="lg:pl-72 min-h-full flex flex-col">
+    <header class="app-topbar sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
+      <button @click="sidebar = !sidebar" aria-label="Abrir menú" class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <img src="{{ url_for('static', filename='img/logo-sm.png') }}" alt="" class="h-9 w-auto lg:hidden">
+
+      {% if current_user.is_authenticated %}
+      <div class="ml-auto flex items-center gap-3">
+        <!-- Gestión activa -->
+        <a href="{{ url_for('crud.index', key='gestion') if current_user.has_perm('gestion_ver') else '#' }}"
+           class="flex items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs
+                  {{ 'border-brand-200 bg-brand-50 text-brand-800' if gestion_activa else 'border-amber-300 bg-amber-50 text-amber-900' }}"
+           title="Gestión académica activa">
+          {{ icono('gestion', 'w-4 h-4') }}
+          {% if gestion_activa %}
+            <span class="hidden sm:inline text-brand-600">Gestión activa</span>
+            <span class="sm:hidden font-semibold">Gestión {{ gestion_activa.gestion }}</span>
+            <span class="hidden sm:inline font-semibold">{{ gestion_activa.gestion }} · {{ gestion_activa.plan }}</span>
+            {% if gestiones_activas > 1 %}<span class="text-amber-600" title="Hay más de una gestión activa">⚠ {{ gestiones_activas }}</span>{% endif %}
+          {% else %}
+            <span class="font-semibold">Sin gestión activa</span>
+          {% endif %}
+        </a>
+
+        <!-- Usuario -->
+        <div class="relative" x-data="{ abierto: false }" @click.outside="abierto = false" @keydown.escape.window="abierto = false">
+          <button @click="abierto = !abierto" class="flex items-center gap-2.5 rounded-full py-1 pl-1 pr-2 hover:bg-slate-100" aria-haspopup="true">
+            <span class="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-brand-600 text-sm font-semibold uppercase text-white">{{ (current_user.usuario or '?')[:2] }}</span>
+            <span class="hidden text-left leading-tight sm:block">
+              <span class="block text-sm font-semibold text-slate-800">{{ current_user.usuario }}</span>
+              <span class="block text-[11px] text-slate-500">{{ current_user.roles|join(', ') or 'Sin roles' }}</span>
+            </span>
+            <svg class="hidden h-4 w-4 text-slate-400 sm:block" viewBox="0 0 20 20" fill="currentColor"><path d="M5.5 7.5L10 12l4.5-4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div x-show="abierto" x-cloak x-transition.origin.top.right
+               class="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+            <div class="border-b border-slate-100 px-4 py-2 sm:hidden">
+              <p class="text-sm font-semibold">{{ current_user.usuario }}</p>
+              <p class="text-xs text-slate-500">{{ current_user.roles|join(', ') or 'Sin roles' }}</p>
+            </div>
+            <a href="{{ url_for('auth.perfil') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+              {{ icono('usuario', 'w-4 h-4') }} Mi perfil</a>
+            <form method="post" action="{{ url_for('auth.logout') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                Cerrar sesión</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </header>
+
+    <main class="app-main flex-1">
+      <div class="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <!-- Encabezado institucional (solo al imprimir) -->
+        <div class="print-only mb-4 border-b-2 border-brand-600 pb-3">
+          <div class="flex items-center gap-4">
+            <img src="{{ url_for('static', filename='img/logo-sm.png') }}" alt="" style="height:54px">
+            <div>
+              <p class="text-xs text-slate-500">{{ INSTITUCION }}</p>
+              <p class="text-lg font-bold text-brand-800">{{ NOMBRE_INST }}</p>
+            </div>
+            <div class="ml-auto text-right text-xs text-slate-500">
+              {% if gestion_activa %}Gestión {{ gestion_activa.gestion }}<br>{% endif %}
+              {{ SISTEMA }}
+            </div>
+          </div>
+        </div>
+
+        {% for cat, msg in get_flashed_messages(with_categories=true) %}
+          <div class="no-print mb-4 flex items-start gap-2 rounded-lg border px-4 py-3 text-sm
+                      {{ 'border-red-200 bg-red-50 text-red-800' if cat == 'error' else 'border-emerald-200 bg-emerald-50 text-emerald-800' }}">{{ msg }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    <footer class="app-footer border-t border-slate-200 bg-white px-4 py-3 text-center text-xs text-slate-500 sm:px-6">
+      © {{ now_year }} {{ INSTITUCION }} {{ NOMBRE_INST }} · {{ SISTEMA }}
+    </footer>
+  </div>
+
+  <!-- Ventana modal (formularios HTMX) -->
+  <div id="modal-wrap" x-show="modal" x-cloak class="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4"
+       @keydown.escape.window="modal = false" @close-modal.window="modal = false">
+    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="modal = false"></div>
+    <div id="modal-body" class="relative max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-2xl sm:max-w-2xl sm:rounded-2xl"></div>
+  </div>
+
+  <!-- Avisos -->
+  <div class="app-toasts pointer-events-none fixed bottom-4 left-4 right-4 z-[60] space-y-2 sm:left-auto sm:w-96">
+    <template x-for="t in toasts" :key="t.id">
+      <div x-transition class="pointer-events-auto flex items-center gap-2 rounded-lg px-4 py-3 text-sm text-white shadow-lg"
+           :class="t.type === 'error' ? 'bg-red-600' : 'bg-emerald-600'" x-text="t.msg"></div>
+    </template>
+  </div>
+</body>
+</html>

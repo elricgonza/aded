@@ -96,6 +96,14 @@ En la opción "Calificaciones":
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----26110x
+-En la aplicación previamente adjuntada, adicionar en el formulario y/o  pantalla que corresponde a la opción de 'Calificaciones' un botón: 'Boletín de Calificaciones' y que esté disponible para los usuarios: administrador, transcriptor y estudiante.
+-El formato del reporte también es adjuntado como una imagen (reporte-boletin-calificaciones.png)
+-Generar el reporte "Boletín de Calificaciones" con los datos obtenidos a partir de la base de datos, los datos requeridos se muestran en el archivo adjunto (reporte-boletin-calificaciones.png). 
+-Efectuar mejoras sin alterar la esencia del reporte.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
 
 -Estará habilitado sólo para el usuario: Administrador
 -Las correcciones Para los usuarios que tienen habilitadas estas opciones

@@ -1,0 +1,5 @@
+{% if gestion_activa and current_user.has_perm('asignado_editar') %}
+<button class="btn btn-outline"
+        hx-get="{{ url_for('acad.masivo') }}" hx-target="#modal-body" hx-swap="innerHTML"
+        @click="modal = true">Asignar profesor por curso/materia</button>
+{% endif %}

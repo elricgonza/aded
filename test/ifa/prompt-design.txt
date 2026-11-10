@@ -103,6 +103,19 @@ En la opción "Calificaciones":
 -Efectuar mejoras sin alterar la esencia del reporte.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
+----261110
+
+-En la aplicación previamente adjuntada, en la opción de 'Reportes' adicionar la sub-opción de: 'Alumnos asignados a Profesor' y que esté disponible para los usuarios: administrador, profesor y transcriptor.
+-Generar el reporte 'Alumnos asignados a Profesor'  cuyo formato del reporte contendrá los datos de:
+		-Nombre del alumno (apellido paterno, apellido materno, nombre)
+		-Nro. de Carnet de Identidad (CI)
+		-Curso (incluído el paralelo)
+		-materia asignada
+		(además de nombre del profesor como título, gestión u otro dato relevante)
+-Debe estar agrupado por curso y luego ordenado por apellido paterno, apellido materno y nombre
+-Debe permitir exportar a .pdf o formato .xlsx
+-Asignar el formato en función a reportes anteriores y presentación más recomendable
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
 -Estará habilitado sólo para el usuario: Administrador

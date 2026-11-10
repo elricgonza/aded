@@ -118,6 +118,24 @@ En la opción "Calificaciones":
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
 
+----261110b
+-En la aplicación previamente adjuntada, en la opción de 'Reportes' adicionar la sub-opción de reporte: 'Record Académico' del alumno y que esté disponible para los usuarios: administrador y transcriptor.
+-Generar el reporte 'Record Académico'  cuyo formato del reporte contendrá los datos de:
+		-Nombre del alumno (apellido paterno, apellido materno, nombres)
+		-Nro. de Carnet de Identidad (CI)
+		En la parte de detalle debe ir:
+		-Gestión
+		-grado al que corresponde la materia
+		-Sigla de la materia
+		-nombre de la materia
+		-nota obtenida (calificación)
+		-observación
+-Debe permitir exportar a .pdf
+-Asignar el formato en función a reportes anteriores y presentación más recomendable
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
+
+
+
 -Estará habilitado sólo para el usuario: Administrador
 -Las correcciones Para los usuarios que tienen habilitadas estas opciones
 

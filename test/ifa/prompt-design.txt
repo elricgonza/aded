@@ -136,9 +136,7 @@ En la opción "Calificaciones":
 
 
 
--Estará habilitado sólo para el usuario: Administrador
--Las correcciones Para los usuarios que tienen habilitadas estas opciones
+----261111
+-En la aplicación previamente adjuntada, en la opción de 'Cursos', adicionar filtro para la visualización de cursos clasificados por instrumento.
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
-----261031
--opción "Cursos"
-	-adicionar filtro para la visualización de cursos por instrumento

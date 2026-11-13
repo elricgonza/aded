@@ -140,3 +140,10 @@ En la opción "Calificaciones":
 -En la aplicación previamente adjuntada, en la opción de 'Cursos', adicionar filtro para la visualización de cursos clasificados por instrumento.
 -Retornar sólo los archivos necesarios a adicionar y/o modificar.
 
+
+----261112
+-En la aplicación previamente adjuntada, mejorar la presentación en los siguientes aspectos:
+	-Presentar la opción de visualización mediante temas de día o noche u otros
+	-en todos los formularios que presentan las opciones de 'Editar', 'Eliminar', reemplazarlas por íconos que sean más visuales e intuitivas.
+	-Si encuentra otras sugerencias de mejora visual, aplicarlas considerando las características de la marca
+-Retornar sólo los archivos necesarios a adicionar y/o modificar.
